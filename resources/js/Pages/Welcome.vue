@@ -1,5 +1,6 @@
 <script setup>
 import { Head, Link } from '@inertiajs/vue3';
+import BrandLogos from '@/Components/BrandLogos.vue';
 
 defineProps({
     canLogin: {
@@ -9,129 +10,158 @@ defineProps({
         type: Boolean,
     },
 });
+
+const handleHeroImageError = (e) => {
+    e.target.src = 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=1200&auto=format&fit=crop';
+};
 </script>
 
 <template>
     <Head title="SmartConstruct - High-End Infrastructure ERP" />
-    <div class="min-h-screen bg-[#0b0f19] text-slate-300 font-sans antialiased selection:bg-blue-500/30 selection:text-white relative overflow-hidden">
+    <div class="min-h-screen bg-[#f8fafc] text-slate-800 font-sans antialiased selection:bg-blue-500/20 selection:text-blue-900 relative overflow-hidden">
         
-        <!-- Refined Ambient Lighting -->
-        <div class="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] rounded-full bg-gradient-to-br from-blue-600/10 to-indigo-600/5 blur-[120px] pointer-events-none"></div>
-        <div class="absolute bottom-[-10%] right-[-5%] w-[600px] h-[600px] rounded-full bg-gradient-to-tl from-cyan-500/10 to-blue-900/10 blur-[100px] pointer-events-none"></div>
-
-        <!-- Ultra-Premium Header -->
-        <header class="relative border-b border-white/[0.03] bg-[#0b0f19]/70 backdrop-blur-2xl sticky top-0 z-50 transition-all duration-500">
+        <!-- Premium Navbar Header -->
+        <header class="relative border-b border-slate-200/80 bg-white/90 backdrop-blur-2xl sticky top-0 z-50 transition-all duration-300 shadow-sm">
             <div class="max-w-[90rem] mx-auto px-6 sm:px-8 lg:px-12 h-24 flex items-center justify-between">
                 <!-- Brand logo -->
-                <div class="flex items-center gap-3.5 group cursor-pointer">
-                    <div class="w-10 h-10 flex items-center justify-center bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl text-white shadow-lg shadow-blue-500/20 group-hover:scale-105 transition-all duration-500 ease-out">
-                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                        </svg>
-                    </div>
-                    <span class="text-sm font-extrabold tracking-[0.2em] text-white uppercase">Smart<span class="text-blue-400 font-medium">Construct</span></span>
+                <Link href="/" class="flex items-center gap-3 group py-1">
+                    <BrandLogos name="smartconstruct" className="h-16 sm:h-18 lg:h-20" />
+                </Link>
+
+                <!-- Navigation Links (Desktop) -->
+                <div class="hidden md:flex items-center gap-8 text-xs font-extrabold text-slate-600 tracking-wide uppercase">
+                    <a href="#features" class="hover:text-blue-600 transition-colors">Features</a>
+                    <a href="#partners" class="hover:text-blue-600 transition-colors">Manufacturers</a>
+                    <a href="#preview" class="hover:text-blue-600 transition-colors">Operations</a>
                 </div>
                 
-                <nav v-if="canLogin" class="flex items-center gap-6">
+                <nav v-if="canLogin" class="flex items-center gap-4 sm:gap-5">
                     <Link
                         v-if="$page.props.auth.user"
                         :href="route('dashboard')"
-                        class="px-6 py-3 rounded-xl text-xs font-bold tracking-wide bg-white text-slate-950 hover:bg-slate-100 transition-all shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_25px_rgba(255,255,255,0.2)] hover:-translate-y-0.5 duration-300"
+                        class="px-6 py-3 rounded-xl text-xs font-extrabold tracking-wide bg-blue-600 hover:bg-blue-700 text-white transition-all shadow-md hover:scale-105"
                     >
-                        Access Console
+                        Access Console &rarr;
                     </Link>
 
                     <template v-else>
                         <Link
                             :href="route('login')"
-                            class="text-xs font-bold tracking-wide text-slate-400 hover:text-white transition-colors duration-300"
+                            class="text-xs font-bold tracking-wide text-slate-600 hover:text-slate-900 transition-colors"
                         >
                             Sign In
                         </Link>
 
                         <Link
                             v-if="canRegister"
-                            class="px-6 py-3 rounded-xl text-xs font-bold tracking-wide bg-blue-600 hover:bg-blue-500 text-white transition-all shadow-[0_0_20px_rgba(37,99,235,0.2)] hover:shadow-[0_0_30px_rgba(37,99,235,0.4)] hover:-translate-y-0.5 duration-300"
+                            class="px-6 py-3 rounded-xl text-xs font-extrabold tracking-wide bg-blue-600 hover:bg-blue-700 text-white transition-all shadow-md hover:scale-105"
                             :href="route('register')"
                         >
-                            Register Identity
+                            Register Account
                         </Link>
                     </template>
                 </nav>
             </div>
         </header>
 
-        <!-- Cinematic Hero Section -->
-        <section class="relative pt-32 pb-40">
+        <!-- A. Hero Section -->
+        <section class="relative pt-12 sm:pt-16 pb-20 sm:pb-28 bg-white border-b border-slate-200/80">
             <div class="max-w-[90rem] mx-auto px-6 sm:px-8 lg:px-12 relative z-10">
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-center">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
                     
-                    <div class="lg:col-span-6 space-y-10 text-center lg:text-left">
-                        <div class="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-slate-900/50 border border-white/5 backdrop-blur-md">
-                            <span class="flex h-2 w-2 rounded-full bg-blue-500 relative">
-                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                    <!-- Left Hero Content (Expanded 7 Columns) -->
+                    <div class="lg:col-span-7 space-y-7 text-center lg:text-left">
+                        <div class="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-blue-50 border border-blue-200">
+                            <span class="flex h-2 w-2 rounded-full bg-blue-600 relative">
+                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-600 opacity-75"></span>
                             </span>
-                            <span class="text-[11px] font-bold tracking-[0.2em] text-slate-300 uppercase">Metro Infrastructure ERP v2.0</span>
+                            <span class="text-[11px] font-extrabold tracking-[0.2em] text-blue-700 uppercase">Enterprise Infrastructure ERP v2.0</span>
                         </div>
                         
-                        <h1 class="text-5xl sm:text-7xl lg:text-[5.5rem] font-extrabold text-white tracking-tighter leading-[1.05]">
-                            Manage scale with <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-300 to-white">precision.</span>
+                        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-[1.08]">
+                            Precision control for <span class="text-blue-600">mega projects.</span>
                         </h1>
                         
-                        <p class="text-lg text-slate-400 max-w-xl mx-auto lg:mx-0 font-medium leading-relaxed tracking-wide">
-                            A refined executive ERP console designed for regional infrastructure operations. Seamlessly connect BSRM steel rebar, LafargeHolcim cement stocks, supplier performance ratings, and project milestone schedules in one unified platform.
+                        <p class="text-base sm:text-lg text-slate-600 max-w-xl mx-auto lg:mx-0 font-medium leading-relaxed">
+                            Connect site material inventories (BSRM steel, Seven Rings cement), verified vendor networks, and project milestone timelines into one unified command center console.
                         </p>
                         
-                        <div class="flex flex-wrap items-center justify-center lg:justify-start gap-5 pt-4">
+                        <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
                             <Link
                                 v-if="!$page.props.auth.user"
                                 :href="route('login')"
-                                class="px-8 py-4 rounded-xl text-xs font-bold tracking-wide bg-white text-slate-950 hover:bg-slate-100 transition-all shadow-[0_0_30px_rgba(255,255,255,0.1)] hover:-translate-y-1 duration-300"
+                                class="px-8 py-4 rounded-2xl text-xs font-extrabold tracking-wide bg-blue-600 hover:bg-blue-700 text-white transition-all shadow-lg shadow-blue-600/20 hover:scale-105"
                             >
-                                Get Started
+                                Launch Console &rarr;
                             </Link>
                             <Link
                                 v-else
                                 :href="route('dashboard')"
-                                class="px-8 py-4 rounded-xl text-xs font-bold tracking-wide bg-white text-slate-950 hover:bg-slate-100 transition-all shadow-[0_0_30px_rgba(255,255,255,0.1)] hover:-translate-y-1 duration-300"
+                                class="px-8 py-4 rounded-2xl text-xs font-extrabold tracking-wide bg-blue-600 hover:bg-blue-700 text-white transition-all shadow-lg shadow-blue-600/20 hover:scale-105"
                             >
-                                Dashboard Console
+                                Enter Dashboard &rarr;
                             </Link>
                             <a
                                 href="#features"
-                                class="px-8 py-4 rounded-xl text-xs font-bold tracking-wide bg-transparent text-white border border-white/10 hover:border-white/30 hover:bg-white/5 transition-all duration-300"
+                                class="px-8 py-4 rounded-2xl text-xs font-bold tracking-wide bg-slate-100 text-slate-700 border border-slate-200 hover:border-slate-300 hover:bg-slate-200 transition-all"
                             >
-                                Explore Modules
+                                Explore Features
                             </a>
+                        </div>
+
+                        <!-- Mini Stats Grid -->
+                        <div class="grid grid-cols-3 gap-6 pt-6 border-t border-slate-200">
+                            <div>
+                                <div class="text-2xl sm:text-3xl font-extrabold text-slate-900">৳ 50M+</div>
+                                <div class="text-[11px] text-slate-500 font-bold uppercase tracking-wider mt-0.5">Stock Tracked</div>
+                            </div>
+                            <div>
+                                <div class="text-2xl sm:text-3xl font-extrabold text-blue-600">100%</div>
+                                <div class="text-[11px] text-slate-500 font-bold uppercase tracking-wider mt-0.5">RBAC Guarded</div>
+                            </div>
+                            <div>
+                                <div class="text-2xl sm:text-3xl font-extrabold text-emerald-600">24/7</div>
+                                <div class="text-[11px] text-slate-500 font-bold uppercase tracking-wider mt-0.5">Site Sync</div>
+                            </div>
                         </div>
                     </div>
                     
-                    <!-- High-End Image Composition -->
-                    <div class="lg:col-span-6 relative">
-                        <div class="absolute inset-0 bg-gradient-to-tr from-blue-600/20 to-indigo-600/20 rounded-3xl blur-2xl transform rotate-3 scale-105"></div>
-                        <div class="relative rounded-3xl overflow-hidden border border-white/10 shadow-2xl aspect-[4/3] group">
-                            <!-- Dummy Image: High-end modern urban construction -->
-                            <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2940&auto=format&fit=crop" alt="Metro Infrastructure Project" class="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-1000 ease-out" />
-                            <div class="absolute inset-0 bg-slate-950/40 group-hover:bg-slate-950/20 transition-colors duration-700"></div>
+                    <!-- Right Hero Showcase Visual Card (Compact 5 Columns) -->
+                    <div class="lg:col-span-5 relative">
+                        <div class="relative rounded-2xl overflow-hidden border border-slate-200 shadow-xl max-h-[340px] aspect-[16/10] group bg-slate-900">
+                            <!-- Real Construction High-Rise Site Photo -->
+                            <img 
+                                src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1200&auto=format&fit=crop" 
+                                alt="Metro Infrastructure High-Rise Site" 
+                                @error="handleHeroImageError"
+                                class="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out opacity-90" 
+                            />
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-900/30 to-slate-900/10"></div>
                             
-                            <!-- Floating UI Element -->
-                            <div class="absolute bottom-8 left-8 right-8 bg-[#0b0f19]/90 backdrop-blur-xl border border-white/10 rounded-2xl p-5 shadow-2xl transform translate-y-2 group-hover:translate-y-0 transition-all duration-700 delay-100">
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center gap-4">
-                                        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-600 p-0.5">
-                                            <div class="w-full h-full bg-[#0b0f19] rounded-[10px] flex items-center justify-center">
-                                                <svg class="w-6 h-6 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                                            </div>
+                            <!-- Top Left Telemetry Pill -->
+                            <div class="absolute top-4 left-4 inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-slate-900/80 backdrop-blur-md border border-white/20 text-white text-[9px] font-extrabold uppercase tracking-wider">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                                Site Telemetry Active
+                            </div>
+
+                            <!-- Top Right Real-Time Material Badge -->
+                            <div class="absolute top-4 right-4 hidden sm:inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-blue-600/90 backdrop-blur-md text-white text-[9px] font-extrabold uppercase tracking-wider border border-blue-400/30">
+                                <span>🏗️ BSRM STEEL • 14 TONS</span>
+                            </div>
+
+                            <!-- Floating UI Card Overlay -->
+                            <div class="absolute bottom-4 left-4 right-4 bg-white/95 backdrop-blur-xl border border-slate-200 rounded-xl p-3.5 shadow-xl">
+                                <div class="flex items-center justify-between gap-3">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-9 h-9 rounded-lg bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600 shrink-0">
+                                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                                         </div>
                                         <div>
-                                            <div class="text-white font-bold tracking-wide">Cast-in-Situ Piling Complete</div>
-                                            <div class="text-slate-400 text-xs mt-0.5">Basement Mat Raft & BSRM Rebar Cage</div>
+                                            <div class="text-slate-900 font-extrabold text-xs tracking-tight">Site Phase #02 In Progress</div>
+                                            <div class="text-slate-500 text-[11px] mt-0.5 font-medium">Basement Mat Raft Foundation Casting</div>
                                         </div>
                                     </div>
-                                    <div class="text-right hidden sm:block">
-                                        <div class="text-emerald-400 font-bold text-lg">100%</div>
-                                        <div class="text-slate-500 text-[10px] uppercase tracking-wider font-bold">Phase Status</div>
-                                    </div>
+                                    <span class="px-2.5 py-1 rounded-full text-[9px] font-extrabold uppercase bg-emerald-50 text-emerald-700 border border-emerald-200 shrink-0 tracking-wider">Active</span>
                                 </div>
                             </div>
                         </div>
@@ -140,122 +170,170 @@ defineProps({
             </div>
         </section>
 
-        <!-- Trusted By Regional Manufacturers -->
-        <section class="border-y border-white/[0.02] bg-slate-900/20 py-16">
-            <div class="max-w-[90rem] mx-auto px-6 sm:px-8 lg:px-12">
-                <p class="text-center text-[10px] font-bold text-slate-500 uppercase tracking-[0.3em] mb-10">Integrated with Leading Regional Building Material Suppliers</p>
-                <div class="flex flex-wrap justify-center gap-12 sm:gap-20 opacity-60 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-700">
-                    <div class="text-xl font-black tracking-widest text-white uppercase italic">BSRM<span class="text-blue-500 font-normal text-xs uppercase tracking-normal"> Steels</span></div>
-                    <div class="text-xl font-extrabold tracking-tight text-white flex items-center gap-2">LafargeHolcim</div>
-                    <div class="text-xl font-bold tracking-tight text-white">Seven Rings Cement</div>
-                    <div class="text-xl font-extrabold tracking-tighter text-white">Mir Concrete</div>
-                    <div class="text-xl font-bold tracking-tight text-white">Berger Paints</div>
+        <!-- B. Official Manufacturers Brand Logo Banner -->
+        <section id="partners" class="border-b border-slate-200 bg-slate-50 py-16">
+            <div class="max-w-[90rem] mx-auto px-6 sm:px-8 lg:px-12 space-y-8">
+                <p class="text-center text-[11px] font-extrabold text-slate-400 uppercase tracking-[0.25em]">Integrated with Verified Material Manufacturers & Official Brand Partners</p>
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center justify-items-center bg-white p-8 sm:p-10 rounded-3xl border border-slate-200/80 shadow-sm">
+                    <BrandLogos name="bsrm" className="h-10" />
+                    <BrandLogos name="lafarge" className="h-9" />
+                    <BrandLogos name="sevenrings" className="h-10" />
+                    <BrandLogos name="mir" className="h-10" />
+                    <BrandLogos name="berger" className="h-9" />
+                    <BrandLogos name="cat" className="h-9" />
                 </div>
             </div>
         </section>
 
-        <!-- Bento Box Features -->
-        <section id="features" class="py-40 relative">
+        <!-- C. Bento Box Features Grid -->
+        <section id="features" class="py-24 sm:py-32 relative">
             <div class="max-w-[90rem] mx-auto px-6 sm:px-8 lg:px-12 relative z-10">
-                <div class="mb-24 md:flex items-end justify-between">
-                    <div class="max-w-2xl">
-                        <h2 class="text-[11px] font-bold text-blue-400 uppercase tracking-[0.2em] mb-4">Core Architecture</h2>
-                        <p class="text-4xl md:text-5xl font-extrabold text-white tracking-tight leading-tight">Everything you need to scale operations.</p>
-                    </div>
-                    <p class="text-slate-400 text-sm max-w-sm font-medium mt-6 md:mt-0 leading-relaxed">
-                        Built for speed and precision. Tailored specifically for regional high-rise and commercial infrastructure projects.
-                    </p>
+                <div class="mb-16 max-w-2xl space-y-3">
+                    <span class="text-xs font-extrabold text-blue-600 uppercase tracking-widest">Core Infrastructure Architecture</span>
+                    <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight">Built for scale, speed, and precision.</h2>
                 </div>
                 
-                <!-- Bento Grid -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 auto-rows-[280px]">
-                    
-                    <!-- Large Feature: Inventory Management -->
-                    <div class="md:col-span-2 md:row-span-2 rounded-3xl bg-slate-900/40 border border-white/5 overflow-hidden relative group hover:border-white/10 transition-colors duration-500">
-                        <img src="https://images.unsplash.com/photo-1541888081691-10c732890e0c?q=80&w=2940&auto=format&fit=crop" alt="Construction Materials" class="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-50 transition-opacity duration-700 mix-blend-overlay" />
-                        <div class="absolute inset-0 bg-gradient-to-t from-[#0b0f19] via-[#0b0f19]/80 to-transparent"></div>
-                        
-                        <div class="absolute inset-x-0 bottom-0 p-10 lg:p-12">
-                            <div class="w-12 h-12 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/20 mb-6 group-hover:scale-110 transition-transform duration-500">
-                                <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
-                            </div>
-                            <h3 class="text-3xl font-extrabold text-white tracking-tight mb-3">Resource Catalogs</h3>
-                            <p class="text-slate-400 text-sm font-medium max-w-md leading-relaxed">
-                                Track 500W steel rebar, composite cement, Sylhet sand, and stone chips. Run real-time stock allocation checks with custom low-stock thresholds.
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+                    <!-- Feature 1: Inventory -->
+                    <div class="bg-white border border-slate-200/80 p-8 sm:p-10 rounded-3xl space-y-6 hover:border-blue-300 hover:shadow-md transition-all duration-300 group hover:-translate-y-1">
+                        <div class="w-14 h-14 bg-blue-50 text-blue-600 border border-blue-100 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                        </div>
+                        <div class="space-y-3">
+                            <h3 class="text-xl font-extrabold text-slate-900 tracking-tight">Material Stock Catalog</h3>
+                            <p class="text-slate-600 text-xs font-medium leading-relaxed">
+                                Complete CRUD for building materials (500W steel rebar, composite cement, red bricks, coarse sand, stone chips). Real-time stock valuation and low-stock alerts.
                             </p>
                         </div>
                     </div>
 
-                    <!-- Small Feature: RBAC -->
-                    <div class="rounded-3xl bg-gradient-to-br from-slate-800/40 to-slate-900/40 border border-white/5 p-8 relative group hover:border-white/10 transition-colors duration-500 flex flex-col justify-between overflow-hidden">
-                        <div class="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity duration-500 transform translate-x-4 -translate-y-4">
-                            <svg class="w-32 h-32 text-blue-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 22h20L12 2z"/></svg>
+                    <!-- Feature 2: Vendor Directory -->
+                    <div class="bg-white border border-slate-200/80 p-8 sm:p-10 rounded-3xl space-y-6 hover:border-indigo-300 hover:shadow-md transition-all duration-300 group hover:-translate-y-1">
+                        <div class="w-14 h-14 bg-indigo-50 text-indigo-600 border border-indigo-100 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
                         </div>
-                        <div class="w-10 h-10 bg-blue-500/10 text-blue-400 rounded-xl flex items-center justify-center border border-blue-500/20 group-hover:scale-110 transition-transform duration-500">
-                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-bold text-white tracking-tight mb-2">Corporate RBAC</h3>
-                            <p class="text-slate-400 text-xs font-medium leading-relaxed">
-                                Granular roles and permission gates. Audit panels instantly as PMs, Engineers, or Vendors.
+                        <div class="space-y-3">
+                            <h3 class="text-xl font-extrabold text-slate-900 tracking-tight">Supplier Directory & Ratings</h3>
+                            <p class="text-slate-600 text-xs font-medium leading-relaxed">
+                                Profiles for key material suppliers. Category filters, contact personnel logging, and interactive 1-5 star performance scorecards.
                             </p>
                         </div>
                     </div>
 
-                    <!-- Small Feature: Vendor Network -->
-                    <div class="rounded-3xl bg-slate-900/40 border border-white/5 p-8 relative group hover:border-white/10 transition-colors duration-500 flex flex-col justify-between">
-                        <div class="w-10 h-10 bg-indigo-500/10 text-indigo-400 rounded-xl flex items-center justify-center border border-indigo-500/20 group-hover:scale-110 transition-transform duration-500">
-                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+                    <!-- Feature 3: Milestone Tracker -->
+                    <div class="bg-white border border-slate-200/80 p-8 sm:p-10 rounded-3xl space-y-6 hover:border-teal-300 hover:shadow-md transition-all duration-300 group hover:-translate-y-1">
+                        <div class="w-14 h-14 bg-teal-50 text-teal-600 border border-teal-100 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                         </div>
-                        <div>
-                            <h3 class="text-xl font-bold text-white tracking-tight mb-2">Vendor Network</h3>
-                            <p class="text-slate-400 text-xs font-medium leading-relaxed">
-                                Maintain verified profiles. Run audits by category and submit performance rating reports.
+                        <div class="space-y-3">
+                            <h3 class="text-xl font-extrabold text-slate-900 tracking-tight">Milestone Tracker</h3>
+                            <p class="text-slate-600 text-xs font-medium leading-relaxed">
+                                Timeline visualization with FullCalendar. Create, map, and track structural phase status (`Pending`, `In Progress`, `Completed`).
                             </p>
                         </div>
                     </div>
-
                 </div>
             </div>
         </section>
 
-        <!-- Premium CTA Section -->
-        <section class="py-24 relative overflow-hidden">
-            <div class="absolute inset-0 bg-blue-600/5"></div>
-            <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
-                <h2 class="text-4xl sm:text-5xl font-extrabold text-white tracking-tight mb-6">Ready to upgrade your infrastructure management?</h2>
-                <p class="text-slate-400 text-base font-medium mb-10 max-w-2xl mx-auto">
-                    Join the regional construction firms using SmartConstruct to maintain operational clarity across all project sites.
-                </p>
-                <Link
-                    v-if="!$page.props.auth.user"
-                    :href="route('register')"
-                    class="inline-block px-10 py-5 rounded-2xl text-sm font-bold tracking-wide bg-white text-slate-950 hover:bg-slate-100 transition-all shadow-[0_0_30px_rgba(255,255,255,0.15)] hover:shadow-[0_0_40px_rgba(255,255,255,0.25)] hover:-translate-y-1 duration-300"
-                >
-                    Create Enterprise Account
-                </Link>
-                <Link
-                    v-else
-                    :href="route('dashboard')"
-                    class="inline-block px-10 py-5 rounded-2xl text-sm font-bold tracking-wide bg-white text-slate-950 hover:bg-slate-100 transition-all shadow-[0_0_30px_rgba(255,255,255,0.15)] hover:shadow-[0_0_40px_rgba(255,255,255,0.25)] hover:-translate-y-1 duration-300"
-                >
-                    Enter Dashboard
-                </Link>
+        <!-- D. Live Operations Preview Section -->
+        <section id="preview" class="py-24 bg-white border-y border-slate-200/80">
+            <div class="max-w-[90rem] mx-auto px-6 sm:px-8 lg:px-12 space-y-12">
+                <div class="text-center max-w-2xl mx-auto space-y-3">
+                    <span class="text-xs font-extrabold text-blue-600 uppercase tracking-widest">Command Center Interface</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">Real-time visibility across all operational layers</h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Inventory Command Card -->
+                    <div class="bg-slate-50 p-6 rounded-3xl border border-slate-200 space-y-4">
+                        <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=800&auto=format&fit=crop" alt="Material Stock Tracking" class="w-full h-48 object-cover rounded-2xl border border-slate-200" />
+                        <div>
+                            <span class="text-[10px] font-extrabold uppercase text-blue-600 tracking-wider">Inventory Command</span>
+                            <h3 class="text-base font-extrabold text-slate-900 mt-1">Material Stock Tracking</h3>
+                            <p class="text-xs text-slate-500 mt-1">Monitor BSRM steel, Holcim cement bags, and aggregate volume with automated reorder alerts.</p>
+                        </div>
+                    </div>
+
+                    <!-- Supplier Auditing Card -->
+                    <div class="bg-slate-50 p-6 rounded-3xl border border-slate-200 space-y-4">
+                        <img src="https://images.unsplash.com/photo-1589939705384-5185137a7f0f?q=80&w=800&auto=format&fit=crop" alt="Verified Vendor Scorecards" class="w-full h-48 object-cover rounded-2xl border border-slate-200" />
+                        <div>
+                            <span class="text-[10px] font-extrabold uppercase text-indigo-600 tracking-wider">Supplier Auditing</span>
+                            <h3 class="text-base font-extrabold text-slate-900 mt-1">Verified Vendor Scorecards</h3>
+                            <p class="text-xs text-slate-500 mt-1">Audit ready-mix concrete and building material partners with 1-5 star quality ratings.</p>
+                        </div>
+                    </div>
+
+                    <!-- Timeline Scheduling Card -->
+                    <div class="bg-slate-50 p-6 rounded-3xl border border-slate-200 space-y-4">
+                        <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=800&auto=format&fit=crop" alt="Milestone Phase Tracker" class="w-full h-48 object-cover rounded-2xl border border-slate-200" />
+                        <div>
+                            <span class="text-[10px] font-extrabold uppercase text-teal-600 tracking-wider">Timeline Scheduling</span>
+                            <h3 class="text-base font-extrabold text-slate-900 mt-1">Milestone Phase Tracker</h3>
+                            <p class="text-xs text-slate-500 mt-1">FullCalendar Gantt-style timeline tracking for raft foundations, columns, and slab casting.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <!-- Refined Footer -->
-        <footer class="border-t border-white/[0.05] bg-[#0b0f19] pt-16 pb-8 relative z-10">
-            <div class="max-w-[90rem] mx-auto px-6 sm:px-8 lg:px-12 flex flex-col md:flex-row items-center justify-between gap-6">
-                <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 flex items-center justify-center bg-blue-500/10 rounded-lg text-blue-400 border border-blue-500/20">
-                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                        </svg>
+        <!-- E. Refined Call to Action Card Section -->
+        <section class="py-24 relative overflow-hidden bg-[#f8fafc]">
+            <div class="max-w-5xl mx-auto px-6 relative z-10">
+                <div class="bg-white border border-slate-200/80 rounded-3xl p-10 sm:p-16 text-center space-y-6 shadow-lg relative overflow-hidden">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-[11px] font-extrabold uppercase tracking-widest">
+                        <span>🚀</span> Instant Enterprise Access
                     </div>
-                    <span class="text-xs font-bold tracking-[0.2em] text-white uppercase">Smart<span class="text-slate-500">Construct</span></span>
+
+                    <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight">
+                        Ready to streamline your construction site?
+                    </h2>
+
+                    <p class="text-slate-600 text-xs sm:text-sm font-medium max-w-xl mx-auto leading-relaxed">
+                        Experience real-time inventory tracking, verified supplier scorecards, and project milestone monitoring with SmartConstruct ERP.
+                    </p>
+
+                    <div class="flex flex-wrap items-center justify-center gap-4 pt-2">
+                        <Link
+                            v-if="!$page.props.auth.user"
+                            :href="route('register')"
+                            class="px-8 py-4 rounded-2xl text-xs font-extrabold tracking-wide bg-blue-600 hover:bg-blue-700 text-white transition-all shadow-md shadow-blue-600/20 hover:scale-105 flex items-center gap-2"
+                        >
+                            Create Corporate Account &rarr;
+                        </Link>
+                        <Link
+                            v-else
+                            :href="route('dashboard')"
+                            class="px-8 py-4 rounded-2xl text-xs font-extrabold tracking-wide bg-blue-600 hover:bg-blue-700 text-white transition-all shadow-md shadow-blue-600/20 hover:scale-105 flex items-center gap-2"
+                        >
+                            Go to Dashboard Console &rarr;
+                        </Link>
+
+                        <Link
+                            v-if="!$page.props.auth.user"
+                            :href="route('login')"
+                            class="px-8 py-4 rounded-2xl text-xs font-bold tracking-wide bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 transition-all"
+                        >
+                            Sign In to Console
+                        </Link>
+                    </div>
                 </div>
-                <div class="text-[11px] text-slate-500 font-semibold tracking-wider uppercase">
+            </div>
+        </section>
+
+        <!-- F. Footer -->
+        <footer class="border-t border-slate-200 bg-white py-10 relative z-10">
+            <div class="max-w-[90rem] mx-auto px-6 sm:px-8 lg:px-12 flex flex-col sm:flex-row items-center justify-between gap-6">
+                <BrandLogos name="smartconstruct" className="h-16 sm:h-18" />
+
+                <div class="flex items-center gap-6 text-xs font-bold text-slate-500 uppercase tracking-wider">
+                    <a href="#features" class="hover:text-slate-900 transition-colors">Features</a>
+                    <a href="#partners" class="hover:text-slate-900 transition-colors">Partners</a>
+                    <a href="#preview" class="hover:text-slate-900 transition-colors">Operations</a>
+                </div>
+
+                <div class="text-[11px] text-slate-500 font-bold uppercase tracking-wider">
                     &copy; 2026 SmartConstruct ERP. All rights reserved.
                 </div>
             </div>
