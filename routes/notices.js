@@ -3,6 +3,22 @@ const router = express.Router();
 const db = require('../config/db');
 const { isAuthenticated, hasRole } = require('../middleware/auth');
 
+// Member D: Internal Notice Board (View for All Employees)
+router.get('/board', isAuthenticated, async (req, res) => {
+    try {
+        const [notices] = await db.query(`
+            SELECT notices.*, users.name as author 
+            FROM notices 
+            LEFT JOIN users ON notices.created_by = users.id 
+            ORDER BY created_at DESC
+        `);
+        res.render('notices/board', { notices, title: 'Internal Notice Board' });
+    } catch (err) {
+        console.error(err);
+        res.render('notices/board', { notices: [], title: 'Internal Notice Board' });
+    }
+});
+
 // Member D: Notice Board CMS List (Admin View)
 router.get('/', isAuthenticated, hasRole('SuperAdmin', 'Project Manager'), async (req, res) => {
     try {

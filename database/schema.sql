@@ -74,6 +74,71 @@ CREATE TABLE IF NOT EXISTS `milestones` (
     FOREIGN KEY (`project_id`) REFERENCES `projects`(`id`) ON DELETE CASCADE
 );
 
+-- Sprint 2: Purchase Order System (Member A)
+CREATE TABLE IF NOT EXISTS `purchase_orders` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `vendor_id` INT NOT NULL,
+    `status` ENUM('Pending', 'Approved', 'Shipped', 'Delivered') DEFAULT 'Pending',
+    `total_amount` DECIMAL(15, 2) DEFAULT 0.00,
+    `expected_date` DATE,
+    `created_by` INT,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (`vendor_id`) REFERENCES `vendors`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`created_by`) REFERENCES `users`(`id`) ON DELETE SET NULL
+);
+
+CREATE TABLE IF NOT EXISTS `purchase_order_items` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `po_id` INT NOT NULL,
+    `material_id` INT NOT NULL,
+    `quantity` DECIMAL(10, 2) NOT NULL,
+    `unit_price` DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (`po_id`) REFERENCES `purchase_orders`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`material_id`) REFERENCES `materials`(`id`) ON DELETE CASCADE
+);
+
+-- Sprint 2: Delivery Scheduling (Member B)
+CREATE TABLE IF NOT EXISTS `deliveries` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `po_id` INT NOT NULL,
+    `status` ENUM('Pending', 'In Transit', 'Delivered') DEFAULT 'Pending',
+    `delivery_date` DATE,
+    `received_by` INT,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (`po_id`) REFERENCES `purchase_orders`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`received_by`) REFERENCES `users`(`id`) ON DELETE SET NULL
+);
+
+-- Sprint 2: Labor Attendance & Cost Log (Member C)
+CREATE TABLE IF NOT EXISTS `labor_logs` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `project_id` INT NOT NULL,
+    `log_date` DATE NOT NULL,
+    `headcount` INT NOT NULL DEFAULT 0,
+    `total_cost` DECIMAL(15, 2) NOT NULL DEFAULT 0.00,
+    `notes` TEXT,
+    `created_by` INT,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (`project_id`) REFERENCES `projects`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`created_by`) REFERENCES `users`(`id`) ON DELETE SET NULL
+);
+
+-- Sprint 2: Site-wise Inventory Transfer (Member A)
+CREATE TABLE IF NOT EXISTS `inventory_transfers` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `material_id` INT NOT NULL,
+    `from_project_id` INT NOT NULL,
+    `to_project_id` INT NOT NULL,
+    `quantity` DECIMAL(10, 2) NOT NULL,
+    `status` ENUM('Requested', 'Approved', 'In Transit', 'Completed') DEFAULT 'Requested',
+    `created_by` INT,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (`material_id`) REFERENCES `materials`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`from_project_id`) REFERENCES `projects`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`to_project_id`) REFERENCES `projects`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`created_by`) REFERENCES `users`(`id`) ON DELETE SET NULL
+);
+
 -- Sample Data Seeding
 INSERT INTO `users` (`name`, `email`, `password`, `role`) VALUES
 ('Super Admin', 'admin@smarstruction.bd', '$2a$10$wT3G/VvO1o9.j.P3r7YVMeD9nC8p3/2N.dGZ3a3.F1/b6G9N0Wn1i', 'SuperAdmin'),
@@ -89,11 +154,11 @@ INSERT INTO `materials` (`name`, `category`, `unit`, `current_stock`, `reorder_l
 ('Coarse Sand (Sylhet)', 'Sand', 'Cft', 1200.00, 300.00, 65.00)
 ON DUPLICATE KEY UPDATE id=id;
 
-INSERT INTO `vendors` (`company_name`, `contact_person`, `email`, `phone`, `material_category`, `rating`) VALUES
-('BSRM Steels Bangladesh', 'Mr. Tanvir', 'sales@bsrm.bd', '+8801700000001', 'Steel/Rod', 4.90),
-('Seven Rings Cement', 'Mr. Karim', 'orders@sevenrings.bd', '+8801800000002', 'Cement', 4.70),
-('Bengal Auto Bricks', 'Mr. Hafiz', 'info@bengalbricks.bd', '+8801900000003', 'Bricks', 4.50)
-ON DUPLICATE KEY UPDATE id=id;
+INSERT INTO `vendors` (`company_name`, `contact_person`, `email`, `phone`, `material_category`, `rating`, `user_id`) VALUES
+('BSRM Steels Bangladesh', 'Mr. Tanvir', 'sales@bsrm.bd', '+8801700000001', 'Steel/Rod', 4.90, 4),
+('Seven Rings Cement', 'Mr. Karim', 'orders@sevenrings.bd', '+8801800000002', 'Cement', 4.70, NULL),
+('Bengal Auto Bricks', 'Mr. Hafiz', 'info@bengalbricks.bd', '+8801900000003', 'Bricks', 4.50, NULL)
+ON DUPLICATE KEY UPDATE user_id=VALUES(user_id);
 
 INSERT INTO `projects` (`name`, `location`, `budget`, `status`, `start_date`, `target_completion_date`) VALUES
 ('Dhanmondi High-Rise Tower (15-Story)', 'Dhanmondi 27, Dhaka', 120000000.00, 'Ongoing', '2026-01-10', '2027-12-30'),

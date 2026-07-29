@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .notice-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-left: 4px solid var(--primary-color);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .notice-card.emergency {
+            border-left-color: #ef4444;
+            background: rgba(239, 68, 68, 0.05);
+        }
+        .notice-card.high {
+            border-left-color: #f59e0b;
+        }
+        .notice-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .notice-meta {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        .notice-content {
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <%- include('../partials/navbar') %>
+
+    <div class="container" style="max-width: 800px;">
+        <div class="page-header">
+            <div>
+                <h2>📌 Internal Notice Board</h2>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Company-wide updates and site bulletins.</p>
+            </div>
+        </div>
+
+        <% if (notices && notices.length > 0) { %>
+            <% notices.forEach(n => { %>
+                <div class="notice-card <%= n.priority.toLowerCase() %>">
+                    <div class="notice-header">
+                        <h3 style="margin: 0;"><%= n.title %></h3>
+                        <span class="status-badge <%= n.priority === 'Emergency' ? 'status-lowstock' : (n.priority === 'High' ? 'status-moderate' : 'status-good') %>">
+                            <%= n.priority %>
+                        </span>
+                    </div>
+                    <div class="notice-meta" style="margin-bottom: 1rem;">
+                        Posted by <strong><%= n.author || 'System Admin' %></strong> on <%= new Date(n.created_at).toLocaleDateString() %>
+                    </div>
+                    <div class="notice-content"><%= n.content %></div>
+                </div>
+            <% }) %>
+        <% } else { %>
+            <div class="card">
+                <p style="text-align: center; color: var(--text-muted); margin: 2rem 0;">No notices have been published recently.</p>
+            </div>
+        <% } %>
+    </div>
+
+    <%- include('../partials/footer') %>
+</body>
+</html>

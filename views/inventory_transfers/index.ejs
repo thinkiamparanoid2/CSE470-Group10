@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <%- include('../partials/navbar') %>
+
+    <div class="container">
+        <div class="page-header">
+            <div>
+                <h2>🔄 Site-wise Inventory Transfer</h2>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Sprint 2 Feature • Member A</p>
+            </div>
+            <% if (user && (user.role === 'SuperAdmin' || user.role === 'Project Manager' || user.role === 'Site Engineer')) { %>
+                <a href="/inventory-transfers/create" class="btn btn-primary">+ Request Transfer</a>
+            <% } %>
+        </div>
+
+        <div class="card">
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Material</th>
+                            <th>Quantity</th>
+                            <th>From Project</th>
+                            <th>To Project</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (transfers && transfers.length > 0) { %>
+                            <% transfers.forEach(t => { %>
+                                <tr>
+                                    <td>#<%= t.id %></td>
+                                    <td><%= t.material_name %></td>
+                                    <td><%= t.quantity %> <%= t.unit %></td>
+                                    <td><%= t.from_project_name %></td>
+                                    <td><%= t.to_project_name %></td>
+                                    <td>
+                                        <span class="status-badge <%= t.status === 'Completed' ? 'status-good' : (t.status === 'Requested' ? 'status-lowstock' : 'status-moderate') %>">
+                                            <%= t.status %>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <% if (user && (user.role === 'SuperAdmin' || user.role === 'Project Manager')) { %>
+                                            <% if (t.status === 'Requested') { %>
+                                                <form action="/inventory-transfers/status/<%= t.id %>" method="POST" style="display:inline;">
+                                                    <input type="hidden" name="status" value="Approved">
+                                                    <button type="submit" class="btn btn-primary" style="padding: 0.2rem 0.5rem; font-size: 0.8rem;">Approve</button>
+                                                </form>
+                                            <% } else if (t.status === 'Approved') { %>
+                                                <form action="/inventory-transfers/status/<%= t.id %>" method="POST" style="display:inline;">
+                                                    <input type="hidden" name="status" value="In Transit">
+                                                    <button type="submit" class="btn btn-secondary" style="padding: 0.2rem 0.5rem; font-size: 0.8rem;">Mark In Transit</button>
+                                                </form>
+                                            <% } else if (t.status === 'In Transit') { %>
+                                                <form action="/inventory-transfers/status/<%= t.id %>" method="POST" style="display:inline;">
+                                                    <input type="hidden" name="status" value="Completed">
+                                                    <button type="submit" class="btn btn-primary" style="padding: 0.2rem 0.5rem; font-size: 0.8rem;">Complete Transfer</button>
+                                                </form>
+                                            <% } %>
+                                        <% } else { %>
+                                            -
+                                        <% } %>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        <% } else { %>
+                            <tr><td colspan="7">No inventory transfers found.</td></tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <%- include('../partials/footer') %>
+</body>
+</html>

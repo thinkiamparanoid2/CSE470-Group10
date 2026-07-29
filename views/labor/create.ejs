@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <%- include('../partials/navbar') %>
+
+    <div class="container" style="max-width: 600px;">
+        <h2>Log Daily Labor</h2>
+        <div class="card" style="margin-top: 2rem;">
+            <form action="/labor/create" method="POST">
+                <div class="form-group" style="margin-bottom: 1rem;">
+                    <label>Project</label>
+                    <select name="project_id" required style="width: 100%; padding: 0.5rem;">
+                        <option value="">Select Project</option>
+                        <% projects.forEach(p => { %>
+                            <option value="<%= p.id %>"><%= p.name %></option>
+                        <% }) %>
+                    </select>
+                </div>
+                
+                <div class="form-group" style="margin-bottom: 1rem;">
+                    <label>Log Date</label>
+                    <input type="date" name="log_date" required style="width: 100%; padding: 0.5rem;">
+                </div>
+                
+                <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+                    <div class="form-group" style="flex: 1;">
+                        <label>Total Headcount</label>
+                        <input type="number" name="headcount" min="1" required placeholder="e.g. 15" style="width: 100%; padding: 0.5rem;">
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label>Total Labor Cost (৳)</label>
+                        <input type="number" step="0.01" name="total_cost" required placeholder="e.g. 15000" style="width: 100%; padding: 0.5rem;">
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label>Notes (Optional)</label>
+                    <textarea name="notes" rows="3" placeholder="Any special incidents, weather conditions, etc." style="width: 100%; padding: 0.5rem;"></textarea>
+                </div>
+
+                <div style="display: flex; gap: 1rem;">
+                    <button type="submit" class="btn btn-primary" style="flex: 1;">Submit Log</button>
+                    <a href="/labor" class="btn btn-secondary" style="flex: 1; text-align: center;">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <%- include('../partials/footer') %>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <%- include('../partials/navbar') %>
+
+    <div class="container">
+        <div class="page-header">
+            <div>
+                <h2>🛒 Purchase Orders</h2>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Sprint 2 Feature • Member A</p>
+            </div>
+            <% if (user && (user.role === 'SuperAdmin' || user.role === 'Project Manager')) { %>
+                <a href="/purchase_orders/create" class="btn btn-primary">+ Create PO</a>
+            <% } %>
+        </div>
+
+        <div class="card">
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>PO ID</th>
+                            <th>Date</th>
+                            <th>Vendor</th>
+                            <th>Total Amount</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (purchaseOrders && purchaseOrders.length > 0) { %>
+                            <% purchaseOrders.forEach(po => { %>
+                                <tr>
+                                    <td>#<%= po.id %></td>
+                                    <td><%= new Date(po.created_at).toLocaleDateString() %></td>
+                                    <td><%= po.vendor_name %></td>
+                                    <td>৳<%= parseFloat(po.total_amount).toLocaleString() %></td>
+                                    <td>
+                                        <span class="status-badge <%= po.status === 'Approved' ? 'status-good' : (po.status === 'Pending' ? 'status-lowstock' : '') %>">
+                                            <%= po.status %>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <% if (user && (user.role === 'SuperAdmin' || user.role === 'Project Manager')) { %>
+                                            <% if (po.status === 'Pending') { %>
+                                                <form action="/purchase_orders/status/<%= po.id %>" method="POST" style="display:inline;">
+                                                    <input type="hidden" name="status" value="Approved">
+                                                    <button type="submit" class="btn btn-primary" style="padding: 0.2rem 0.5rem; font-size: 0.8rem;">Approve</button>
+                                                </form>
+                                            <% } %>
+                                        <% } %>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        <% } else { %>
+                            <tr><td colspan="6">No Purchase Orders found.</td></tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <%- include('../partials/footer') %>
+</body>
+</html>

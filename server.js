@@ -40,6 +40,10 @@ const vendorsRoutes = require('./routes/vendors');
 const projectsRoutes = require('./routes/projects');
 const milestonesRoutes = require('./routes/milestones');
 const noticesRoutes = require('./routes/notices');
+const purchaseOrdersRoutes = require('./routes/purchase_orders');
+const deliveriesRoutes = require('./routes/deliveries');
+const laborRoutes = require('./routes/labor');
+const inventoryTransfersRoutes = require('./routes/inventory_transfers');
 
 app.use('/', indexRoutes);
 app.use('/', authRoutes);
@@ -49,6 +53,10 @@ app.use('/vendors', vendorsRoutes);
 app.use('/projects', projectsRoutes);
 app.use('/milestones', milestonesRoutes);
 app.use('/notices', noticesRoutes);
+app.use('/purchase_orders', purchaseOrdersRoutes);
+app.use('/deliveries', deliveriesRoutes);
+app.use('/labor', laborRoutes);
+app.use('/inventory-transfers', inventoryTransfersRoutes);
 
 // Error 404 handler
 app.use((req, res) => {

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <%- include('../partials/navbar') %>
+
+    <div class="container">
+        <div class="page-header">
+            <div>
+                <h2>👷 Labor Attendance & Cost Log</h2>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Sprint 2 Feature • Member C</p>
+            </div>
+            <% if (user && (user.role === 'SuperAdmin' || user.role === 'Project Manager' || user.role === 'Site Engineer')) { %>
+                <a href="/labor/create" class="btn btn-primary">+ Log Labor</a>
+            <% } %>
+        </div>
+
+        <div class="card">
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Project</th>
+                            <th>Headcount</th>
+                            <th>Total Cost</th>
+                            <th>Logged By</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (laborLogs && laborLogs.length > 0) { %>
+                            <% laborLogs.forEach(log => { %>
+                                <tr>
+                                    <td><%= new Date(log.log_date).toLocaleDateString() %></td>
+                                    <td><%= log.project_name %></td>
+                                    <td><%= log.headcount %> workers</td>
+                                    <td>৳<%= parseFloat(log.total_cost).toLocaleString() %></td>
+                                    <td><%= log.created_by_name %></td>
+                                    <td style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="<%= log.notes %>">
+                                        <%= log.notes || '-' %>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        <% } else { %>
+                            <tr><td colspan="6">No labor logs found.</td></tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <%- include('../partials/footer') %>
+</body>
+</html>
