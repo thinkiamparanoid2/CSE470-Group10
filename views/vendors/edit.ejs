@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <%- include('../partials/navbar') %>
+
+    <div class="container" style="max-width: 550px;">
+        <div class="card" style="margin-top: 2rem;">
+            <div class="page-header">
+                <h2>Edit Vendor Record</h2>
+                <a href="/vendors" class="btn btn-secondary" style="padding: 0.35rem 0.75rem;">Back</a>
+            </div>
+
+            <% if (typeof error !== 'undefined' && error) { %>
+                <div style="background: rgba(239, 68, 68, 0.2); border: 1px solid #f87171; color: #f87171; padding: 0.75rem; border-radius: 8px; margin-bottom: 1rem; text-align: center;">
+                    <%= error %>
+                </div>
+            <% } %>
+
+            <form action="/vendors/edit/<%= vendor.id %>" method="POST">
+                <div class="form-group">
+                    <label for="company_name">Company Name</label>
+                    <input type="text" id="company_name" name="company_name" required value="<%= vendor.company_name %>">
+                </div>
+                <div class="form-group">
+                    <label for="contact_person">Contact Representative</label>
+                    <input type="text" id="contact_person" name="contact_person" value="<%= vendor.contact_person %>">
+                </div>
+                <div class="form-group">
+                    <label for="material_category">Material Category Provided</label>
+                    <input type="text" id="material_category" name="material_category" value="<%= vendor.material_category %>">
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="text" id="phone" name="phone" required value="<%= vendor.phone %>">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" value="<%= vendor.email %>">
+                </div>
+                <div class="form-group">
+                    <label for="address">Office / Yard Address</label>
+                    <textarea id="address" name="address" rows="2"><%= vendor.address %></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="rating">Rating (1.0 to 5.0)</label>
+                    <input type="number" step="0.1" min="1.0" max="5.0" id="rating" name="rating" value="<%= vendor.rating %>">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Update Vendor Record</button>
+            </form>
+        </div>
+    </div>
+
+    <%- include('../partials/footer') %>
+</body>
+</html>

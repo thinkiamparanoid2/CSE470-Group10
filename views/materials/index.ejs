@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <%- include('../partials/navbar') %>
+
+    <div class="container">
+        <div class="page-header">
+            <div>
+                <h2>📦 Material Stock Tracking</h2>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Sprint 1 Feature • Member A</p>
+            </div>
+            <% if (user && (user.role === 'SuperAdmin' || user.role === 'Project Manager')) { %>
+                <a href="/materials/create" class="btn btn-primary">+ Add New Material</a>
+            <% } %>
+        </div>
+
+        <div class="card">
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Material Name</th>
+                            <th>Category</th>
+                            <th>Current Stock</th>
+                            <th>Reorder Threshold</th>
+                            <th>Est. Unit Price</th>
+                            <th>Stock Status</th>
+                            <% if (user && (user.role === 'SuperAdmin' || user.role === 'Project Manager')) { %>
+                                <th>Actions</th>
+                            <% } %>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (materials && materials.length > 0) { %>
+                            <% materials.forEach(m => { %>
+                                <tr>
+                                    <td><strong><%= m.name %></strong></td>
+                                    <td><%= m.category %></td>
+                                    <td><%= m.current_stock %> <%= m.unit %></td>
+                                    <td><%= m.reorder_level %> <%= m.unit %></td>
+                                    <td>৳<%= Number(m.unit_price_est).toLocaleString() %></td>
+                                    <td>
+                                        <span class="status-badge <%= Number(m.current_stock) <= Number(m.reorder_level) ? 'status-lowstock' : 'status-good' %>">
+                                            <%= Number(m.current_stock) <= Number(m.reorder_level) ? 'Low Stock Warning' : 'In Stock' %>
+                                        </span>
+                                    </td>
+                                    <% if (user && (user.role === 'SuperAdmin' || user.role === 'Project Manager')) { %>
+                                        <td>
+                                            <a href="/materials/edit/<%= m.id %>" class="btn btn-secondary" style="padding: 0.2rem 0.5rem; font-size: 0.8rem; margin-right: 0.25rem;">Edit</a>
+                                            <form action="/materials/delete/<%= m.id %>" method="POST" style="display:inline;">
+                                                <button type="submit" class="btn btn-secondary" style="padding: 0.2rem 0.5rem; font-size: 0.8rem; background: rgba(220, 38, 38, 0.2); color: #fca5a5; border-color: rgba(220, 38, 38, 0.4);" onclick="return confirm('Delete this material?');">Delete</button>
+                                            </form>
+                                        </td>
+                                    <% } %>
+                                </tr>
+                            <% }) %>
+                        <% } else { %>
+                            <tr><td colspan="6">No materials logged in stock yet.</td></tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <%- include('../partials/footer') %>
+</body>
+</html>

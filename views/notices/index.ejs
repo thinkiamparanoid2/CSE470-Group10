@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <%- include('../partials/navbar') %>
+
+    <div class="container">
+        <div class="page-header">
+            <div>
+                <h2>📢 Notice Board CMS</h2>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Sprint 1 Feature • Member D</p>
+            </div>
+            <% if (user && (user.role === 'SuperAdmin' || user.role === 'Project Manager')) { %>
+                <a href="/notices/create" class="btn btn-primary">+ Create Notice</a>
+            <% } %>
+        </div>
+
+        <div class="card">
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Priority</th>
+                            <th>Title</th>
+                            <th>Author</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (notices && notices.length > 0) { %>
+                            <% notices.forEach(n => { %>
+                                <tr>
+                                    <td><%= new Date(n.created_at).toLocaleDateString() %></td>
+                                    <td>
+                                        <span class="status-badge <%= n.priority === 'Emergency' ? 'status-lowstock' : 'status-good' %>">
+                                            <%= n.priority %>
+                                        </span>
+                                    </td>
+                                    <td><strong><%= n.title %></strong></td>
+                                    <td><%= n.author || 'System Admin' %></td>
+                                    <td>
+                                        <a href="/notices/edit/<%= n.id %>" class="btn btn-secondary" style="padding: 0.2rem 0.5rem; font-size: 0.8rem; margin-right: 0.25rem;">Edit</a>
+                                        <form action="/notices/delete/<%= n.id %>" method="POST" style="display:inline;">
+                                            <button type="submit" class="btn btn-secondary" style="padding: 0.2rem 0.5rem; font-size: 0.8rem; background: rgba(220, 38, 38, 0.2); color: #fca5a5; border-color: rgba(220, 38, 38, 0.4);" onclick="return confirm('Delete this notice?');">Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        <% } else { %>
+                            <tr><td colspan="5">No notices have been published.</td></tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <%- include('../partials/footer') %>
+</body>
+</html>

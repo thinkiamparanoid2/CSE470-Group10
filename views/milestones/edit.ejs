@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <%- include('../partials/navbar') %>
+
+    <div class="container" style="max-width: 550px;">
+        <div class="card" style="margin-top: 2rem;">
+            <div class="page-header">
+                <h2>Edit Milestone</h2>
+                <a href="/milestones" class="btn btn-secondary" style="padding: 0.35rem 0.75rem;">Back</a>
+            </div>
+
+            <% if (typeof error !== 'undefined' && error) { %>
+                <div style="background: rgba(239, 68, 68, 0.2); border: 1px solid #f87171; color: #f87171; padding: 0.75rem; border-radius: 8px; margin-bottom: 1rem; text-align: center;">
+                    <%= error %>
+                </div>
+            <% } %>
+
+            <form action="/milestones/edit/<%= milestone.id %>" method="POST">
+                <div class="form-group">
+                    <label for="title">Milestone Phase Title</label>
+                    <input type="text" id="title" name="title" required value="<%= milestone.title %>">
+                </div>
+                <div class="form-group">
+                    <label for="description">Phase Scope Details</label>
+                    <textarea id="description" name="description" rows="2"><%= milestone.description %></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="status">Status</label>
+                    <select id="status" name="status">
+                        <option value="Pending" <%= milestone.status === 'Pending' ? 'selected' : '' %>>Pending</option>
+                        <option value="In Progress" <%= milestone.status === 'In Progress' ? 'selected' : '' %>>In Progress</option>
+                        <option value="Completed" <%= milestone.status === 'Completed' ? 'selected' : '' %>>Completed</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="due_date">Target Completion Date</label>
+                    <input type="date" id="due_date" name="due_date" required value="<%= new Date(milestone.due_date).toISOString().split('T')[0] %>">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Update Milestone</button>
+            </form>
+        </div>
+    </div>
+
+    <%- include('../partials/footer') %>
+</body>
+</html>

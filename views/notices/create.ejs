@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <%- include('../partials/navbar') %>
+
+    <div class="container" style="max-width: 550px;">
+        <div class="card" style="margin-top: 2rem;">
+            <h2>Publish New Notice</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">Member D • Notice Board CMS</p>
+
+            <% if (typeof error !== 'undefined' && error) { %>
+                <div style="background: rgba(220, 38, 38, 0.2); color: #fca5a5; padding: 1rem; border-radius: 6px; margin-bottom: 1rem;">
+                    <%= error %>
+                </div>
+            <% } %>
+
+            <form action="/notices/create" method="POST">
+                <div class="form-group">
+                    <label for="title">Notice Title</label>
+                    <input type="text" id="title" name="title" required placeholder="e.g. Site Safety Guidelines Update">
+                </div>
+                <div class="form-group">
+                    <label for="priority">Priority Level</label>
+                    <select id="priority" name="priority" required>
+                        <option value="Normal">Normal</option>
+                        <option value="High">High</option>
+                        <option value="Emergency">Emergency</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="content">Announcement Details</label>
+                    <textarea id="content" name="content" rows="4" required placeholder="Details about the announcement..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Publish Notice</button>
+            </form>
+        </div>
+    </div>
+
+    <%- include('../partials/footer') %>
+</body>
+</html>

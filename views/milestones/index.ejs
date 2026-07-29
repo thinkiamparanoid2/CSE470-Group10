@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <%- include('../partials/navbar') %>
+
+    <div class="container">
+        <div class="page-header">
+            <div>
+                <h2>📅 Milestone Tracker</h2>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Sprint 1 Feature • Member C</p>
+            </div>
+            <% if (user && (user.role === 'SuperAdmin' || user.role === 'Project Manager')) { %>
+                <a href="/projects/create" class="btn btn-primary">+ Create Project</a>
+            <% } %>
+        </div>
+
+        <div class="grid-2">
+            <!-- Create Milestone Form -->
+            <div class="card">
+                <h3>+ Map Core Project Phase</h3>
+                <form action="/milestones/create" method="POST" style="margin-top: 1rem;">
+                    <div class="form-group">
+                        <label for="project_id">Select Project Site</label>
+                        <select id="project_id" name="project_id" required>
+                            <% if (projects && projects.length > 0) { %>
+                                <% projects.forEach(p => { %>
+                                    <option value="<%= p.id %>"><%= p.name %></option>
+                                <% }) %>
+                            <% } else { %>
+                                <option value="" disabled selected>No projects available</option>
+                            <% } %>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="title">Milestone Phase Title</label>
+                        <input type="text" id="title" name="title" required placeholder="e.g. Foundation & Piling Completion">
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Phase Scope Details</label>
+                        <textarea id="description" name="description" rows="2" placeholder="Pouring 50 foundation pillars..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="due_date">Target Completion Date</label>
+                        <input type="date" id="due_date" name="due_date" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Create Project Milestone</button>
+                </form>
+            </div>
+
+            <!-- Milestones List -->
+            <div class="card">
+                <h3>Mapped Construction Milestones</h3>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Project</th>
+                                <th>Milestone</th>
+                                <th>Target Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (milestones && milestones.length > 0) { %>
+                                <% milestones.forEach(m => { %>
+                                    <tr>
+                                        <td><%= m.project_name %></td>
+                                        <td><strong><%= m.title %></strong></td>
+                                        <td><%= new Date(m.due_date).toLocaleDateString() %></td>
+                                        <td><span class="status-badge status-ongoing"><%= m.status %></span></td>
+                                        <td>
+                                            <a href="/milestones/edit/<%= m.id %>" class="btn btn-secondary" style="padding: 0.2rem 0.5rem; font-size: 0.8rem; margin-right: 0.25rem;">Edit</a>
+                                            <form action="/milestones/delete/<%= m.id %>" method="POST" style="display:inline;">
+                                                <button type="submit" class="btn btn-secondary" style="padding: 0.2rem 0.5rem; font-size: 0.8rem; background: rgba(220, 38, 38, 0.2); color: #fca5a5; border-color: rgba(220, 38, 38, 0.4);" onclick="return confirm('Delete this milestone?');">Delete</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                <% }) %>
+                            <% } else { %>
+                                <tr><td colspan="5">No milestones mapped yet.</td></tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <%- include('../partials/footer') %>
+</body>
+</html>

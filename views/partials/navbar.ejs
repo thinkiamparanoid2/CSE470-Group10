@@ -1,0 +1,24 @@
+<nav class="navbar">
+    <a href="/" class="brand">
+        🏗️ Smarstruction
+    </a>
+    <ul class="nav-links">
+        <li><a href="/" class="nav-link">Home (CMS)</a></li>
+        <% if (user) { %>
+            <li><a href="/dashboard" class="nav-link">Dashboard</a></li>
+            <li><a href="/materials" class="nav-link">Materials (A)</a></li>
+            <li><a href="/vendors" class="nav-link">Vendors (B)</a></li>
+            <li><a href="/milestones" class="nav-link">Milestones (C)</a></li>
+            <% if (user.role === 'SuperAdmin' || user.role === 'Project Manager') { %>
+                <li><a href="/notices" class="nav-link">Notices (D)</a></li>
+            <% } %>
+            <li>
+                <span class="user-badge"><%= user.name %> (<%= user.role %>)</span>
+            </li>
+            <li><a href="/logout" class="btn btn-secondary" style="padding: 0.35rem 0.75rem;">Logout</a></li>
+        <% } else { %>
+            <li><a href="/login" class="nav-link">Login</a></li>
+            <li><a href="/register" class="btn btn-primary" style="padding: 0.35rem 0.85rem;">Register</a></li>
+        <% } %>
+    </ul>
+</nav>

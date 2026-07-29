@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <%- include('partials/navbar') %>
+
+    <div class="container">
+        <div class="page-header">
+            <h2>Management Dashboard</h2>
+            <span class="user-badge" style="font-size: 1rem;">Role: <%= user.role %></span>
+        </div>
+
+        <!-- Metrics Grid -->
+        <div class="grid-3">
+            <div class="card" style="border-left: 4px solid var(--accent-orange);">
+                <p style="color: var(--text-muted);">Material Stock Items (Member A)</p>
+                <h2 style="font-size: 2.2rem; margin-top: 0.3rem;"><%= totalMaterials %></h2>
+                <a href="/materials" style="font-size: 0.85rem; margin-top: 0.5rem; display: inline-block;">View Stock Logs &rarr;</a>
+            </div>
+            <div class="card" style="border-left: 4px solid var(--accent-amber);">
+                <p style="color: var(--text-muted);">Registered Vendors (Member B)</p>
+                <h2 style="font-size: 2.2rem; margin-top: 0.3rem;"><%= totalVendors %></h2>
+                <a href="/vendors" style="font-size: 0.85rem; margin-top: 0.5rem; display: inline-block;">View Vendor Directory &rarr;</a>
+            </div>
+            <div class="card" style="border-left: 4px solid var(--accent-blue);">
+                <p style="color: var(--text-muted);">Active Construction Sites (Member C)</p>
+                <h2 style="font-size: 2.2rem; margin-top: 0.3rem;"><%= totalProjects %></h2>
+                <a href="/milestones" style="font-size: 0.85rem; margin-top: 0.5rem; display: inline-block;">View Milestones &rarr;</a>
+            </div>
+        </div>
+
+        <!-- Quick Action Widgets -->
+        <div class="grid-2" style="margin-top: 1rem;">
+            <div class="card">
+                <h3>📦 Recent Material Stock Levels</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Stock</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (recentMaterials.length > 0) { %>
+                            <% recentMaterials.forEach(m => { %>
+                                <tr>
+                                    <td><%= m.name %></td>
+                                    <td><%= m.current_stock %> <%= m.unit %></td>
+                                    <td>
+                                        <span class="status-badge <%= Number(m.current_stock) <= Number(m.reorder_level) ? 'status-lowstock' : 'status-good' %>">
+                                            <%= Number(m.current_stock) <= Number(m.reorder_level) ? 'Reorder Alert' : 'Sufficient' %>
+                                        </span>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        <% } else { %>
+                            <tr><td colspan="3">No materials tracked yet.</td></tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <h3>🤝 Top Rated Material Suppliers</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Company</th>
+                            <th>Category</th>
+                            <th>Rating</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (recentVendors.length > 0) { %>
+                            <% recentVendors.forEach(v => { %>
+                                <tr>
+                                    <td><%= v.company_name %></td>
+                                    <td><%= v.material_category %></td>
+                                    <td>⭐ <%= v.rating %></td>
+                                </tr>
+                            <% }) %>
+                        <% } else { %>
+                            <tr><td colspan="3">No vendors registered.</td></tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <%- include('partials/footer') %>
+</body>
+</html>

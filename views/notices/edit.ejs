@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <%- include('../partials/navbar') %>
+
+    <div class="container" style="max-width: 600px;">
+        <div class="card" style="margin-top: 2rem;">
+            <div class="page-header">
+                <h2>Edit Notice</h2>
+                <a href="/notices" class="btn btn-secondary" style="padding: 0.35rem 0.75rem;">Back</a>
+            </div>
+
+            <% if (typeof error !== 'undefined' && error) { %>
+                <div style="background: rgba(239, 68, 68, 0.2); border: 1px solid #f87171; color: #f87171; padding: 0.75rem; border-radius: 8px; margin-bottom: 1rem; text-align: center;">
+                    <%= error %>
+                </div>
+            <% } %>
+
+            <form action="/notices/edit/<%= notice.id %>" method="POST">
+                <div class="form-group">
+                    <label for="title">Notice Title</label>
+                    <input type="text" id="title" name="title" required value="<%= notice.title %>">
+                </div>
+                <div class="form-group">
+                    <label for="priority">Priority Level</label>
+                    <select id="priority" name="priority">
+                        <option value="Normal" <%= notice.priority === 'Normal' ? 'selected' : '' %>>Normal / General</option>
+                        <option value="High" <%= notice.priority === 'High' ? 'selected' : '' %>>High Priority</option>
+                        <option value="Emergency" <%= notice.priority === 'Emergency' ? 'selected' : '' %>>Emergency / Critical</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="content">Notice Content / Message</label>
+                    <textarea id="content" name="content" rows="6" required><%= notice.content %></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Update Notice</button>
+            </form>
+        </div>
+    </div>
+
+    <%- include('../partials/footer') %>
+</body>
+</html>

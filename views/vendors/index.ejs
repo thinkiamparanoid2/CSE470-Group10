@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <%- include('../partials/navbar') %>
+
+    <div class="container">
+        <div class="page-header">
+            <div>
+                <h2>🤝 Vendor Directory & Ratings</h2>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Sprint 1 Feature • Member B</p>
+            </div>
+            <% if (user && (user.role === 'SuperAdmin' || user.role === 'Project Manager')) { %>
+                <a href="/vendors/create" class="btn btn-primary">+ Add New Supplier</a>
+            <% } %>
+        </div>
+
+        <div class="card">
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Company Name</th>
+                            <th>Contact Person</th>
+                            <th>Supply Category</th>
+                            <th>Phone</th>
+                            <th>Email</th>
+                            <th>Rating</th>
+                            <% if (user && (user.role === 'SuperAdmin' || user.role === 'Project Manager')) { %>
+                                <th>Actions</th>
+                            <% } %>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (vendors && vendors.length > 0) { %>
+                            <% vendors.forEach(v => { %>
+                                <tr>
+                                    <td><strong><%= v.company_name %></strong></td>
+                                    <td><%= v.contact_person || 'N/A' %></td>
+                                    <td><%= v.material_category %></td>
+                                    <td><%= v.phone %></td>
+                                    <td><%= v.email || 'N/A' %></td>
+                                    <td>⭐ <%= v.rating %> / 5.0</td>
+                                    <% if (user && (user.role === 'SuperAdmin' || user.role === 'Project Manager')) { %>
+                                        <td>
+                                            <a href="/vendors/edit/<%= v.id %>" class="btn btn-secondary" style="padding: 0.2rem 0.5rem; font-size: 0.8rem; margin-right: 0.25rem;">Edit</a>
+                                            <form action="/vendors/delete/<%= v.id %>" method="POST" style="display:inline;">
+                                                <button type="submit" class="btn btn-secondary" style="padding: 0.2rem 0.5rem; font-size: 0.8rem; background: rgba(220, 38, 38, 0.2); color: #fca5a5; border-color: rgba(220, 38, 38, 0.4);" onclick="return confirm('Delete this vendor?');">Delete</button>
+                                            </form>
+                                        </td>
+                                    <% } %>
+                                </tr>
+                            <% }) %>
+                        <% } else { %>
+                            <tr><td colspan="6">No vendors registered yet.</td></tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <%- include('../partials/footer') %>
+</body>
+</html>

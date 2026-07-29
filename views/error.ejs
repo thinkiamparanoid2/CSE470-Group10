@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <%- include('partials/navbar') %>
+
+    <div class="container" style="max-width: 500px; text-align: center;">
+        <div class="card" style="margin-top: 4rem;">
+            <h1 style="color: #f87171; margin-bottom: 1rem;">⚠️ Notice</h1>
+            <p style="font-size: 1.1rem; margin-bottom: 1.5rem;"><%= message %></p>
+            <a href="javascript:history.back()" class="btn btn-secondary">Go Back</a>
+        </div>
+    </div>
+
+    <%- include('partials/footer') %>
+</body>
+</html>

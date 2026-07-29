@@ -1,0 +1,101 @@
+-- Database creation
+CREATE DATABASE IF NOT EXISTS `smarstruction_db`;
+USE `smarstruction_db`;
+
+-- Member D: Users & Role-Based Access Control (RBAC)
+CREATE TABLE IF NOT EXISTS `users` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `name` VARCHAR(100) NOT NULL,
+    `email` VARCHAR(100) NOT NULL UNIQUE,
+    `password` VARCHAR(255) NOT NULL,
+    `role` ENUM('SuperAdmin', 'Project Manager', 'Site Engineer', 'Vendor') NOT NULL DEFAULT 'Site Engineer',
+    `phone` VARCHAR(20),
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Member D: Notice / Announcement Board & CMS content
+CREATE TABLE IF NOT EXISTS `notices` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `title` VARCHAR(255) NOT NULL,
+    `content` TEXT NOT NULL,
+    `priority` ENUM('Normal', 'High', 'Emergency') DEFAULT 'Normal',
+    `created_by` INT,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (`created_by`) REFERENCES `users`(`id`) ON DELETE SET NULL
+);
+
+-- Member A: Material Stock Tracking
+CREATE TABLE IF NOT EXISTS `materials` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `name` VARCHAR(100) NOT NULL, -- e.g., Cement (Bags), Rod 500W (Tons), Bricks (Pcs)
+    `category` VARCHAR(50) DEFAULT 'General',
+    `unit` VARCHAR(20) NOT NULL,
+    `current_stock` DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    `reorder_level` DECIMAL(10, 2) NOT NULL DEFAULT 10.00,
+    `unit_price_est` DECIMAL(10, 2) DEFAULT 0.00,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Member B: Vendor Directory & Rating
+CREATE TABLE IF NOT EXISTS `vendors` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `company_name` VARCHAR(150) NOT NULL,
+    `contact_person` VARCHAR(100),
+    `email` VARCHAR(100),
+    `phone` VARCHAR(20) NOT NULL,
+    `address` TEXT,
+    `material_category` VARCHAR(100), -- e.g., Rod Supplier, Cement Dealer
+    `rating` DECIMAL(3, 2) DEFAULT 5.00,
+    `user_id` INT UNIQUE, -- Link to user account if vendor logs in
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE SET NULL
+);
+
+-- Member C: Projects & Milestone Tracker
+CREATE TABLE IF NOT EXISTS `projects` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `name` VARCHAR(150) NOT NULL,
+    `location` VARCHAR(255),
+    `budget` DECIMAL(15, 2) DEFAULT 0.00,
+    `status` ENUM('Planning', 'Ongoing', 'Completed', 'On Hold') DEFAULT 'Ongoing',
+    `start_date` DATE,
+    `target_completion_date` DATE,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS `milestones` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `project_id` INT NOT NULL,
+    `title` VARCHAR(150) NOT NULL,
+    `description` TEXT,
+    `status` ENUM('Pending', 'In Progress', 'Completed') DEFAULT 'Pending',
+    `due_date` DATE,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (`project_id`) REFERENCES `projects`(`id`) ON DELETE CASCADE
+);
+
+-- Sample Data Seeding
+INSERT INTO `users` (`name`, `email`, `password`, `role`) VALUES
+('Super Admin', 'admin@smarstruction.bd', '$2a$10$wT3G/VvO1o9.j.P3r7YVMeD9nC8p3/2N.dGZ3a3.F1/b6G9N0Wn1i', 'SuperAdmin'),
+('Project Manager John', 'pm@smarstruction.bd', '$2a$10$wT3G/VvO1o9.j.P3r7YVMeD9nC8p3/2N.dGZ3a3.F1/b6G9N0Wn1i', 'Project Manager'),
+('Site Eng. Rahat', 'engineer@smarstruction.bd', '$2a$10$wT3G/VvO1o9.j.P3r7YVMeD9nC8p3/2N.dGZ3a3.F1/b6G9N0Wn1i', 'Site Engineer'),
+('BSRM Steels Ltd', 'vendor@bsrm.bd', '$2a$10$wT3G/VvO1o9.j.P3r7YVMeD9nC8p3/2N.dGZ3a3.F1/b6G9N0Wn1i', 'Vendor')
+ON DUPLICATE KEY UPDATE id=id;
+
+INSERT INTO `materials` (`name`, `category`, `unit`, `current_stock`, `reorder_level`, `unit_price_est`) VALUES
+('Portland Cement', 'Cement', 'Bags', 500.00, 100.00, 560.00),
+('Deformed Bar 60G (16mm Rod)', 'Steel/Rod', 'Tons', 45.50, 10.00, 98000.00),
+('First Class Red Bricks', 'Bricks', 'Pcs', 25000.00, 5000.00, 12.50),
+('Coarse Sand (Sylhet)', 'Sand', 'Cft', 1200.00, 300.00, 65.00)
+ON DUPLICATE KEY UPDATE id=id;
+
+INSERT INTO `vendors` (`company_name`, `contact_person`, `email`, `phone`, `material_category`, `rating`) VALUES
+('BSRM Steels Bangladesh', 'Mr. Tanvir', 'sales@bsrm.bd', '+8801700000001', 'Steel/Rod', 4.90),
+('Seven Rings Cement', 'Mr. Karim', 'orders@sevenrings.bd', '+8801800000002', 'Cement', 4.70),
+('Bengal Auto Bricks', 'Mr. Hafiz', 'info@bengalbricks.bd', '+8801900000003', 'Bricks', 4.50)
+ON DUPLICATE KEY UPDATE id=id;
+
+INSERT INTO `projects` (`name`, `location`, `budget`, `status`, `start_date`, `target_completion_date`) VALUES
+('Dhanmondi High-Rise Tower (15-Story)', 'Dhanmondi 27, Dhaka', 120000000.00, 'Ongoing', '2026-01-10', '2027-12-30'),
+('Uttara Residential Villa Project', 'Sector 11, Uttara, Dhaka', 35000000.00, 'Ongoing', '2026-03-01', '2027-04-15')
+ON DUPLICATE KEY UPDATE id=id;
