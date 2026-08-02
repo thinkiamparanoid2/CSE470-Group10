@@ -139,6 +139,59 @@ CREATE TABLE IF NOT EXISTS `inventory_transfers` (
     FOREIGN KEY (`created_by`) REFERENCES `users`(`id`) ON DELETE SET NULL
 );
 
+-- Sprint 3: Price Comparison Engine (Member B)
+CREATE TABLE IF NOT EXISTS `vendor_quotations` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `vendor_id` INT NOT NULL,
+    `material_id` INT NOT NULL,
+    `price` DECIMAL(10, 2) NOT NULL,
+    `last_updated` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (`vendor_id`) REFERENCES `vendors`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`material_id`) REFERENCES `materials`(`id`) ON DELETE CASCADE
+);
+
+-- Sprint 3: Emergency Material Request (Member D)
+CREATE TABLE IF NOT EXISTS `material_requests` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `project_id` INT NOT NULL,
+    `material_id` INT NOT NULL,
+    `quantity` DECIMAL(10, 2) NOT NULL,
+    `priority` ENUM('Normal', 'High', 'Emergency') DEFAULT 'Normal',
+    `status` ENUM('Pending', 'Approved', 'Fulfilled', 'Rejected') DEFAULT 'Pending',
+    `requested_by` INT,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (`project_id`) REFERENCES `projects`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`material_id`) REFERENCES `materials`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`requested_by`) REFERENCES `users`(`id`) ON DELETE SET NULL
+);
+
+-- Sprint 3: Material Waste Log (Member A)
+CREATE TABLE IF NOT EXISTS `material_waste_logs` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `project_id` INT NOT NULL,
+    `material_id` INT NOT NULL,
+    `waste_quantity` DECIMAL(10, 2) NOT NULL,
+    `reason` VARCHAR(255) NOT NULL,
+    `logged_by` INT,
+    `log_date` DATE NOT NULL,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (`project_id`) REFERENCES `projects`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`material_id`) REFERENCES `materials`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`logged_by`) REFERENCES `users`(`id`) ON DELETE SET NULL
+);
+
+-- Sprint 3: Contract Document Upload (Member B)
+CREATE TABLE IF NOT EXISTS `vendor_contracts` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `vendor_id` INT NOT NULL,
+    `title` VARCHAR(150) NOT NULL,
+    `file_path` VARCHAR(255) NOT NULL,
+    `uploaded_by` INT,
+    `uploaded_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (`vendor_id`) REFERENCES `vendors`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`uploaded_by`) REFERENCES `users`(`id`) ON DELETE SET NULL
+);
+
 -- Sample Data Seeding
 INSERT INTO `users` (`name`, `email`, `password`, `role`) VALUES
 ('Super Admin', 'admin@smarstruction.bd', '$2a$10$wT3G/VvO1o9.j.P3r7YVMeD9nC8p3/2N.dGZ3a3.F1/b6G9N0Wn1i', 'SuperAdmin'),
@@ -157,10 +210,20 @@ ON DUPLICATE KEY UPDATE id=id;
 INSERT INTO `vendors` (`company_name`, `contact_person`, `email`, `phone`, `material_category`, `rating`, `user_id`) VALUES
 ('BSRM Steels Bangladesh', 'Mr. Tanvir', 'sales@bsrm.bd', '+8801700000001', 'Steel/Rod', 4.90, 4),
 ('Seven Rings Cement', 'Mr. Karim', 'orders@sevenrings.bd', '+8801800000002', 'Cement', 4.70, NULL),
-('Bengal Auto Bricks', 'Mr. Hafiz', 'info@bengalbricks.bd', '+8801900000003', 'Bricks', 4.50, NULL)
+('Bengal Auto Bricks', 'Mr. Hafiz', 'info@bengalbricks.bd', '+8801900000003', 'Bricks', 4.50, NULL),
+('Anwar Ispat', 'Mr. Rahim', 'sales@anwar.bd', '+8801700000005', 'Steel/Rod', 4.60, NULL),
+('Crown Cement', 'Mr. Hasan', 'info@crowncement.bd', '+8801800000006', 'Cement', 4.80, NULL)
 ON DUPLICATE KEY UPDATE user_id=VALUES(user_id);
 
 INSERT INTO `projects` (`name`, `location`, `budget`, `status`, `start_date`, `target_completion_date`) VALUES
 ('Dhanmondi High-Rise Tower (15-Story)', 'Dhanmondi 27, Dhaka', 120000000.00, 'Ongoing', '2026-01-10', '2027-12-30'),
 ('Uttara Residential Villa Project', 'Sector 11, Uttara, Dhaka', 35000000.00, 'Ongoing', '2026-03-01', '2027-04-15')
+ON DUPLICATE KEY UPDATE id=id;
+
+INSERT INTO `vendor_quotations` (`vendor_id`, `material_id`, `price`) VALUES
+(1, 2, 98000.00), -- BSRM for Rod
+(4, 2, 96500.00), -- Anwar for Rod
+(2, 1, 560.00),   -- Seven Rings for Cement
+(5, 1, 550.00),   -- Crown for Cement
+(3, 3, 12.50)     -- Bengal for Bricks
 ON DUPLICATE KEY UPDATE id=id;

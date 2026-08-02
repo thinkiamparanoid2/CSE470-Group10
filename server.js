@@ -44,7 +44,11 @@ const purchaseOrdersRoutes = require('./routes/purchase_orders');
 const deliveriesRoutes = require('./routes/deliveries');
 const laborRoutes = require('./routes/labor');
 const inventoryTransfersRoutes = require('./routes/inventory_transfers');
-
+const dashboardProjectsRoutes = require('./routes/dashboard_projects');
+const priceComparisonRoutes = require('./routes/price_comparison');
+const materialRequestsRoutes = require('./routes/material_requests');
+const wasteLogsRoutes = require('./routes/waste_logs');
+const contractsRoutes = require('./routes/contracts');
 app.use('/', indexRoutes);
 app.use('/', authRoutes);
 app.use('/dashboard', dashboardRoutes);
@@ -57,7 +61,11 @@ app.use('/purchase_orders', purchaseOrdersRoutes);
 app.use('/deliveries', deliveriesRoutes);
 app.use('/labor', laborRoutes);
 app.use('/inventory-transfers', inventoryTransfersRoutes);
-
+app.use('/dashboard_projects', dashboardProjectsRoutes);
+app.use('/price-comparison', priceComparisonRoutes);
+app.use('/material-requests', materialRequestsRoutes);
+app.use('/waste-logs', wasteLogsRoutes);
+app.use('/contracts', contractsRoutes);
 // Error 404 handler
 app.use((req, res) => {
     res.status(404).render('error', { message: '404: Page Not Found' });
