@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <%- include('../partials/navbar') %>
+
+    <div class="container">
+        <div class="page-header">
+            <h2>Create New Bill of Quantities (BOQ)</h2>
+            <a href="/boq" class="btn btn-secondary">&larr; Back to BOQ List</a>
+        </div>
+
+        <div class="card" style="max-width: 600px; margin: 0 auto;">
+            <form action="/boq/create" method="POST">
+                <div class="form-group">
+                    <label for="project_id">Select Construction Project Site:</label>
+                    <select name="project_id" id="project_id" class="form-control" required>
+                        <option value="">-- Choose Project --</option>
+                        <% projects.forEach(p => { %>
+                            <option value="<%= p.id %>"><%= p.name %> (Budget: ৳<%= parseFloat(p.budget).toLocaleString() %>)</option>
+                        <% }) %>
+                    </select>
+                </div>
+
+                <div class="form-group" style="margin-top: 1rem;">
+                    <label for="title">BOQ Worksheet Title:</label>
+                    <input type="text" name="title" id="title" class="form-control" placeholder="e.g., Foundation & Structural Materials BOQ" required>
+                </div>
+
+                <div class="form-group" style="margin-top: 1rem;">
+                    <label for="notes">Description & Assumptions:</label>
+                    <textarea name="notes" id="notes" class="form-control" rows="3" placeholder="Enter assumptions regarding wastage, mix ratios, or project timelines..."></textarea>
+                </div>
+
+                <div style="margin-top: 1.5rem; display: flex; gap: 1rem;">
+                    <button type="submit" class="btn btn-primary" style="flex: 1;">Generate BOQ & Add Items</button>
+                    <a href="/boq" class="btn btn-secondary" style="text-align: center;">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <%- include('../partials/footer') %>
+</body>
+</html>

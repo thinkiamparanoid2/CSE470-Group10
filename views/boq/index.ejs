@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <%- include('../partials/navbar') %>
+
+    <div class="container">
+        <div class="page-header">
+            <div>
+                <h2>📈 Bill of Quantities (BOQ) Generator</h2>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Sprint 4 Feature • Member A (Materials & Inventory)</p>
+            </div>
+            <% if (user && (user.role === 'SuperAdmin' || user.role === 'Project Manager' || user.role === 'Site Engineer')) { %>
+                <a href="/boq/create" class="btn btn-primary">+ Create New BOQ</a>
+            <% } %>
+        </div>
+
+        <div class="card">
+            <h3>All Project BOQ Forecasts</h3>
+            <div class="table-responsive" style="margin-top: 1rem;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>BOQ #</th>
+                            <th>Title</th>
+                            <th>Project Site</th>
+                            <th>Total Forecast Cost</th>
+                            <th>Created By</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (boqs && boqs.length > 0) { %>
+                            <% boqs.forEach(boq => { %>
+                                <tr>
+                                    <td><strong>#BOQ-<%= boq.id %></strong></td>
+                                    <td><%= boq.title %></td>
+                                    <td><%= boq.project_name %></td>
+                                    <td style="font-weight: bold; color: var(--accent-green);">
+                                        ৳<%= parseFloat(boq.total_estimated_cost).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) %>
+                                    </td>
+                                    <td><%= boq.created_by_name || 'System' %></td>
+                                    <td><%= new Date(boq.created_at).toLocaleDateString() %></td>
+                                    <td>
+                                        <a href="/boq/<%= boq.id %>" class="btn btn-secondary" style="padding: 0.3rem 0.6rem; font-size: 0.85rem;">Worksheet</a>
+                                        <a href="/boq/<%= boq.id %>/export-csv" class="btn btn-primary" style="padding: 0.3rem 0.6rem; font-size: 0.85rem; margin-left: 0.3rem;">📊 Excel CSV</a>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        <% } else { %>
+                                <tr>
+                                    <td colspan="7" style="text-align: center; padding: 2rem;">
+                                        No Bill of Quantities created yet. Click "+ Create New BOQ" above to begin estimation.
+                                    </td>
+                                </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <%- include('../partials/footer') %>
+</body>
+</html>

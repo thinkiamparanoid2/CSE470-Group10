@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <%- include('../partials/navbar') %>
+
+    <div class="container">
+        <div class="page-header">
+            <h2>Schedule Machinery Maintenance & Service</h2>
+            <a href="/equipment" class="btn btn-secondary">&larr; Back to Scheduler</a>
+        </div>
+
+        <div class="card" style="max-width: 650px; margin: 0 auto;">
+            <form action="/equipment/schedule" method="POST">
+                <div class="form-group">
+                    <label for="equipment_id">Select Heavy Machinery / Equipment:</label>
+                    <select name="equipment_id" id="equipment_id" class="form-control" required>
+                        <option value="">-- Choose Machine from Fleet --</option>
+                        <% equipmentList.forEach(eq => { %>
+                            <option value="<%= eq.id %>" <%= String(eq.id) === String(selectedEquipmentId) ? 'selected' : '' %>>
+                                <%= eq.name %> [Code: <%= eq.equipment_code %>] (<%= eq.status %>)
+                            </option>
+                        <% }) %>
+                    </select>
+                </div>
+
+                <div class="grid-2" style="margin-top: 1rem;">
+                    <div class="form-group">
+                        <label for="scheduled_date">Scheduled Date of Service:</label>
+                        <input type="date" name="scheduled_date" id="scheduled_date" class="form-control" value="<%= new Date().toISOString().split('T')[0] %>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="maintenance_type">Type of Service Work:</label>
+                        <select name="maintenance_type" id="maintenance_type" class="form-control" required>
+                            <option value="Routine Check-up">Routine Check-up & Safety Inspection</option>
+                            <option value="Preventive Maintenance">Preventive Maintenance (Fluids & Filters)</option>
+                            <option value="Repair">Repair / Component Replacement</option>
+                            <option value="Overhaul">Major Mechanical Overhaul</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top: 1rem;">
+                    <label for="description">Task Details & Inspection Checklist:</label>
+                    <textarea name="description" id="description" class="form-control" rows="3" placeholder="Specify parts to test, hydraulic pressures to monitor, or engine problems observed..." required></textarea>
+                </div>
+
+                <div class="grid-2" style="margin-top: 1rem;">
+                    <div class="form-group">
+                        <label for="assigned_to">Assigned Technician / Service Team:</label>
+                        <input type="text" name="assigned_to" id="assigned_to" class="form-control" placeholder="e.g., Mech. Engr. Shafiq / Caterpillar Service BD">
+                    </div>
+                    <div class="form-group">
+                        <label for="cost_estimate">Estimated Cost (৳):</label>
+                        <input type="number" step="0.01" name="cost_estimate" id="cost_estimate" class="form-control" placeholder="0.00">
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top: 1rem;">
+                    <label for="notes">Additional Operational Remarks:</label>
+                    <textarea name="notes" id="notes" class="form-control" rows="2" placeholder="Note any required downtime or safety lockouts on site..."></textarea>
+                </div>
+
+                <div style="margin-top: 1.5rem; display: flex; gap: 1rem;">
+                    <button type="submit" class="btn btn-primary" style="flex: 1;">Confirm & Schedule Maintenance</button>
+                    <a href="/equipment" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <%- include('../partials/footer') %>
+</body>
+</html>

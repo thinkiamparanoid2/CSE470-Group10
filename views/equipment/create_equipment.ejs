@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <%- include('../partials/navbar') %>
+
+    <div class="container">
+        <div class="page-header">
+            <h2>Register Heavy Machinery to Fleet Inventory</h2>
+            <a href="/equipment" class="btn btn-secondary">&larr; Back to Equipment Directory</a>
+        </div>
+
+        <div class="card" style="max-width: 650px; margin: 0 auto;">
+            <form action="/equipment/create" method="POST">
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label for="name">Machine / Equipment Name:</label>
+                        <input type="text" name="name" id="name" class="form-control" required placeholder="e.g., LIEBHERR Tower Crane 150T">
+                    </div>
+                    <div class="form-group">
+                        <label for="equipment_code">Unique Asset Code / Tag:</label>
+                        <input type="text" name="equipment_code" id="equipment_code" class="form-control" required placeholder="e.g., CRN-02 / MIX-05">
+                    </div>
+                </div>
+
+                <div class="grid-2" style="margin-top: 1rem;">
+                    <div class="form-group">
+                        <label for="category">Equipment Category:</label>
+                        <select name="category" id="category" class="form-control" required>
+                            <option value="Cranes">Heavy Tower & Mobile Cranes</option>
+                            <option value="Mixers">Concrete Mixers & Batch Vats</option>
+                            <option value="Power Generators">Diesel Power Generators</option>
+                            <option value="Heavy Machinery">Excavators / Bulldozers</option>
+                            <option value="Tools">Site Scaffolding & Specialized Tools</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="current_project_id">Initial Site Deployment (Optional):</label>
+                        <select name="current_project_id" id="current_project_id" class="form-control">
+                            <option value="">-- Central Depot (Unassigned) --</option>
+                            <% projects.forEach(p => { %>
+                                <option value="<%= p.id %>"><%= p.name %></option>
+                            <% }) %>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid-2" style="margin-top: 1rem;">
+                    <div class="form-group">
+                        <label for="status">Initial Operational Status:</label>
+                        <select name="status" id="status" class="form-control" required>
+                            <option value="Operational">Operational (Active on Site)</option>
+                            <option value="Available">Available / Ready</option>
+                            <option value="Under Maintenance">Under Maintenance</option>
+                            <option value="Out of Service">Out of Service</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="purchase_date">Acquisition / Purchase Date:</label>
+                        <input type="date" name="purchase_date" id="purchase_date" class="form-control" value="<%= new Date().toISOString().split('T')[0] %>">
+                    </div>
+                </div>
+
+                <div style="margin-top: 1.5rem; display: flex; gap: 1rem;">
+                    <button type="submit" class="btn btn-primary" style="flex: 1;">Save & Register Machine</button>
+                    <a href="/equipment" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <%- include('../partials/footer') %>
+</body>
+</html>

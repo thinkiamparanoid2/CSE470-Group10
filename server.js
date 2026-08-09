@@ -49,6 +49,11 @@ const priceComparisonRoutes = require('./routes/price_comparison');
 const materialRequestsRoutes = require('./routes/material_requests');
 const wasteLogsRoutes = require('./routes/waste_logs');
 const contractsRoutes = require('./routes/contracts');
+const boqRoutes = require('./routes/boq');
+const paymentsRoutes = require('./routes/payments');
+const expensesRoutes = require('./routes/expenses');
+const siteReportsRoutes = require('./routes/site_reports');
+const equipmentRoutes = require('./routes/equipment');
 app.use('/', indexRoutes);
 app.use('/', authRoutes);
 app.use('/dashboard', dashboardRoutes);
@@ -66,6 +71,11 @@ app.use('/price-comparison', priceComparisonRoutes);
 app.use('/material-requests', materialRequestsRoutes);
 app.use('/waste-logs', wasteLogsRoutes);
 app.use('/contracts', contractsRoutes);
+app.use('/boq', boqRoutes);
+app.use('/payments', paymentsRoutes);
+app.use('/expenses', expensesRoutes);
+app.use('/site-reports', siteReportsRoutes);
+app.use('/equipment', equipmentRoutes);
 // Error 404 handler
 app.use((req, res) => {
     res.status(404).render('error', { message: '404: Page Not Found' });

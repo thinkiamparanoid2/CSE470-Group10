@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .print-only {
+            display: none;
+        }
+        @media print {
+            .no-print, .btn, footer, .navbar {
+                display: none !important;
+            }
+            .print-only {
+                display: block !important;
+            }
+            .print-header-box {
+                border-bottom: 2px solid #000;
+                padding-bottom: 15px;
+                margin-bottom: 20px;
+            }
+            .print-meta-table {
+                width: 100% !important;
+                margin-bottom: 25px !important;
+                border: none !important;
+            }
+            .print-meta-table td {
+                border: none !important;
+                padding: 4px 0 !important;
+                font-size: 11pt !important;
+            }
+            .signature-section {
+                display: flex !important;
+                flex-direction: row !important;
+                justify-content: space-between !important;
+                margin-top: 60px !important;
+                page-break-inside: avoid;
+            }
+            .signature-block {
+                width: 250px;
+                text-align: center;
+                border-top: 1px solid #000 !important;
+                padding-top: 8px;
+                font-size: 10pt;
+            }
+            .grid-3 h3, .grid-3 p, .grid-3 h4 {
+                color: #000 !important;
+            }
+            .expense-bar {
+                background: #f7f7f7 !important;
+                border: 1px solid #aaa !important;
+                padding: 15px !important;
+                margin-bottom: 20px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <%- include('../partials/navbar') %>
+
+    <div class="container">
+        <!-- Professional Corporate Print Letterhead -->
+        <div class="print-only print-header-box">
+            <h2 style="margin: 0; font-size: 18pt; text-transform: uppercase; letter-spacing: 0.5px;">Smarstruction Engineering & Infrastructure Ltd.</h2>
+            <h3 style="margin: 5px 0 0 0; font-size: 13pt; color: #333; font-weight: 600;">Consolidated Executive Financial & Site Expenditure Report</h3>
+        </div>
+
+        <div class="print-only">
+            <table class="print-meta-table">
+                <tr>
+                    <td style="width: 18%;"><strong>Project Site Name:</strong></td>
+                    <td style="width: 42%;"><%= project.name %></td>
+                    <td style="width: 18%;"><strong>Report Date:</strong></td>
+                    <td style="width: 22%;"><%= new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) %></td>
+                </tr>
+                <tr>
+                    <td><strong>Site Location:</strong></td>
+                    <td><%= project.location %></td>
+                    <td><strong>Filter Period:</strong></td>
+                    <td><%= (startDate && endDate) ? (startDate + ' to ' + endDate) : 'Inception to Date' %></td>
+                </tr>
+                <tr>
+                    <td><strong>Project Status:</strong></td>
+                    <td><%= project.status %></td>
+                    <td><strong>Auditing Standard:</strong></td>
+                    <td>ISO 9001:2015 & BNBC Compliant</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Web UI Header -->
+        <div class="page-header no-print">
+            <div>
+                <h2>Expense Report: <%= project.name %></h2>
+                <p style="color: var(--text-muted);">Location: <strong><%= project.location %></strong> | Status: <%= project.status %></p>
+            </div>
+            <div style="display: flex; gap: 0.5rem;">
+                <button onclick="window.print()" class="btn btn-secondary">🖨️ Print / Client PDF</button>
+                <a href="/expenses/export-csv?project_id=<%= project.id %>&start_date=<%= startDate %>&end_date=<%= endDate %>" class="btn btn-primary">📊 Download Excel (CSV)</a>
+                <a href="/expenses" class="btn btn-secondary">&larr; Back to Projects</a>
+            </div>
+        </div>
+
+        <!-- Executive Financial Summary -->
+        <div class="grid-3" style="margin-bottom: 1.5rem;">
+            <div class="card" style="border-left: 4px solid var(--accent-blue);">
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.2rem;">Approved Project Budget</p>
+                <h3 style="font-size: 1.5rem;">৳<%= parseFloat(project.budget || 0).toLocaleString(undefined, {minimumFractionDigits: 2}) %></h3>
+            </div>
+            <div class="card" style="border-left: 4px solid var(--accent-orange);">
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.2rem;">Grand Total Expenditure</p>
+                <h3 style="font-size: 1.5rem; color: var(--accent-orange);">৳<%= financials.totalExpenditure.toLocaleString(undefined, {minimumFractionDigits: 2}) %></h3>
+            </div>
+            <div class="card" style="border-left: 4px solid <%= (parseFloat(project.budget) - financials.totalExpenditure) < 0 ? 'var(--accent-red)' : 'var(--accent-green)' %>;">
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.2rem;">Remaining Budget Variance</p>
+                <h3 style="font-size: 1.5rem; color: <%= (parseFloat(project.budget) - financials.totalExpenditure) < 0 ? 'var(--accent-red)' : 'var(--accent-green)' %>;">
+                    ৳<%= (parseFloat(project.budget) - financials.totalExpenditure).toLocaleString(undefined, {minimumFractionDigits: 2}) %>
+                </h3>
+            </div>
+        </div>
+
+        <!-- Expense Category Breakdown Bar -->
+        <div class="card expense-bar" style="margin-bottom: 1.5rem; background: rgba(255, 255, 255, 0.02);">
+            <h3 style="margin-bottom: 0.8rem;">Expenditure Breakdown by Financial Pillar</h3>
+            <div class="grid-3" style="margin-top: 0.8rem;">
+                <div style="padding: 0.8rem; background: rgba(255,255,255,0.03); border-radius: 6px;">
+                    <span style="color: var(--text-muted); font-size: 0.9rem;">📦 Materials & Site Transfers:</span>
+                    <h4 style="font-size: 1.25rem; margin-top: 0.2rem;">৳<%= financials.materialCost.toLocaleString(undefined, {minimumFractionDigits: 2}) %></h4>
+                </div>
+                <div style="padding: 0.8rem; background: rgba(255,255,255,0.03); border-radius: 6px;">
+                    <span style="color: var(--text-muted); font-size: 0.9rem;">👷 Workforce Labor Payroll:</span>
+                    <h4 style="font-size: 1.25rem; margin-top: 0.2rem;">৳<%= financials.labor.cost.toLocaleString(undefined, {minimumFractionDigits: 2}) %></h4>
+                    <small style="font-size: 0.85rem; color: var(--text-muted);">(Total Headcount: <%= financials.labor.headcount %> Workers)</small>
+                </div>
+                <div style="padding: 0.8rem; background: rgba(255,255,255,0.03); border-radius: 6px;">
+                    <span style="color: var(--text-muted); font-size: 0.9rem;">🗑️ Wastage Valuation Loss:</span>
+                    <h4 style="font-size: 1.25rem; margin-top: 0.2rem; color: var(--accent-red);">৳<%= financials.waste.cost.toLocaleString(undefined, {minimumFractionDigits: 2}) %></h4>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detailed Audit Tables -->
+        <div class="card" style="margin-bottom: 1.5rem;">
+            <h3 style="margin-bottom: 0.8rem;">👷 Workforce Attendance & Payroll Log Details</h3>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 15%;">Log Date</th>
+                            <th style="width: 20%;">Workforce Headcount</th>
+                            <th style="width: 20%; text-align: right;">Daily Payroll Cost (৳)</th>
+                            <th style="width: 20%;">Recorder / Engineer</th>
+                            <th style="width: 25%;">Task Activities</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (laborLogs && laborLogs.length > 0) { %>
+                            <% laborLogs.forEach(l => { %>
+                                <tr>
+                                    <td><%= new Date(l.log_date).toLocaleDateString('en-GB') %></td>
+                                    <td><strong><%= l.headcount %> Workers</strong></td>
+                                    <td style="text-align: right; font-weight: 600; color: var(--accent-green);">৳<%= parseFloat(l.total_cost).toLocaleString(undefined, {minimumFractionDigits: 2}) %></td>
+                                    <td><%= l.recorder || 'Site Engineer' %></td>
+                                    <td><%= l.notes || 'Routine structural construction tasks' %></td>
+                                </tr>
+                            <% }) %>
+                        <% } else { %>
+                            <tr><td colspan="5" style="text-align: center; padding: 1.5rem;">No labor attendance logged for this project period.</td></tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3 style="margin-bottom: 0.8rem;">🗑️ Material Waste & Efficiency Valuation Log</h3>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 15%;">Log Date</th>
+                            <th style="width: 25%;">Wasted Material</th>
+                            <th style="width: 15%;">Quantity</th>
+                            <th style="width: 20%; text-align: right;">Est. Valuation Loss (৳)</th>
+                            <th style="width: 25%;">Reason / Incident Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (wasteLogs && wasteLogs.length > 0) { %>
+                            <% wasteLogs.forEach(w => { %>
+                                <tr>
+                                    <td><%= new Date(w.log_date).toLocaleDateString('en-GB') %></td>
+                                    <td><strong><%= w.material_name %></strong></td>
+                                    <td><%= w.waste_quantity %> <%= w.unit %></td>
+                                    <td style="text-align: right; font-weight: 600; color: var(--accent-red);">
+                                        ৳<%= parseFloat(w.est_loss || 0).toLocaleString(undefined, {minimumFractionDigits: 2}) %>
+                                    </td>
+                                    <td><%= w.reason %></td>
+                                </tr>
+                            <% }) %>
+                        <% } else { %>
+                            <tr><td colspan="5" style="text-align: center; padding: 1.5rem;">No material waste recorded on this construction site! ⭐ Excellent efficiency.</td></tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Corporate Signature Block (Only in PDF printout) -->
+        <div class="print-only signature-section">
+            <div class="signature-block">
+                <strong>Chief Estimating Officer</strong><br>
+                <span style="color: #444; font-size: 9.5pt;">Financial Audit Department</span>
+            </div>
+            <div class="signature-block">
+                <strong>Project Manager / Engineer</strong><br>
+                <span style="color: #444; font-size: 9.5pt;">Site Operations Division</span>
+            </div>
+            <div class="signature-block">
+                <strong>Managing Director Approval</strong><br>
+                <span style="color: #444; font-size: 9.5pt;">Smarstruction Executive Board</span>
+            </div>
+        </div>
+        <div class="print-only" style="margin-top: 35px; font-size: 8.5pt; color: #666; border-top: 1px solid #ddd; padding-top: 8px;">
+            <em>Notice: This financial expenditure report is generated by Smarstruction Accounting Engine. All figures are calculated from verified site purchase orders and attendance logs.</em>
+        </div>
+    </div>
+
+    <%- include('../partials/footer') %>
+</body>
+</html>

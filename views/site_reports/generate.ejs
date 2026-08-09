@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <%- include('../partials/navbar') %>
+
+    <div class="container">
+        <div class="page-header">
+            <h2>Generate & Log Daily Site Progress Report</h2>
+            <a href="/site-reports" class="btn btn-secondary">&larr; Back to Reports List</a>
+        </div>
+
+        <div class="card" style="max-width: 750px; margin: 0 auto;">
+            <!-- Auto-load parameters selector -->
+            <div style="background: rgba(255,255,255,0.04); padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; border: 1px solid rgba(255,255,255,0.08);">
+                <form action="/site-reports/generate" method="GET" style="display: flex; gap: 1rem; align-items: flex-end;">
+                    <div class="form-group" style="flex: 2;">
+                        <label for="p_id_select">Select Project Site to Auto-pull System Data:</label>
+                        <select name="project_id" id="p_id_select" class="form-control" onchange="this.form.submit()">
+                            <option value="">-- Choose Ongoing Site --</option>
+                            <% projects.forEach(p => { %>
+                                <option value="<%= p.id %>" <%= String(p.id) === String(selectedProjectId) ? 'selected' : '' %>><%= p.name %></option>
+                            <% }) %>
+                        </select>
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label for="r_date_select">Report Date:</label>
+                        <input type="date" name="report_date" id="r_date_select" class="form-control" value="<%= defaultDate %>" onchange="this.form.submit()">
+                    </div>
+                </form>
+                <% if (autoData) { %>
+                    <div style="margin-top: 1rem; font-size: 0.9rem; color: var(--accent-green);">
+                        ✅ <strong>System Auto-Aggregated Data Found for this Date:</strong> <br>
+                        • Total Workforce Logged: <strong><%= autoData.workers %> Workers</strong> (Payroll: ৳<%= autoData.wages %>)<br>
+                        • Incoming Inventory Transfers / Events: <strong><%= autoData.transfersCount %> shipments</strong>
+                    </div>
+                <% } %>
+            </div>
+
+            <!-- Main Creation Form -->
+            <form action="/site-reports/create" method="POST">
+                <input type="hidden" name="project_id" id="hidden_project_id" value="<%= selectedProjectId || (projects.length > 0 ? projects[0].id : '') %>" required>
+                
+                <% if (!selectedProjectId && projects.length > 0) { %>
+                    <div class="form-group">
+                        <label>Confirm Project Site:</label>
+                        <select name="project_id" class="form-control" required>
+                            <% projects.forEach(p => { %>
+                                <option value="<%= p.id %>"><%= p.name %></option>
+                            <% }) %>
+                        </select>
+                    </div>
+                <% } %>
+
+                <div class="grid-2" style="margin-top: 1rem;">
+                    <div class="form-group">
+                        <label for="report_date">Report Date:</label>
+                        <input type="date" name="report_date" id="report_date" class="form-control" value="<%= defaultDate %>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="weather_condition">Weather Condition on Site:</label>
+                        <select name="weather_condition" id="weather_condition" class="form-control" required>
+                            <option value="Sunny & Clear (30°C+)">Sunny & Clear (Hot)</option>
+                            <option value="Partly Cloudy / Mild">Partly Cloudy / Mild</option>
+                            <option value="Heavy Rain / Stormy (Downtime)">Heavy Rain / Stormy (Downtime)</option>
+                            <option value="Humid / Overcast">Humid / Overcast</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top: 1rem;">
+                    <label for="general_progress">General Engineering & Construction Progress:</label>
+                    <textarea name="general_progress" id="general_progress" class="form-control" rows="4" placeholder="Describe concrete casting, shuttering, plumbing, brick work, or milestones achieved today..." required><%= autoData ? autoData.notes : '' %></textarea>
+                </div>
+
+                <div class="form-group" style="margin-top: 1rem;">
+                    <label for="safety_incidents">Safety Incidents & Environmental Report (OH&S):</label>
+                    <textarea name="safety_incidents" id="safety_incidents" class="form-control" rows="2" placeholder="Report any first aid incidents, scaffolding safety inspections, or hazardous material handling...">None. Zero harm reported; all site workers adhering to PPE safety guidelines.</textarea>
+                </div>
+
+                <div style="margin-top: 1.5rem; display: flex; gap: 1rem;">
+                    <button type="submit" class="btn btn-primary" style="flex: 1;">Save & Publish Daily Site Report</button>
+                    <a href="/site-reports" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <%- include('../partials/footer') %>
+</body>
+</html>

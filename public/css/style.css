@@ -266,3 +266,105 @@ footer {
         gap: 0.75rem;
     }
 }
+
+/* --- Professional Corporate PDF & Print Styles --- */
+@media print {
+    @page {
+        margin: 1.5cm;
+        size: A4 portrait;
+    }
+    
+    body {
+        background: #ffffff !important;
+        background-image: none !important;
+        color: #000000 !important;
+        font-family: 'Segoe UI', Arial, Helvetica, sans-serif !important;
+        font-size: 11pt !important;
+        line-height: 1.4 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    
+    .navbar, .no-print, .btn, footer, .user-badge {
+        display: none !important;
+    }
+    
+    .container {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    
+    /* Remove web card rounded borders and shadows for pure document appearance */
+    .card {
+        background: transparent !important;
+        box-shadow: none !important;
+        border: none !important;
+        border-radius: 0 !important;
+        padding: 0 !important;
+        margin-bottom: 25px !important;
+        backdrop-filter: none !important;
+    }
+    
+    /* ELIMINATE SLIDING BAR & PREVENT TABLE CUTOFF */
+    .table-responsive {
+        overflow: visible !important;
+        width: 100% !important;
+        display: block !important;
+    }
+    
+    table {
+        width: 100% !important;
+        border-collapse: collapse !important;
+        table-layout: auto !important;
+        margin-top: 10px !important;
+        font-size: 10pt !important;
+    }
+    
+    table, th, td {
+        border: 1px solid #333333 !important;
+    }
+    
+    th {
+        background-color: #f0f0f0 !important;
+        color: #000000 !important;
+        font-weight: 700 !important;
+        text-transform: uppercase !important;
+        font-size: 9.5pt !important;
+        padding: 8px !important;
+    }
+    
+    td {
+        color: #000000 !important;
+        padding: 8px !important;
+        white-space: normal !important;
+        word-wrap: break-word !important;
+    }
+    
+    .status-badge {
+        background: none !important;
+        border: 1px solid #666 !important;
+        color: #000 !important;
+        font-weight: normal !important;
+        padding: 2px 6px !important;
+        border-radius: 4px !important;
+    }
+
+    .grid-3, .grid-2 {
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        gap: 15px !important;
+        margin-bottom: 20px !important;
+    }
+
+    .grid-3 > div, .grid-2 > div {
+        flex: 1 !important;
+        border: 1px solid #333 !important;
+        padding: 12px !important;
+        border-radius: 4px !important;
+        box-sizing: border-box !important;
+    }
+}
+

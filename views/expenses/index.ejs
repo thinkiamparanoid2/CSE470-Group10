@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <%- include('../partials/navbar') %>
+
+    <div class="container">
+        <div class="page-header">
+            <div>
+                <h2>💵 Project Expense Report & Financials Export</h2>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Sprint 4 Feature • Member C (Projects, Labor & Milestones)</p>
+            </div>
+        </div>
+
+        <div class="card" style="margin-bottom: 1.5rem; background: rgba(255,255,255,0.03);">
+            <h3>🎯 Generate Customized Client-Ready Report</h3>
+            <form action="/expenses/report" method="GET" style="margin-top: 1rem;">
+                <div class="grid-3">
+                    <div class="form-group">
+                        <label for="project_id">Select Construction Project Site:</label>
+                        <select name="project_id" id="project_id" class="form-control" required>
+                            <option value="">-- Choose Project --</option>
+                            <% projects.forEach(p => { %>
+                                <option value="<%= p.id %>"><%= p.name %></option>
+                            <% }) %>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="start_date">From Date (Optional Filter):</label>
+                        <input type="date" name="start_date" id="start_date" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="end_date">To Date (Optional Filter):</label>
+                        <input type="date" name="end_date" id="end_date" class="form-control">
+                    </div>
+                </div>
+                <div style="margin-top: 1rem; text-align: right;">
+                    <button type="submit" class="btn btn-primary">Generate Financial Report &rarr;</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Project Expense Summaries Grid/Table -->
+        <div class="card">
+            <h3>Active Project Site Financial Dashboard</h3>
+            <div class="table-responsive" style="margin-top: 1rem;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Project Site Name</th>
+                            <th>Location</th>
+                            <th>Status</th>
+                            <th>Total Budget</th>
+                            <th>Current Expenditure</th>
+                            <th>Remaining Variance</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (projects && projects.length > 0) { %>
+                            <% projects.forEach(p => { 
+                                 const rem = parseFloat(p.remainingBudget || 0);
+                            %>
+                                <tr>
+                                    <td><strong><%= p.name %></strong></td>
+                                    <td><%= p.location || 'Dhaka, Bangladesh' %></td>
+                                    <td><span class="status-badge status-good"><%= p.status %></span></td>
+                                    <td>৳<%= parseFloat(p.budget).toLocaleString(undefined, {minimumFractionDigits: 2}) %></td>
+                                    <td style="font-weight: bold; color: var(--accent-orange);">
+                                        ৳<%= parseFloat(p.totalExpenditure || 0).toLocaleString(undefined, {minimumFractionDigits: 2}) %>
+                                    </td>
+                                    <td style="font-weight: bold; color: <%= rem < 0 ? 'var(--accent-red)' : 'var(--accent-green)' %>;">
+                                        ৳<%= rem.toLocaleString(undefined, {minimumFractionDigits: 2}) %>
+                                    </td>
+                                    <td>
+                                        <a href="/expenses/report?project_id=<%= p.id %>" class="btn btn-secondary" style="padding: 0.3rem 0.6rem; font-size: 0.85rem;">Full Report</a>
+                                        <a href="/expenses/export-csv?project_id=<%= p.id %>" class="btn btn-primary" style="padding: 0.3rem 0.6rem; font-size: 0.85rem; margin-left: 0.3rem;">📊 Excel CSV</a>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        <% } else { %>
+                            <tr><td colspan="7" style="text-align: center; padding: 2rem;">No construction projects found in DB.</td></tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <%- include('../partials/footer') %>
+</body>
+</html>

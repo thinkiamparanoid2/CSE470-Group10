@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <%- include('../partials/navbar') %>
+
+    <div class="container">
+        <div class="page-header">
+            <h2>Record Vendor Payment Disbursement</h2>
+            <a href="/payments" class="btn btn-secondary">&larr; Back to Tracker</a>
+        </div>
+
+        <div class="card" style="max-width: 650px; margin: 0 auto;">
+            <form action="/payments/create" method="POST">
+                <div class="form-group">
+                    <label for="vendor_id">Select Vendor / Beneficiary Company:</label>
+                    <select name="vendor_id" id="vendor_id" class="form-control" required onchange="filterPOs()">
+                        <option value="">-- Choose Supplier --</option>
+                        <% vendors.forEach(v => { %>
+                            <option value="<%= v.id %>"><%= v.company_name %></option>
+                        <% }) %>
+                    </select>
+                </div>
+
+                <div class="grid-2" style="margin-top: 1rem;">
+                    <div class="form-group">
+                        <label for="po_id">Link to Purchase Order (Optional):</label>
+                        <select name="po_id" id="po_id" class="form-control">
+                            <option value="">-- No specific PO (General Advance) --</option>
+                            <% pos.forEach(po => { %>
+                                <option value="<%= po.id %>" data-vendor="<%= po.vendor_id %>">
+                                    PO #<%= po.id %> (Value: ৳<%= parseFloat(po.total_amount).toLocaleString() %>)
+                                </option>
+                            <% }) %>
+                        </select>
+                        <small style="color: var(--text-muted); font-size: 0.8rem;">Dropdown updates dynamically based on selected vendor.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="payment_type">Payment Type / Classification:</label>
+                        <select name="payment_type" id="payment_type" class="form-control" required>
+                            <option value="Advance">Advance Payment</option>
+                            <option value="Milestone Payment">Milestone Payment</option>
+                            <option value="Final Clearance">Final Clearance</option>
+                            <option value="Refund">Refund / Reversal</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid-3" style="margin-top: 1rem;">
+                    <div class="form-group">
+                        <label for="amount">Disbursement Amount (৳):</label>
+                        <input type="number" step="0.01" name="amount" id="amount" class="form-control" required placeholder="0.00">
+                    </div>
+                    <div class="form-group">
+                        <label for="payment_method">Payment Method:</label>
+                        <select name="payment_method" id="payment_method" class="form-control">
+                            <option value="Bank Transfer">Bank Transfer (EFT/BEFTN)</option>
+                            <option value="Cheque">Bank Cheque</option>
+                            <option value="Cash">Cash Disbursement</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="payment_date">Date of Disbursement:</label>
+                        <input type="date" name="payment_date" id="payment_date" class="form-control" value="<%= new Date().toISOString().split('T')[0] %>" required>
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top: 1rem;">
+                    <label for="reference_no">Transaction ID / Cheque Number:</label>
+                    <input type="text" name="reference_no" id="reference_no" class="form-control" placeholder="e.g., TXN-998822 / CHQ-100293">
+                </div>
+
+                <div class="form-group" style="margin-top: 1rem;">
+                    <label for="notes">Remarks / Accounting Notes:</label>
+                    <textarea name="notes" id="notes" class="form-control" rows="3" placeholder="Additional commentary on invoices covered or delivery shipments..."></textarea>
+                </div>
+
+                <div style="margin-top: 1.5rem; display: flex; gap: 1rem;">
+                    <button type="submit" class="btn btn-primary" style="flex: 1;">Save Payment & Update Balance</button>
+                    <a href="/payments" class="btn btn-secondary" style="text-align: center;">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Master list of purchase orders supplied by EJS backend
+        const masterPOs = <%- JSON.stringify(pos || []) %>;
+
+        function filterPOs() {
+            const selectedVendor = document.getElementById('vendor_id').value;
+            const poSelect = document.getElementById('po_id');
+            
+            // Complete DOM reconstruction to ensure 100% cross-browser reliability
+            poSelect.innerHTML = '<option value="">-- No specific PO (General Advance) --</option>';
+            
+            let matchCount = 0;
+            masterPOs.forEach(po => {
+                if (!selectedVendor || String(po.vendor_id) === String(selectedVendor)) {
+                    const option = document.createElement('option');
+                    option.value = po.id;
+                    const valFmt = parseFloat(po.total_amount).toLocaleString(undefined, {minimumFractionDigits: 2});
+                    option.textContent = `PO #${po.id} (Invoice: ৳${valFmt}) [Status: ${po.status || 'Approved'}]`;
+                    poSelect.appendChild(option);
+                    matchCount++;
+                }
+            });
+
+            if (selectedVendor && matchCount === 0) {
+                const emptyOpt = document.createElement('option');
+                emptyOpt.value = "";
+                emptyOpt.textContent = "-- No approved Purchase Orders found for this supplier --";
+                emptyOpt.disabled = true;
+                poSelect.appendChild(emptyOpt);
+            }
+        }
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', filterPOs);
+    </script>
+
+    <%- include('../partials/footer') %>
+</body>
+</html>

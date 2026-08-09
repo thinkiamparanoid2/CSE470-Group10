@@ -5,7 +5,7 @@
     <ul class="nav-links">
         <li><a href="/" class="nav-link">Home (CMS)</a></li>
         <% if (user) { %>
-            <li><a href="/dashboard" class="nav-link">Dashboard</a></li>
+            <li><a href="/dashboard" class="nav-link" style="font-weight: bold;">Dashboard</a></li>
             <% if (user.role !== 'Vendor') { %>
                 <li><a href="/materials" class="nav-link">Materials</a></li>
                 <li><a href="/vendors" class="nav-link">Vendors</a></li>
@@ -17,7 +17,12 @@
                 <li><a href="/price-comparison" class="nav-link">Prices</a></li>
                 <li><a href="/material-requests" class="nav-link">Requests</a></li>
                 <li><a href="/waste-logs" class="nav-link">Waste</a></li>
+                <li><a href="/boq" class="nav-link" style="color: var(--accent-amber);">BOQ</a></li>
+                <li><a href="/expenses" class="nav-link" style="color: var(--accent-amber);">Expenses</a></li>
+                <li><a href="/site-reports" class="nav-link" style="color: var(--accent-amber);">Site Reports</a></li>
+                <li><a href="/equipment" class="nav-link" style="color: var(--accent-amber);">Equipment</a></li>
             <% } %>
+            <li><a href="/payments" class="nav-link" style="color: var(--accent-amber);">Payments</a></li>
             <li><a href="/contracts" class="nav-link">Contracts</a></li>
             <li><a href="/deliveries" class="nav-link">Deliveries</a></li>
             <li><a href="/notices/board" class="nav-link">Notice Board</a></li>

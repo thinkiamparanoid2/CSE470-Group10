@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .print-only {
+            display: none;
+        }
+        @media print {
+            .no-print, .btn, footer, .navbar {
+                display: none !important;
+            }
+            .print-only {
+                display: block !important;
+            }
+            .print-header-box {
+                border-bottom: 2px solid #000;
+                padding-bottom: 15px;
+                margin-bottom: 20px;
+            }
+            .print-meta-table {
+                width: 100% !important;
+                margin-bottom: 25px !important;
+                border: none !important;
+            }
+            .print-meta-table td {
+                border: none !important;
+                padding: 4px 0 !important;
+                font-size: 11pt !important;
+            }
+            .signature-section {
+                display: flex !important;
+                flex-direction: row !important;
+                justify-content: space-between !important;
+                margin-top: 60px !important;
+                page-break-inside: avoid;
+            }
+            .signature-block {
+                width: 250px;
+                text-align: center;
+                border-top: 1px solid #000 !important;
+                padding-top: 8px;
+                font-size: 10pt;
+            }
+            .grid-3 h3, .grid-3 p {
+                color: #000 !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <%- include('../partials/navbar') %>
+
+    <%
+        const totalBilled = parseFloat(vendor.total_billed || 0);
+        const totalPaid = parseFloat(vendor.total_paid || 0);
+        const dueBalance = parseFloat(vendor.outstanding_balance !== undefined ? vendor.outstanding_balance : (totalBilled - totalPaid));
+        const categoryName = vendor.material_category || vendor.category || 'General Supplier';
+    %>
+
+    <div class="container">
+        <!-- Professional Corporate Print Letterhead -->
+        <div class="print-only print-header-box">
+            <h2 style="margin: 0; font-size: 18pt; text-transform: uppercase; letter-spacing: 0.5px;">Smarstruction Engineering & Infrastructure Ltd.</h2>
+            <h3 style="margin: 5px 0 0 0; font-size: 13pt; color: #333; font-weight: 600;">Supplier Financial Reconciliation & Account Ledger Statement</h3>
+        </div>
+
+        <div class="print-only">
+            <table class="print-meta-table">
+                <tr>
+                    <td style="width: 18%;"><strong>Supplier Company:</strong></td>
+                    <td style="width: 42%;"><strong><%= vendor.company_name %></strong></td>
+                    <td style="width: 18%;"><strong>Statement Date:</strong></td>
+                    <td style="width: 22%;"><%= new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) %></td>
+                </tr>
+                <tr>
+                    <td><strong>Representative:</strong></td>
+                    <td><%= vendor.contact_person || 'N/A' %> (<%= vendor.phone || 'N/A' %>)</td>
+                    <td><strong>Account Code:</strong></td>
+                    <td>#VEND-AC-<%= vendor.id %></td>
+                </tr>
+                <tr>
+                    <td><strong>Supply Category:</strong></td>
+                    <td><%= categoryName %></td>
+                    <td><strong>Financial Status:</strong></td>
+                    <td><%= dueBalance > 0 ? 'DUE BALANCE ACTIVE' : 'SETTLED IN FULL' %></td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Web UI Header -->
+        <div class="page-header no-print">
+            <div>
+                <h2>Vendor Account Ledger: <%= vendor.company_name %></h2>
+                <p style="color: var(--text-muted);">Contact Person: <strong><%= vendor.contact_person || 'N/A' %></strong> (<%= vendor.phone || 'N/A' %>) | Category: <%= categoryName %></p>
+            </div>
+            <div style="display: flex; gap: 0.5rem;">
+                <button onclick="window.print()" class="btn btn-secondary">🖨️ Print / Statement PDF</button>
+                <a href="/payments/create?vendor_id=<%= vendor.id %>" class="btn btn-primary">➕ Record Payment</a>
+                <a href="/payments" class="btn btn-secondary">&larr; Back to Payments</a>
+            </div>
+        </div>
+
+        <!-- Financial Summary Grid -->
+        <div class="grid-3" style="margin-bottom: 1.5rem;">
+            <div class="card" style="border-left: 4px solid var(--accent-blue);">
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.2rem;">Total Approved PO Invoices</p>
+                <h3 style="font-size: 1.5rem;">৳<%= totalBilled.toLocaleString(undefined, {minimumFractionDigits: 2}) %></h3>
+            </div>
+            <div class="card" style="border-left: 4px solid var(--accent-green);">
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.2rem;">Total Disbursed Payments</p>
+                <h3 style="font-size: 1.5rem; color: var(--accent-green);">৳<%= totalPaid.toLocaleString(undefined, {minimumFractionDigits: 2}) %></h3>
+            </div>
+            <div class="card" style="border-left: 4px solid <%= dueBalance > 0 ? 'var(--accent-amber)' : 'var(--accent-green)' %>;">
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.2rem;">Net Outstanding Due Balance</p>
+                <h3 style="font-size: 1.5rem; color: <%= dueBalance > 0 ? 'var(--accent-amber)' : 'var(--accent-green)' %>;">
+                    ৳<%= dueBalance.toLocaleString(undefined, {minimumFractionDigits: 2}) %>
+                </h3>
+            </div>
+        </div>
+
+        <!-- Purchase Orders (Invoices Billed) -->
+        <div class="card" style="margin-bottom: 1.5rem;">
+            <h3 style="margin-bottom: 0.8rem;">📦 Billed Invoices & Purchase Orders (Debits)</h3>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 18%;">PO Reference</th>
+                            <th style="width: 22%;">Expected Date</th>
+                            <th style="width: 25%;">Order Status</th>
+                            <th style="width: 35%; text-align: right;">Invoice Total Amount (৳)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (purchaseOrders.length > 0) { %>
+                            <% purchaseOrders.forEach(po => { %>
+                                <% const poAmt = parseFloat(po.total_amount || po.total_cost || 0); %>
+                                <tr>
+                                    <td><strong>#PO-2026-<%= po.id %></strong></td>
+                                    <td><%= po.expected_date ? new Date(po.expected_date).toLocaleDateString('en-GB') : 'Immediate Delivery' %></td>
+                                    <td>
+                                        <span class="status-badge <%= po.status === 'Approved' || po.status === 'Delivered' ? 'status-good' : 'status-warning' %>">
+                                            <%= po.status %>
+                                        </span>
+                                    </td>
+                                    <td style="text-align: right; font-weight: 600;">
+                                        ৳<%= poAmt.toLocaleString(undefined, {minimumFractionDigits: 2}) %>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        <% } else { %>
+                            <tr>
+                                <td colspan="4" style="text-align: center; padding: 1.5rem; color: var(--text-muted);">No approved Purchase Orders recorded for this supplier yet.</td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Payments Disbursed -->
+        <div class="card">
+            <h3 style="margin-bottom: 0.8rem;">💸 Disbursement Receipts & Payment History (Credits)</h3>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 15%;">Payment Date</th>
+                            <th style="width: 20%;">Payment Category</th>
+                            <th style="width: 20%;">Payment Method</th>
+                            <th style="width: 20%;">Transaction / Reference ID</th>
+                            <th style="width: 25%; text-align: right;">Amount Disbursed (৳)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (payments.length > 0) { %>
+                            <% payments.forEach(pay => { %>
+                                <% const payAmt = parseFloat(pay.amount || 0); %>
+                                <tr>
+                                    <td><%= new Date(pay.payment_date).toLocaleDateString('en-GB') %></td>
+                                    <td><span class="status-badge status-good"><%= pay.payment_type %></span></td>
+                                    <td><%= pay.payment_method %></td>
+                                    <td><code><%= pay.reference_no || 'N/A' %></code></td>
+                                    <td style="text-align: right; font-weight: 600; color: var(--accent-green);">
+                                        ৳<%= payAmt.toLocaleString(undefined, {minimumFractionDigits: 2}) %>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        <% } else { %>
+                            <tr>
+                                <td colspan="5" style="text-align: center; padding: 1.5rem; color: var(--text-muted);">No disbursements have been issued to this vendor yet.</td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Corporate Signature Block (Only in PDF printout) -->
+        <div class="print-only signature-section">
+            <div class="signature-block">
+                <strong>Chief Accountant / Treasurer</strong><br>
+                <span style="color: #444; font-size: 9.5pt;">Financial Division Signature</span>
+            </div>
+            <div class="signature-block">
+                <strong>Supplier Representative Acceptance</strong><br>
+                <span style="color: #444; font-size: 9.5pt;"><%= vendor.company_name %> Stamp</span>
+            </div>
+            <div class="signature-block">
+                <strong>Project Director Verification</strong><br>
+                <span style="color: #444; font-size: 9.5pt;">Smarstruction Executive Audit</span>
+            </div>
+        </div>
+        <div class="print-only" style="margin-top: 35px; font-size: 8.5pt; color: #666; border-top: 1px solid #ddd; padding-top: 8px;">
+            <em>Notice: This account ledger statement represents an official financial reconciliation generated via Smarstruction Accounting Systems. Any discrepancy must be reported within 14 business days.</em>
+        </div>
+    </div>
+
+    <%- include('../partials/footer') %>
+</body>
+</html>

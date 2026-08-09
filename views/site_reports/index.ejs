@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <%- include('../partials/navbar') %>
+
+    <div class="container">
+        <div class="page-header">
+            <div>
+                <h2>📋 Daily Site Progress Reports</h2>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Sprint 4 Feature • Member C (Projects, Labor & Milestones)</p>
+            </div>
+            <% if (user && (user.role === 'SuperAdmin' || user.role === 'Project Manager' || user.role === 'Site Engineer')) { %>
+                <a href="/site-reports/generate" class="btn btn-primary">+ Generate New Daily Report</a>
+            <% } %>
+        </div>
+
+        <!-- Filter Form Bar -->
+        <div class="card" style="margin-bottom: 1.5rem; background: rgba(255,255,255,0.03);">
+            <form action="/site-reports" method="GET" style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: flex-end;">
+                <div class="form-group" style="flex: 1; min-width: 250px;">
+                    <label for="project_id">Filter by Construction Project Site:</label>
+                    <select name="project_id" id="project_id" class="form-control">
+                        <option value="">-- All Construction Sites --</option>
+                        <% projects.forEach(p => { %>
+                            <option value="<%= p.id %>" <%= String(p.id) === String(selectedProject) ? 'selected' : '' %>><%= p.name %></option>
+                        <% }) %>
+                    </select>
+                </div>
+                <div class="form-group" style="flex: 1; min-width: 180px;">
+                    <label for="report_date">Filter by Report Date:</label>
+                    <input type="date" name="report_date" id="report_date" class="form-control" value="<%= selectedDate %>">
+                </div>
+                <div>
+                    <button type="submit" class="btn btn-secondary" style="padding: 0.45rem 1rem;">Filter Reports</button>
+                    <% if (selectedProject || selectedDate) { %>
+                        <a href="/site-reports" class="btn btn-secondary" style="padding: 0.45rem 0.8rem; margin-left: 0.5rem;">Reset</a>
+                    <% } %>
+                </div>
+            </form>
+        </div>
+
+        <!-- Reports Table -->
+        <div class="card">
+            <h3>Submitted Daily Site Progress Logs</h3>
+            <div class="table-responsive" style="margin-top: 1rem;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Report ID</th>
+                            <th>Log Date</th>
+                            <th>Project Site Name</th>
+                            <th>Weather Condition</th>
+                            <th>Site Engineer / Author</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (reports && reports.length > 0) { %>
+                            <% reports.forEach(r => { %>
+                                <tr>
+                                    <td><strong>#REP-<%= r.id %></strong></td>
+                                    <td><%= new Date(r.report_date).toLocaleDateString() %></td>
+                                    <td><%= r.project_name %></td>
+                                    <td><span class="status-badge status-good"><%= r.weather_condition || 'Sunny' %></span></td>
+                                    <td><%= r.engineer_name || 'Site Engineer' %></td>
+                                    <td>
+                                        <a href="/site-reports/<%= r.id %>" class="btn btn-secondary" style="padding: 0.3rem 0.6rem; font-size: 0.85rem;">View & Print Report &rarr;</a>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        <% } else { %>
+                            <tr><td colspan="6" style="text-align: center; padding: 2rem;">No daily site reports matching criteria found. Click "+ Generate New Daily Report" above.</td></tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <%- include('../partials/footer') %>
+</body>
+</html>

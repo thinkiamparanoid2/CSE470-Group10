@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <%- include('../partials/navbar') %>
+
+    <div class="container">
+        <div class="page-header">
+            <div>
+                <h2>⚙️ Equipment Maintenance Scheduler & Fleet Inventory</h2>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Sprint 4 Feature • Member D (System Admin, RBAC & Notices)</p>
+            </div>
+            <% if (user && user.role !== 'Vendor') { %>
+                <div style="display: flex; gap: 0.5rem;">
+                    <a href="/equipment/create" class="btn btn-secondary">+ Register Machinery</a>
+                    <a href="/equipment/schedule" class="btn btn-primary">+ Schedule Maintenance</a>
+                </div>
+            <% } %>
+        </div>
+
+        <!-- Section 1: Maintenance Schedule & Alerts Calendar -->
+        <div class="card" style="margin-bottom: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h3>🔧 Active & Upcoming Maintenance Schedule</h3>
+                <span class="status-badge status-good">Preventive & Routine Workflows</span>
+            </div>
+            <div class="table-responsive" style="margin-top: 1rem;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Scheduled Date</th>
+                            <th>Equipment / Machine</th>
+                            <th>Type & Description</th>
+                            <th>Assigned Specialist</th>
+                            <th>Est. Cost</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (maintenance && maintenance.length > 0) { %>
+                            <% maintenance.forEach(ms => { %>
+                                <tr>
+                                    <td><strong><%= new Date(ms.scheduled_date).toLocaleDateString() %></strong></td>
+                                    <td>
+                                        <strong><%= ms.equipment_name %></strong> <br>
+                                        <small style="color: var(--text-muted);"><%= ms.equipment_code %> (<%= ms.project_name || 'In Depot' %>)</small>
+                                    </td>
+                                    <td>
+                                        <span class="status-badge status-good" style="font-size: 0.75rem;"><%= ms.maintenance_type %></span><br>
+                                        <span style="font-size: 0.9rem;"><%= ms.description %></span>
+                                    </td>
+                                    <td><%= ms.assigned_to || 'Internal Mechanics' %></td>
+                                    <td>৳<%= parseFloat(ms.cost_estimate || 0).toLocaleString() %></td>
+                                    <td>
+                                        <span class="status-badge <%= ms.status === 'Completed' ? 'status-good' : (ms.status === 'In Progress' ? 'status-lowstock' : '') %>">
+                                            <%= ms.status %>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <% if (user && user.role !== 'Vendor' && ms.status !== 'Completed') { %>
+                                            <form action="/equipment/maintenance/<%= ms.id %>/status" method="POST" style="display: inline-block;">
+                                                <input type="hidden" name="equipment_id" value="<%= ms.equipment_id %>">
+                                                <% if (ms.status === 'Scheduled') { %>
+                                                    <input type="hidden" name="status" value="In Progress">
+                                                    <button type="submit" class="btn btn-secondary" style="padding: 0.25rem 0.6rem; font-size: 0.8rem;">Start Work</button>
+                                                <% } else if (ms.status === 'In Progress') { %>
+                                                    <input type="hidden" name="status" value="Completed">
+                                                    <button type="submit" class="btn btn-primary" style="padding: 0.25rem 0.6rem; font-size: 0.8rem; background-color: var(--accent-green);">Mark Complete & ✓ Operational</button>
+                                                <% } %>
+                                            </form>
+                                        <% } %>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        <% } else { %>
+                            <tr><td colspan="7" style="text-align: center; padding: 2rem; color: var(--text-muted);">No maintenance tasks currently scheduled or in progress.</td></tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Section 2: Heavy Machinery & Fleet Inventory Directory -->
+        <div class="card">
+            <h3>🚜 Heavy Machinery & Construction Equipment Directory</h3>
+            <div class="table-responsive" style="margin-top: 1rem;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Code</th>
+                            <th>Equipment Name</th>
+                            <th>Category</th>
+                            <th>Current Project Deployment</th>
+                            <th>Operational Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (equipment && equipment.length > 0) { %>
+                            <% equipment.forEach(eq => { %>
+                                <tr>
+                                    <td><strong><%= eq.equipment_code %></strong></td>
+                                    <td><%= eq.name %></td>
+                                    <td><%= eq.category %></td>
+                                    <td><%= eq.project_name || 'Central Depot / Available' %></td>
+                                    <td>
+                                        <span class="status-badge <%= eq.status === 'Operational' || eq.status === 'Available' ? 'status-good' : 'status-lowstock' %>">
+                                            <%= eq.status %>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <% if (user && user.role !== 'Vendor') { %>
+                                            <a href="/equipment/schedule?equipment_id=<%= eq.id %>" class="btn btn-secondary" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">+ Schedule Service</a>
+                                        <% } %>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        <% } else { %>
+                            <tr><td colspan="6" style="text-align: center; padding: 2rem;">No heavy machinery registered in fleet. Click "+ Register Machinery".</td></tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <%- include('../partials/footer') %>
+</body>
+</html>
