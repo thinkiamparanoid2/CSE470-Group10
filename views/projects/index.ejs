@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <%- include('../partials/navbar') %>
+
+    <div class="container">
+        <div class="page-header">
+            <h2>📋 Project Management</h2>
+            <% if (user && (user.role === 'SuperAdmin' || user.role === 'Project Manager')) { %>
+                <a href="/projects/create" class="btn btn-primary">+ New Project</a>
+            <% } %>
+        </div>
+
+        <div class="card">
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Project Name</th>
+                            <th>Location</th>
+                            <th>Budget (BDT)</th>
+                            <th>Status</th>
+                            <th>Start Date</th>
+                            <th>Target Completion</th>
+                            <% if (user && (user.role === 'SuperAdmin' || user.role === 'Project Manager')) { %>
+                                <th>Actions</th>
+                            <% } %>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (projects && projects.length > 0) { %>
+                            <% projects.forEach((p, i) => { %>
+                                <tr>
+                                    <td><%= i + 1 %></td>
+                                    <td><strong><%= p.name %></strong></td>
+                                    <td><%= p.location || 'N/A' %></td>
+                                    <td>৳<%= Number(p.budget).toLocaleString() %></td>
+                                    <td>
+                                        <span class="status-badge <%= p.status === 'Ongoing' ? 'status-ongoing' : p.status === 'Completed' ? 'status-good' : 'status-lowstock' %>">
+                                            <%= p.status %>
+                                        </span>
+                                    </td>
+                                    <td><%= p.start_date ? new Date(p.start_date).toLocaleDateString() : 'N/A' %></td>
+                                    <td><%= p.target_completion_date ? new Date(p.target_completion_date).toLocaleDateString() : 'N/A' %></td>
+                                    <% if (user && (user.role === 'SuperAdmin' || user.role === 'Project Manager')) { %>
+                                        <td>
+                                            <a href="/projects/edit/<%= p.id %>" class="btn btn-secondary" style="padding: 0.3rem 0.6rem; font-size: 0.85rem;">Edit</a>
+                                            <form action="/projects/delete/<%= p.id %>" method="POST" style="display: inline;" onsubmit="return confirm('Delete this project?')">
+                                                <button type="submit" class="btn" style="background: rgba(239,68,68,0.3); color: #f87171; padding: 0.3rem 0.6rem; font-size: 0.85rem;">Delete</button>
+                                            </form>
+                                        </td>
+                                    <% } %>
+                                </tr>
+                            <% }) %>
+                        <% } else { %>
+                            <tr><td colspan="8" style="text-align: center; color: var(--text-muted);">No projects found. Create one to get started.</td></tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <%- include('../partials/footer') %>
+</body>
+</html>
