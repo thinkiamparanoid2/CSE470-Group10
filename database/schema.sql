@@ -306,6 +306,17 @@ INSERT INTO `projects` (`id`, `name`, `location`, `budget`, `status`, `start_dat
 (2, 'Uttara Residential Villa Project', 'Sector 11, Uttara, Dhaka', 35000000.00, 'Ongoing', '2026-03-01', '2027-04-15')
 ON DUPLICATE KEY UPDATE id=id;
 
+INSERT INTO `milestones` (`id`, `project_id`, `title`, `due_date`, `status`, `description`) VALUES
+(1, 1, 'Soil Excavation & Foundation Piling', '2026-03-30', 'Completed', 'Deep foundation bore piling completed.'),
+(2, 1, 'Basement 1 & 2 RCC Casting', '2026-06-15', 'Completed', 'Basement walls and slab casting done.'),
+(3, 1, 'Superstructure Floors 1 to 5', '2026-11-30', 'In Progress', 'Column casting active on 3rd floor.'),
+(4, 1, 'Interior Electrical & Plumbing', '2027-08-15', 'Pending', 'Concealed wiring and piping installation.'),
+(5, 2, 'Boundary Wall & Site Leveling', '2026-04-10', 'Completed', 'Perimeter secured and leveled.'),
+(6, 2, 'Ground Floor Brick Masonry', '2026-07-20', 'Completed', 'First class red brick walls completed.'),
+(7, 2, 'First Floor Slab Casting', '2026-08-15', 'Completed', 'Roof slab casting cured and inspected.'),
+(8, 2, 'Interior Paint & Finishing', '2026-12-01', 'In Progress', 'Plastering and primer coating underway.')
+ON DUPLICATE KEY UPDATE id=id;
+
 INSERT INTO `vendor_quotations` (`vendor_id`, `material_id`, `price`) VALUES
 (1, 2, 98000.00), -- BSRM for Rod
 (4, 2, 96500.00), -- Anwar for Rod
