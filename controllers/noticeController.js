@@ -42,7 +42,8 @@ function showCreateForm(req, res) {
 async function createNotice(req, res) {
     const title = sanitize(req.body.title);
     const content = sanitize(req.body.content);
-    const priority = sanitize(req.body.priority) || 'Normal';
+    let priority = sanitize(req.body.priority) || 'Normal';
+    if (priority === 'Urgent') priority = 'Emergency';
     const created_by = req.session.user.id;
 
     const validPriorities = ['Normal', 'High', 'Emergency'];
@@ -98,7 +99,8 @@ async function updateNotice(req, res) {
 
     const title = sanitize(req.body.title);
     const content = sanitize(req.body.content);
-    const priority = sanitize(req.body.priority) || 'Normal';
+    let priority = sanitize(req.body.priority) || 'Normal';
+    if (priority === 'Urgent') priority = 'Emergency';
     const validPriorities = ['Normal', 'High', 'Emergency'];
 
     // Validation

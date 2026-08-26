@@ -44,7 +44,7 @@
                                     <td><%= t.from_project_name %></td>
                                     <td><%= t.to_project_name %></td>
                                     <td>
-                                        <span class="status-badge <%= t.status === 'Completed' ? 'status-good' : (t.status === 'Requested' ? 'status-lowstock' : 'status-moderate') %>">
+                                        <span class="status-badge <%= t.status === 'Completed' ? 'status-good' : (t.status === 'Requested' || t.status === 'Rejected' ? 'status-lowstock' : 'status-moderate') %>">
                                             <%= t.status %>
                                         </span>
                                     </td>
@@ -54,6 +54,10 @@
                                                 <form action="/inventory-transfers/status/<%= t.id %>" method="POST" style="display:inline;">
                                                     <input type="hidden" name="status" value="Approved">
                                                     <button type="submit" class="btn btn-primary" style="padding: 0.2rem 0.5rem; font-size: 0.8rem;">Approve</button>
+                                                </form>
+                                                <form action="/inventory-transfers/status/<%= t.id %>" method="POST" style="display:inline; margin-left: 0.25rem;">
+                                                    <input type="hidden" name="status" value="Rejected">
+                                                    <button type="submit" class="btn btn-secondary" style="padding: 0.2rem 0.5rem; font-size: 0.8rem; background: rgba(239, 68, 68, 0.2); color: #f87171; border-color: rgba(239, 68, 68, 0.4);">Reject</button>
                                                 </form>
                                             <% } else if (t.status === 'Approved') { %>
                                                 <form action="/inventory-transfers/status/<%= t.id %>" method="POST" style="display:inline;">
