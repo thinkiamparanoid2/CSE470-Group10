@@ -280,10 +280,10 @@ CREATE TABLE IF NOT EXISTS `maintenance_schedules` (
 
 -- Sample Data Seeding
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `role`) VALUES
-(1, 'Super Admin', 'admin@smarstruction.bd', '$2a$10$p9JFIO3uJ2sMSPRyFKCEjuzdp.lNOEjJNxl6FtgkyY.UbBhILGQHS', 'SuperAdmin'),
-(2, 'Project Manager John', 'pm@smarstruction.bd', '$2a$10$p9JFIO3uJ2sMSPRyFKCEjuzdp.lNOEjJNxl6FtgkyY.UbBhILGQHS', 'Project Manager'),
-(3, 'Site Eng. Rahat', 'engineer@smarstruction.bd', '$2a$10$p9JFIO3uJ2sMSPRyFKCEjuzdp.lNOEjJNxl6FtgkyY.UbBhILGQHS', 'Site Engineer'),
-(4, 'BSRM Steels Ltd', 'vendor@bsrm.bd', '$2a$10$p9JFIO3uJ2sMSPRyFKCEjuzdp.lNOEjJNxl6FtgkyY.UbBhILGQHS', 'Vendor')
+(1, 'Super Admin', 'admin@smarstruction.bd', '$2a$10$gifD7bp.pEYzKSasAhJ4j.h21nIeZ1orsrhVzu0uUdMITtwabRteu', 'SuperAdmin'),
+(2, 'Project Manager John', 'pm@smarstruction.bd', '$2a$10$gifD7bp.pEYzKSasAhJ4j.h21nIeZ1orsrhVzu0uUdMITtwabRteu', 'Project Manager'),
+(3, 'Site Eng. Rahat', 'engineer@smarstruction.bd', '$2a$10$gifD7bp.pEYzKSasAhJ4j.h21nIeZ1orsrhVzu0uUdMITtwabRteu', 'Site Engineer'),
+(4, 'BSRM Steels Ltd', 'vendor@bsrm.bd', '$2a$10$gifD7bp.pEYzKSasAhJ4j.h21nIeZ1orsrhVzu0uUdMITtwabRteu', 'Vendor')
 ON DUPLICATE KEY UPDATE id=id;
 
 INSERT INTO `materials` (`id`, `name`, `category`, `unit`, `current_stock`, `reorder_level`, `unit_price_est`) VALUES
