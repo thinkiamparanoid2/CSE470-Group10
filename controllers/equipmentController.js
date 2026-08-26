@@ -48,9 +48,9 @@ async function createEquipment(req, res) {
     const rawProjectId = req.body.current_project_id;
     const status = sanitize(req.body.status) || 'Available';
     const purchase_date = req.body.purchase_date;
+    const projectVal = req.body.current_project_id ? parseInt(req.body.current_project_id, 10) : null;
 
-    const projectVal = (rawProjectId && rawProjectId !== '') ? parseInt(rawProjectId, 10) : null;
-    const validStatuses = ['Available', 'In Use', 'Under Maintenance', 'Decommissioned'];
+    const validStatuses = ['Operational', 'Available', 'In Use', 'Under Maintenance', 'Out of Service', 'Decommissioned'];
 
     // Validation
     if (!isRequired(name) || name.length < 2) {
