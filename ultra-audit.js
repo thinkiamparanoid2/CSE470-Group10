@@ -125,8 +125,10 @@ async function runUltraAudit() {
 
         // Sprint 2: Purchase Orders
         const [availableMats] = await db.query('SELECT id FROM materials LIMIT 1');
+        const [availableVendors] = await db.query('SELECT id FROM vendors LIMIT 1');
         const poMatId = availableMats[0].id;
-        const poCreateRes = await request('POST', '/purchase_orders/create', { project_id: 1, vendor_id: 1, material_id: poMatId, quantity: '100.00', unit_price: '98000.00', delivery_deadline: '2026-09-01', notes: 'Urgent steel consignment' });
+        const poVendorId = availableVendors[0].id;
+        const poCreateRes = await request('POST', '/purchase_orders/create', { project_id: 1, vendor_id: poVendorId, material_id: poMatId, quantity: '100.00', unit_price: '98000.00', delivery_deadline: '2026-09-01', notes: 'Urgent steel consignment' });
         check('POST /purchase_orders/create creates new supplier PO invoice', poCreateRes.statusCode === 302 && poCreateRes.headers.location === '/purchase_orders', `Status: ${poCreateRes.statusCode}, Body: ${poCreateRes.body.slice(0, 200)}`);
         const [pos] = await db.query('SELECT id FROM purchase_orders ORDER BY id DESC LIMIT 1');
         const newPoId = pos[0].id;
@@ -135,8 +137,10 @@ async function runUltraAudit() {
         check(`POST /purchase_orders/status/${newPoId} updates PO status to Approved`, poStatusRes.statusCode === 302 && poStatusRes.headers.location === '/purchase_orders');
 
         // Sprint 2: Deliveries
-        const delivStatusRes = await request('POST', `/deliveries/status/1`, { status: 'In Transit' });
-        check('POST /deliveries/status/1 updates consignment logistics status', delivStatusRes.statusCode === 302 && delivStatusRes.headers.location === '/deliveries');
+        const [availableDeliveries] = await db.query('SELECT id FROM deliveries LIMIT 1');
+        const delivId = availableDeliveries.length > 0 ? availableDeliveries[0].id : 1;
+        const delivStatusRes = await request('POST', `/deliveries/status/${delivId}`, { status: 'In Transit' });
+        check(`POST /deliveries/status/${delivId} updates consignment logistics status`, delivStatusRes.statusCode === 302 && delivStatusRes.headers.location === '/deliveries');
 
         // Sprint 2: Inventory Transfers
         const transCreateRes = await request('POST', '/inventory-transfers/create', { from_project_id: '1', to_project_id: '2', material_id: '1', quantity: '50', transfer_date: '2026-08-03', notes: 'Transferring extra cement bags to villa site' });
@@ -153,16 +157,19 @@ async function runUltraAudit() {
 
         // Sprint 3: Waste Logs & Emergency Requests
         console.log('\n--- SPRINT 3: Material Waste Logs & Emergency Requests ---');
-        const wasteCreateRes = await request('POST', '/waste-logs', { project_id: '1', material_id: '3', waste_quantity: '150', log_date: '2026-08-03', reason: 'Damaged during forklift offloading at basement storage.' });
+        const wasteCreateRes = await request('POST', '/waste-logs', { project_id: '1', material_id: poMatId, waste_quantity: '150', log_date: '2026-08-03', reason: 'Damaged during forklift offloading at basement storage.' });
         check('POST /waste-logs records material breakage & financial loss', wasteCreateRes.statusCode === 302 && wasteCreateRes.headers.location === '/waste-logs', `Status: ${wasteCreateRes.statusCode}, Body: ${wasteCreateRes.body.slice(0, 200)}`);
 
-        const reqCreateRes = await request('POST', '/material-requests', { project_id: '1', material_id: '1', quantity: '300', priority: 'Urgent', reason: 'Immediate concrete pouring requirement.' });
+        const reqCreateRes = await request('POST', '/material-requests', { project_id: '1', material_id: poMatId, quantity: '300', priority: 'Urgent', reason: 'Immediate concrete pouring requirement.' });
         check('POST /material-requests flags high-priority field requirement', reqCreateRes.statusCode === 302 && reqCreateRes.headers.location === '/material-requests', `Status: ${reqCreateRes.statusCode}, Body: ${reqCreateRes.body.slice(0, 200)}`);
         const [mReqs] = await db.query('SELECT id FROM material_requests ORDER BY id DESC LIMIT 1');
         const newReqId = mReqs[0].id;
 
         const reqStatusRes = await request('POST', `/material-requests/${newReqId}/status`, { status: 'Approved' });
         check(`POST /material-requests/${newReqId}/status executive approves urgent request`, reqStatusRes.statusCode === 302 && reqStatusRes.headers.location === '/material-requests');
+
+        const reqFulfillRes = await request('POST', `/material-requests/${newReqId}/status`, { status: 'Fulfilled' });
+        check(`POST /material-requests/${newReqId}/status marks urgent request as Fulfilled`, reqFulfillRes.statusCode === 302 && reqFulfillRes.headers.location === '/material-requests');
 
         console.log('\n==================================================================================');
         console.log(`🌟 SCIENTITIFC PROOF: ALL ${passed}/${total} POST ENDPOINTS ACROSS SPRINTS 1, 2, 3 & 4 TESTED PERFECTLY!`);

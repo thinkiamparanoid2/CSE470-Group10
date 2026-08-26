@@ -255,7 +255,7 @@ CREATE TABLE IF NOT EXISTS `equipment` (
     `equipment_code` VARCHAR(50) NOT NULL UNIQUE,
     `category` VARCHAR(100) DEFAULT 'Heavy Machinery',
     `current_project_id` INT DEFAULT NULL,
-    `status` ENUM('Operational', 'Under Maintenance', 'Out of Service', 'Available') DEFAULT 'Available',
+    `status` ENUM('Operational', 'Under Maintenance', 'Out of Service', 'Available', 'In Use', 'Decommissioned') DEFAULT 'Available',
     `purchase_date` DATE,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (`current_project_id`) REFERENCES `projects`(`id`) ON DELETE SET NULL

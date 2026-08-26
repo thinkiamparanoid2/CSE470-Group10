@@ -70,7 +70,7 @@ async function createRequest(req, res) {
 async function updateStatus(req, res) {
     const requestId = parseInt(req.params.id, 10);
     const { status } = req.body;
-    const validStatuses = ['Pending', 'Approved', 'Rejected'];
+    const validStatuses = ['Pending', 'Approved', 'Fulfilled', 'Rejected'];
 
     if (isNaN(requestId) || !validStatuses.includes(status)) {
         return res.render('error', { message: 'Validation Error: Invalid request record or status update.' });
