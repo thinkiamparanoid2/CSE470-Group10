@@ -33,7 +33,7 @@ async function showCreateForm(req, res) {
 // Create Purchase Order Action (Raw SQL with Transaction & Validation)
 async function createPurchaseOrder(req, res) {
     const vendor_id = parseInt(req.body.vendor_id, 10);
-    const expected_date = req.body.expected_date;
+    const expected_date = req.body.expected_date || req.body.delivery_deadline;
     const { material_id, quantity, unit_price } = req.body;
     const created_by = req.session.user.id;
 
