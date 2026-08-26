@@ -131,7 +131,7 @@ CREATE TABLE IF NOT EXISTS `inventory_transfers` (
     `from_project_id` INT NOT NULL,
     `to_project_id` INT NOT NULL,
     `quantity` DECIMAL(10, 2) NOT NULL,
-    `status` ENUM('Requested', 'Approved', 'In Transit', 'Completed') DEFAULT 'Requested',
+    `status` ENUM('Requested', 'Approved', 'In Transit', 'Completed', 'Rejected') DEFAULT 'Requested',
     `created_by` INT,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (`material_id`) REFERENCES `materials`(`id`) ON DELETE CASCADE,

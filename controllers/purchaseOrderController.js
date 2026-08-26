@@ -108,7 +108,7 @@ async function createPurchaseOrder(req, res) {
 async function updateStatus(req, res) {
     const poId = parseInt(req.params.id, 10);
     const { status } = req.body;
-    const validStatuses = ['Draft', 'Approved', 'Delivered', 'Rejected'];
+    const validStatuses = ['Pending', 'Draft', 'Approved', 'Shipped', 'Delivered', 'Rejected'];
 
     if (isNaN(poId) || !validStatuses.includes(status)) {
         return res.render('error', { message: 'Validation Error: Invalid PO ID or status transition.' });

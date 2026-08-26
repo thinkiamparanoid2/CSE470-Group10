@@ -73,13 +73,18 @@ async function createTransfer(req, res) {
 async function updateStatus(req, res) {
     const transferId = parseInt(req.params.id, 10);
     const { status } = req.body;
-    const validStatuses = ['Pending', 'Approved', 'Rejected'];
+    const validStatuses = ['Requested', 'Approved', 'In Transit', 'Completed', 'Rejected'];
 
     if (isNaN(transferId) || !validStatuses.includes(status)) {
         return res.render('error', { message: 'Validation Error: Invalid transfer record or status action.' });
     }
 
     try {
+        const [existing] = await db.query('SELECT id, status FROM inventory_transfers WHERE id = ?', [transferId]);
+        if (existing.length === 0) {
+            return res.render('error', { message: 'Validation Error: Transfer record not found.' });
+        }
+
         await db.query('UPDATE inventory_transfers SET status = ? WHERE id = ?', [status, transferId]);
         res.redirect('/inventory-transfers');
     } catch (err) {
