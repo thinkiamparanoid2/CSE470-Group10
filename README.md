@@ -6,26 +6,6 @@
 **Tech Stack:** Node.js + Express.js + Raw MySQL (`mysql2/promise`) + EJS + Custom CSS  
 **Architecture:** Strict MVC (Model-View-Controller) — **No ORM**
 
----
-
-## 📌 Notice for Shifting Devices & AI Agents
-
-If you are continuing work on this project on a new device or with a new agent session, all complete project documentation has been organized into the **`md/`** directory:
-
-1. **[`md/fix_issues.md`](md/fix_issues.md) (★ Most Important for New Agents)**:
-   - Detailed record of **what was wrong initially** (lack of controllers/MVC violation, `admin123` authentication backdoor bypass, incomplete project CRUD, broken redirects, missing `.env`).
-   - Detailed record of **all changes made** (20 controllers created, 22 routes refactored into thin dispatchers, bcrypt hashing secured, input validation layer in `middleware/validate.js`, global error middleware, database seed password fix).
-2. **[`md/progress.md`](md/progress.md)**:
-   - Comprehensive system architecture, RBAC permissions matrix, 20 features mapped across Members A, B, C, and D, and the 21 database table schemas.
-3. **[`md/CSE470_Demo_Guide.md`](md/CSE470_Demo_Guide.md)**:
-   - Step-by-step instructions for demonstrating all 20 features during presentations and viva (click paths, sample input values, and technical talking points).
-4. **[`md/CSE470_Project_Feature_Doc.md`](md/CSE470_Project_Feature_Doc.md)**:
-   - Complete formal project feature documentation matching university submission requirements.
-5. **[`md/PROJECT_ROADMAP.md`](md/PROJECT_ROADMAP.md)**:
-   - Original 4-sprint milestone plan.
-
----
-
 ## 🚀 Quick Setup on a New Device
 
 ```bash
