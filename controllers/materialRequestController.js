@@ -39,7 +39,8 @@ async function createRequest(req, res) {
     const project_id = parseInt(req.body.project_id, 10);
     const material_id = parseInt(req.body.material_id, 10);
     const quantity = req.body.quantity;
-    const priority = sanitize(req.body.priority) || 'Normal';
+    let priority = sanitize(req.body.priority) || 'Normal';
+    if (priority === 'Urgent') priority = 'Emergency';
     const validPriorities = ['Emergency', 'High', 'Normal'];
 
     // Validation

@@ -124,7 +124,9 @@ async function runUltraAudit() {
         check(`POST /notices/delete/${newNoticeId} deletes notice from board`, noticeDelRes.statusCode === 302 && noticeDelRes.headers.location === '/notices');
 
         // Sprint 2: Purchase Orders
-        const poCreateRes = await request('POST', '/purchase_orders/create', { project_id: 1, vendor_id: 1, material_id: 2, quantity: '100.00', unit_price: '98000.00', delivery_deadline: '2026-09-01', notes: 'Urgent steel consignment' });
+        const [availableMats] = await db.query('SELECT id FROM materials LIMIT 1');
+        const poMatId = availableMats[0].id;
+        const poCreateRes = await request('POST', '/purchase_orders/create', { project_id: 1, vendor_id: 1, material_id: poMatId, quantity: '100.00', unit_price: '98000.00', delivery_deadline: '2026-09-01', notes: 'Urgent steel consignment' });
         check('POST /purchase_orders/create creates new supplier PO invoice', poCreateRes.statusCode === 302 && poCreateRes.headers.location === '/purchase_orders', `Status: ${poCreateRes.statusCode}, Body: ${poCreateRes.body.slice(0, 200)}`);
         const [pos] = await db.query('SELECT id FROM purchase_orders ORDER BY id DESC LIMIT 1');
         const newPoId = pos[0].id;
