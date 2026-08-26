@@ -2,6 +2,7 @@ const db = require('../config/db');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const { isRequired, sanitize } = require('../middleware/validate');
 
 // Ensure upload directory exists
 const uploadDir = path.join(__dirname, '../public/uploads/contracts');
@@ -9,16 +10,33 @@ if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir, { recursive: true });
 }
 
-// Multer Storage Configuration
+// Multer Storage Configuration with File Filter
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, uploadDir);
     },
     filename: function (req, file, cb) {
-        cb(null, Date.now() + '-' + Math.round(Math.random() * 1E9) + path.extname(file.originalname));
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        const cleanName = path.basename(file.originalname).replace(/[^a-zA-Z0-9.-]/g, '_');
+        cb(null, uniqueSuffix + '-' + cleanName);
     }
 });
-const upload = multer({ storage: storage });
+
+const fileFilter = (req, file, cb) => {
+    const allowedExtensions = ['.pdf', '.doc', '.docx', '.png', '.jpg', '.jpeg'];
+    const ext = path.extname(file.originalname).toLowerCase();
+    if (allowedExtensions.includes(ext)) {
+        cb(null, true);
+    } else {
+        cb(new Error('Invalid file type. Only PDF, DOC, DOCX, PNG, and JPG files are accepted.'), false);
+    }
+};
+
+const upload = multer({
+    storage: storage,
+    limits: { fileSize: 15 * 1024 * 1024 }, // 15 MB limit
+    fileFilter: fileFilter
+});
 
 // List Contracts
 async function listContracts(req, res) {
@@ -52,19 +70,28 @@ async function listContracts(req, res) {
             error: null
         });
     } catch (err) {
-        console.error(err);
-        res.status(500).send('Server Error');
+        console.error('List Contracts Error:', err);
+        res.render('error', { message: 'Database Error: Could not retrieve vendor contracts.' });
     }
 }
 
-// Upload Contract (Raw SQL)
+// Upload Contract (Raw SQL with Validation)
 async function uploadContract(req, res) {
-    try {
-        const { vendor_id, title } = req.body;
-        if (!req.file) {
-            return res.status(400).send('No file uploaded.');
-        }
+    const vendor_id = parseInt(req.body.vendor_id, 10);
+    const title = sanitize(req.body.title);
 
+    // Validation
+    if (isNaN(vendor_id)) {
+        return res.render('error', { message: 'Validation Error: Please select a valid vendor for this contract.' });
+    }
+    if (!isRequired(title) || title.length < 3) {
+        return res.render('error', { message: 'Validation Error: Contract title is required and must be at least 3 characters.' });
+    }
+    if (!req.file) {
+        return res.render('error', { message: 'Validation Error: No document file was selected for upload.' });
+    }
+
+    try {
         const file_path = '/uploads/contracts/' + req.file.filename;
 
         await db.query(
@@ -74,13 +101,13 @@ async function uploadContract(req, res) {
 
         res.redirect('/contracts');
     } catch (err) {
-        console.error(err);
-        res.status(500).send('Server Error');
+        console.error('Upload Contract Error:', err);
+        res.render('error', { message: 'Database Error: Failed to save contract metadata.' });
     }
 }
 
 module.exports = {
     listContracts,
     uploadContract,
-    upload  // Export multer middleware for use in routes
+    upload
 };

@@ -66,7 +66,7 @@ CSE470-Group10/
 │   └── uploads/      # Contract document uploads
 ├── database/
 │   └── schema.sql    # 21 tables + seed data (Raw SQL DDL)
-├── .env.example      # Environment variables template
+├── .env              # Database credentials
 ├── server.js         # Express app entry point
 └── package.json      # Dependencies
 ```
@@ -163,7 +163,6 @@ CSE470-Group10/
 | admin@smarstruction.bd | admin123 | SuperAdmin |
 | pm@smarstruction.bd | admin123 | Project Manager |
 | engineer@smarstruction.bd | admin123 | Site Engineer |
-| vendor@bsrm.bd | admin123 | Vendor |
 
 ---
 
@@ -175,8 +174,8 @@ git clone <repo-url>
 cd CSE470-Group10
 npm install
 
-# 2. Configure .env file
-cp .env.example .env
+# 2. Create .env file (already included)
+# Edit .env if your MySQL password is different
 
 # 3. Import database
 mysql -u root -p < database/schema.sql
@@ -189,3 +188,15 @@ npm run dev
 # 5. Open browser
 # http://localhost:3000
 ```
+
+---
+
+## ✅ University Compliance Checklist
+
+- [x] **No ORM**: All DB operations use `db.query('SELECT ...')` with `mysql2/promise`
+- [x] **No Django/Flask**: Built with Node.js + Express.js
+- [x] **MVC Structure**: `controllers/` + `routes/` + `views/` separation
+- [x] **5 Features per Member**: 20 features across 4 members (A, B, C, D)
+- [x] **Login/Signup separate**: Not counted toward feature count
+- [x] **4 User Roles**: SuperAdmin, Project Manager, Site Engineer, Vendor
+- [x] **Raw SQL everywhere**: No Sequelize, Prisma, or any ORM

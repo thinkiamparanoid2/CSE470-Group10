@@ -81,6 +81,14 @@ app.use((req, res) => {
     res.status(404).render('error', { message: '404: Page Not Found' });
 });
 
+// Global 500 Error Handler Middleware
+app.use((err, req, res, next) => {
+    console.error('Unhandled Application Error:', err);
+    res.status(err.status || 500).render('error', { 
+        message: err.message || '500: An unexpected internal server error occurred.' 
+    });
+});
+
 app.listen(PORT, () => {
     console.log(`🚀 Smarstruction Server running on http://localhost:${PORT}`);
 });

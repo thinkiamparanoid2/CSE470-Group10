@@ -1,0 +1,6 @@
+# Terminal 1: Start MySQL
+"C:\Program Files\MySQL\MySQL Server 8.4\bin\mysqld.exe" --datadir="F:\UserRelocatedData\mysql-data" --console
+
+# Terminal 2: Start app
+cd "e:\CSE 470 project\CSE470-Group10"
+npm start

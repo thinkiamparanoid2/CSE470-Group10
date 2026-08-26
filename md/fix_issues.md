@@ -123,6 +123,16 @@ This document details:
 3. `CSE470_Project_Feature_Doc.md`: Comprehensive academic feature documentation with database schemas and SQL queries.
 4. `fix_issues.md`: This comprehensive change log and audit summary.
 
+### 2.6. Robust Server-Side Input Validation & Error Handling Layer
+* **Created `middleware/validate.js`**: Pure JavaScript validation library providing non-negative number checks, date format checks, email verification, integer headcount checks, and HTML/tag sanitization.
+* **Integrated Pre-Query Validation across all 20 Controllers**:
+  * **Auth**: Email formatting, minimum 6-character password enforcement, role whitelisting.
+  * **Materials / Vendors**: Positive stock/threshold checks, valid rating ranges (0–10).
+  * **Projects / Milestones**: Start date $\le$ Target date logic validation, non-negative budgets.
+  * **Purchase Orders / Inventory Transfers**: Quantity $> 0$, non-negative price rates, prevention of transferring materials to the same site.
+  * **File Uploads (Contracts)**: Strict file extension filter (PDF, DOC, DOCX, PNG, JPG) and 15MB file size limit.
+* **Global Error Middleware (`server.js`)**: Added centralized 404 and 500 error handlers that render user-friendly error views (`views/error.ejs`) without application crashes or unhandled promise rejections.
+
 ---
 
 ## 🎯 3. Verification & Compliance Status
@@ -133,5 +143,7 @@ This document details:
 | **No ORM (Raw SQL Only)** | ✅ Raw SQL used in routes | ✅ Raw SQL preserved across controllers (`db.query`) | **COMPLIANT** |
 | **No Django / Flask** | ✅ Node.js / Express | ✅ Node.js / Express | **COMPLIANT** |
 | **20 Features (5 per Member)** | ✅ 20/20 present | ✅ 20/20 verified with full CRUD | **COMPLIANT** |
+| **Input Validation & Safety** | ⚠️ Minimal / client-only | ✅ Server-side pre-query validation on all 20 controllers | **COMPLIANT** |
+| **Error Handling & Resilience** | ⚠️ Basic console logs | ✅ Graceful error views + Global 500 handler + Transaction rollbacks | **ROBUST** |
 | **Authentication Security** | ❌ Backdoor password bypass | ✅ Strict bcrypt hash verification | **SECURE** |
 | **Route Health Status** | ⚠️ Unverified / crashed | ✅ All 20 feature endpoints return HTTP 200 OK | **VERIFIED** |

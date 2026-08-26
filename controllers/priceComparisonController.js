@@ -3,14 +3,16 @@ const db = require('../config/db');
 // Price Comparison Engine - Member B
 async function comparePrices(req, res) {
     try {
-        const materialId = req.query.material_id;
+        const rawMaterialId = req.query.material_id;
+        const materialId = rawMaterialId ? parseInt(rawMaterialId, 10) : null;
+        
         const [materials] = await db.query('SELECT id, name FROM materials ORDER BY name ASC');
 
         let quotations = [];
         let selectedMaterial = null;
 
-        if (materialId) {
-            selectedMaterial = materials.find(m => m.id == materialId);
+        if (materialId && !isNaN(materialId)) {
+            selectedMaterial = materials.find(m => m.id === materialId);
             const [results] = await db.query(`
                 SELECT vq.price, vq.last_updated, v.company_name, v.rating, v.phone
                 FROM vendor_quotations vq
@@ -29,8 +31,8 @@ async function comparePrices(req, res) {
             quotations
         });
     } catch (err) {
-        console.error(err);
-        res.status(500).send('Server Error');
+        console.error('Compare Prices Error:', err);
+        res.render('error', { message: 'Database Error: Failed to perform material price comparison.' });
     }
 }
 

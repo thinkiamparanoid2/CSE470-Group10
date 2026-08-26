@@ -1,4 +1,5 @@
 const db = require('../config/db');
+const { isPositiveNumber, isValidDate, sanitize } = require('../middleware/validate');
 
 // Vendor Payment Tracker Dashboard - Member B
 async function listPayments(req, res) {
@@ -34,12 +35,13 @@ async function listPayments(req, res) {
             JOIN vendors v ON p.vendor_id = v.id
             LEFT JOIN users u ON p.recorded_by = u.id
         `;
+        let txParams = [];
         if (req.session.user.role === 'Vendor') {
             txQuery += ` WHERE v.user_id = ? `;
+            txParams.push(req.session.user.id);
         }
         txQuery += ` ORDER BY p.payment_date DESC, p.created_at DESC LIMIT 20`;
 
-        const txParams = req.session.user.role === 'Vendor' ? [req.session.user.id] : [];
         const [recentPayments] = await db.query(txQuery, txParams);
 
         res.render('payments/index', {
@@ -48,11 +50,12 @@ async function listPayments(req, res) {
             user: req.session.user
         });
     } catch (err) {
-        console.error('Error fetching payment tracker data:', err);
+        console.error('List Payments Error:', err);
         res.render('payments/index', {
             title: 'Vendor Payment Tracker',
             vendors: [], recentPayments: [],
-            user: req.session.user
+            user: req.session.user,
+            error: 'Failed to retrieve financial payment logs.'
         });
     }
 }
@@ -64,38 +67,58 @@ async function showCreateForm(req, res) {
         const [pos] = await db.query('SELECT id, vendor_id, total_amount, status FROM purchase_orders ORDER BY id DESC');
         res.render('payments/create', { vendors, pos, title: 'Record Vendor Payment' });
     } catch (err) {
-        console.error(err);
-        res.redirect('/payments');
+        console.error('Show Create Payment Form Error:', err);
+        res.render('error', { message: 'Database Error: Could not load vendors or POs for payment entry.' });
     }
 }
 
-// Record Payment (Raw SQL)
+// Record Payment (Raw SQL with Validation)
 async function createPayment(req, res) {
-    const { vendor_id, po_id, amount, payment_type, payment_method, reference_no, payment_date, notes } = req.body;
+    const vendor_id = parseInt(req.body.vendor_id, 10);
+    const po_id = req.body.po_id ? parseInt(req.body.po_id, 10) : null;
+    const amount = req.body.amount;
+    const payment_type = sanitize(req.body.payment_type) || 'Advance';
+    const payment_method = sanitize(req.body.payment_method) || 'Bank Transfer';
+    const reference_no = sanitize(req.body.reference_no);
+    const payment_date = req.body.payment_date;
+    const notes = sanitize(req.body.notes);
     const recorded_by = req.session.user.id;
-    const cleanPoId = (po_id && po_id !== '') ? po_id : null;
+
+    // Validation
+    if (isNaN(vendor_id)) {
+        return res.render('error', { message: 'Validation Error: Please select a valid vendor beneficiary.' });
+    }
+    if (!isPositiveNumber(amount) || parseFloat(amount) <= 0) {
+        return res.render('error', { message: 'Validation Error: Payment amount must be greater than zero.' });
+    }
+    if (payment_date && !isValidDate(payment_date)) {
+        return res.render('error', { message: 'Validation Error: A valid payment settlement date is required.' });
+    }
 
     try {
         await db.query(
             'INSERT INTO vendor_payments (vendor_id, po_id, amount, payment_type, payment_method, reference_no, payment_date, notes, recorded_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
-            [vendor_id, cleanPoId, amount, payment_type || 'Advance', payment_method || 'Bank Transfer', reference_no, payment_date, notes, recorded_by]
+            [vendor_id, po_id && !isNaN(po_id) ? po_id : null, parseFloat(amount), payment_type, payment_method, reference_no || null, payment_date || new Date(), notes || null, recorded_by]
         );
         res.redirect('/payments');
     } catch (err) {
-        console.error('Error creating payment record:', err);
-        res.redirect('/payments/create');
+        console.error('Create Payment Error:', err);
+        res.render('error', { message: 'Database Error: Failed to record payment transaction.' });
     }
 }
 
 // Vendor Ledger Account Statement
 async function vendorStatement(req, res) {
-    try {
-        const vendorId = req.params.id;
+    const vendorId = parseInt(req.params.id, 10);
+    if (isNaN(vendorId)) {
+        return res.render('error', { message: 'Invalid vendor ID specified.' });
+    }
 
+    try {
         if (req.session.user.role === 'Vendor') {
             const [vCheck] = await db.query('SELECT id FROM vendors WHERE id = ? AND user_id = ?', [vendorId, req.session.user.id]);
             if (vCheck.length === 0) {
-                return res.status(403).render('error', { message: 'Access Denied: You cannot view financial statements of other vendors.' });
+                return res.status(403).render('error', { message: 'Access Denied: You cannot view financial statements belonging to other vendors.' });
             }
         }
 
@@ -107,7 +130,7 @@ async function vendorStatement(req, res) {
         `, [vendorId]);
 
         if (vendorRows.length === 0) {
-            return res.status(404).render('error', { message: 'Vendor Not Found' });
+            return res.status(404).render('error', { message: 'Vendor profile not found.' });
         }
 
         const vendor = vendorRows[0];
@@ -122,8 +145,8 @@ async function vendorStatement(req, res) {
             user: req.session.user
         });
     } catch (err) {
-        console.error('Error fetching vendor statement:', err);
-        res.redirect('/payments');
+        console.error('Vendor Statement Error:', err);
+        res.render('error', { message: 'Database Error: Failed to generate ledger statement.' });
     }
 }
 

@@ -21,16 +21,21 @@ async function listDeliveries(req, res) {
 
         res.render('deliveries/index', { deliveries, title: 'Delivery Scheduling' });
     } catch (err) {
-        console.error(err);
-        res.render('deliveries/index', { deliveries: [], title: 'Delivery Scheduling' });
+        console.error('List Deliveries Error:', err);
+        res.render('deliveries/index', { deliveries: [], title: 'Delivery Scheduling', error: 'Failed to load deliveries.' });
     }
 }
 
-// Update Delivery Status (Raw SQL)
+// Update Delivery Status (Raw SQL with Validation & Cascading Updates)
 async function updateStatus(req, res) {
+    const deliveryId = parseInt(req.params.id, 10);
     const { status } = req.body;
-    const deliveryId = req.params.id;
     const userId = req.session.user.id;
+    const validStatuses = ['Pending', 'In Transit', 'Delivered', 'Cancelled'];
+
+    if (isNaN(deliveryId) || !validStatuses.includes(status)) {
+        return res.render('error', { message: 'Validation Error: Invalid delivery record or status update.' });
+    }
 
     try {
         if (status === 'Delivered') {
@@ -44,8 +49,8 @@ async function updateStatus(req, res) {
         }
         res.redirect('/deliveries');
     } catch (err) {
-        console.error(err);
-        res.redirect('/deliveries');
+        console.error('Update Delivery Status Error:', err);
+        res.render('error', { message: 'Database Error: Failed to update delivery status.' });
     }
 }
 

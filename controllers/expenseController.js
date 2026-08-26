@@ -1,4 +1,5 @@
 const db = require('../config/db');
+const { isValidDate } = require('../middleware/validate');
 
 // Helper function to aggregate financials for a project
 async function calculateProjectFinancials(projectId, startDate = null, endDate = null) {
@@ -63,25 +64,39 @@ async function listExpenses(req, res) {
         }
         res.render('expenses/index', { title: 'Project Expense Report Export', projects, user: req.session.user });
     } catch (err) {
-        console.error('Error fetching projects for expense reports:', err);
-        res.render('expenses/index', { title: 'Project Expense Reports', projects: [], user: req.session.user });
+        console.error('List Expenses Error:', err);
+        res.render('expenses/index', { title: 'Project Expense Reports', projects: [], user: req.session.user, error: 'Could not load expense overview.' });
     }
 }
 
-// Detailed Expense Report
+// Detailed Expense Report (with Validation)
 async function generateReport(req, res) {
+    const projectId = parseInt(req.query.project_id, 10);
+    const { start_date, end_date } = req.query;
+
+    if (isNaN(projectId)) {
+        return res.redirect('/expenses');
+    }
+
+    if (start_date && !isValidDate(start_date)) {
+        return res.render('error', { message: 'Validation Error: Invalid start date filter.' });
+    }
+    if (end_date && !isValidDate(end_date)) {
+        return res.render('error', { message: 'Validation Error: Invalid end date filter.' });
+    }
+    if (start_date && end_date && new Date(start_date) > new Date(end_date)) {
+        return res.render('error', { message: 'Validation Error: Filter start date cannot be later than end date.' });
+    }
+
     try {
-        const { project_id, start_date, end_date } = req.query;
-        if (!project_id) return res.redirect('/expenses');
-
-        const [pRows] = await db.query('SELECT * FROM projects WHERE id = ?', [project_id]);
-        if (pRows.length === 0) return res.status(404).render('error', { message: 'Project site not found' });
+        const [pRows] = await db.query('SELECT * FROM projects WHERE id = ?', [projectId]);
+        if (pRows.length === 0) return res.status(404).render('error', { message: 'Project site record not found.' });
         const project = pRows[0];
-        const financials = await calculateProjectFinancials(project_id, start_date, end_date);
+        const financials = await calculateProjectFinancials(projectId, start_date, end_date);
 
-        const laborParams = start_date && end_date ? [project_id, start_date, end_date] : [project_id];
-        const wasteParams = start_date && end_date ? [project_id, start_date, end_date] : [project_id];
-        const reqParams = start_date && end_date ? [project_id, start_date, end_date + ' 23:59:59'] : [project_id];
+        const laborParams = start_date && end_date ? [projectId, start_date, end_date] : [projectId];
+        const wasteParams = start_date && end_date ? [projectId, start_date, end_date] : [projectId];
+        const reqParams = start_date && end_date ? [projectId, start_date, end_date + ' 23:59:59'] : [projectId];
 
         const dateFilterLabor = start_date && end_date ? ' AND ll.log_date BETWEEN ? AND ? ' : '';
         const dateFilterWaste = start_date && end_date ? ' AND w.log_date BETWEEN ? AND ? ' : '';
@@ -112,27 +127,31 @@ async function generateReport(req, res) {
             user: req.session.user
         });
     } catch (err) {
-        console.error('Error generating expense report:', err);
-        res.redirect('/expenses');
+        console.error('Generate Expense Report Error:', err);
+        res.render('error', { message: 'Database Error: Could not compute consolidated project expenses.' });
     }
 }
 
-// Export CSV
+// Export CSV (with Validation & Error Handling)
 async function exportCsv(req, res) {
-    try {
-        const { project_id, start_date, end_date } = req.query;
-        if (!project_id) return res.status(400).send('Project ID required');
+    const projectId = parseInt(req.query.project_id, 10);
+    const { start_date, end_date } = req.query;
 
-        const [pRows] = await db.query('SELECT * FROM projects WHERE id = ?', [project_id]);
+    if (isNaN(projectId)) {
+        return res.status(400).send('Project ID is required');
+    }
+
+    try {
+        const [pRows] = await db.query('SELECT * FROM projects WHERE id = ?', [projectId]);
         if (pRows.length === 0) return res.status(404).send('Project not found');
         const project = pRows[0];
 
-        const financials = await calculateProjectFinancials(project_id, start_date, end_date);
-        const [laborLogs] = await db.query('SELECT * FROM labor_logs WHERE project_id = ? ORDER BY log_date DESC', [project_id]);
+        const financials = await calculateProjectFinancials(projectId, start_date, end_date);
+        const [laborLogs] = await db.query('SELECT * FROM labor_logs WHERE project_id = ? ORDER BY log_date DESC', [projectId]);
         const [wasteLogs] = await db.query(`
             SELECT w.*, m.name as material_name, m.unit, (w.waste_quantity * m.unit_price_est) as est_loss
             FROM material_waste_logs w JOIN materials m ON w.material_id = m.id WHERE w.project_id = ? ORDER BY w.log_date DESC
-        `, [project_id]);
+        `, [projectId]);
 
         let csv = '\uFEFF';
         csv += `Consolidated Project Expense & Financial Report\n`;
@@ -161,11 +180,11 @@ async function exportCsv(req, res) {
         });
 
         res.setHeader('Content-Type', 'text/csv; charset=utf-8');
-        res.setHeader('Content-Disposition', `attachment; filename="Expense_Report_Project_${project_id}.csv"`);
+        res.setHeader('Content-Disposition', `attachment; filename="Expense_Report_Project_${projectId}.csv"`);
         res.status(200).send(csv);
     } catch (err) {
-        console.error('Error exporting CSV:', err);
-        res.status(500).send('Server Error generating CSV');
+        console.error('Export Expense CSV Error:', err);
+        res.status(500).send('Server Error generating CSV export.');
     }
 }
 

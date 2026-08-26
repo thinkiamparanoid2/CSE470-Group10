@@ -1,4 +1,5 @@
 const db = require('../config/db');
+const { isRequired, isValidDate, sanitize } = require('../middleware/validate');
 
 // List Daily Site Reports
 async function listReports(req, res) {
@@ -12,8 +13,17 @@ async function listReports(req, res) {
             WHERE 1=1
         `;
         const params = [];
-        if (project_id && project_id !== '') { query += ` AND dsr.project_id = ? `; params.push(project_id); }
-        if (report_date && report_date !== '') { query += ` AND dsr.report_date = ? `; params.push(report_date); }
+        if (project_id && project_id !== '') { 
+            const pid = parseInt(project_id, 10);
+            if (!isNaN(pid)) {
+                query += ` AND dsr.project_id = ? `; 
+                params.push(pid); 
+            }
+        }
+        if (report_date && report_date !== '' && isValidDate(report_date)) { 
+            query += ` AND dsr.report_date = ? `; 
+            params.push(report_date); 
+        }
         query += ` ORDER BY dsr.report_date DESC, dsr.created_at DESC`;
 
         const [reports] = await db.query(query, params);
@@ -26,8 +36,8 @@ async function listReports(req, res) {
             user: req.session.user
         });
     } catch (err) {
-        console.error('Error fetching site reports:', err);
-        res.render('site_reports/index', { title: 'Daily Site Reports', reports: [], projects: [], selectedProject: '', selectedDate: '', user: req.session.user });
+        console.error('List Site Reports Error:', err);
+        res.render('site_reports/index', { title: 'Daily Site Reports', reports: [], projects: [], selectedProject: '', selectedDate: '', user: req.session.user, error: 'Could not load site reports.' });
     }
 }
 
@@ -35,17 +45,19 @@ async function listReports(req, res) {
 async function showGenerateForm(req, res) {
     try {
         const { project_id, report_date } = req.query;
-        const defaultDate = report_date || new Date().toISOString().split('T')[0];
+        const defaultDate = (report_date && isValidDate(report_date)) ? report_date : new Date().toISOString().split('T')[0];
         const [projects] = await db.query('SELECT * FROM projects WHERE status = "Ongoing" ORDER BY name ASC');
 
         let autoData = null;
-        if (project_id) {
-            const [labor] = await db.query('SELECT SUM(headcount) as total_workers, SUM(total_cost) as total_wage, GROUP_CONCAT(notes) as labor_notes FROM labor_logs WHERE project_id = ? AND log_date = ?', [project_id, defaultDate]);
-            const [transfers] = await db.query('SELECT * FROM inventory_transfers WHERE to_project_id = ? AND DATE(created_at) = ?', [project_id, defaultDate]);
+        const parsedProjectId = project_id ? parseInt(project_id, 10) : null;
+
+        if (parsedProjectId && !isNaN(parsedProjectId)) {
+            const [labor] = await db.query('SELECT SUM(headcount) as total_workers, SUM(total_cost) as total_wage, GROUP_CONCAT(notes) as labor_notes FROM labor_logs WHERE project_id = ? AND log_date = ?', [parsedProjectId, defaultDate]);
+            const [transfers] = await db.query('SELECT * FROM inventory_transfers WHERE to_project_id = ? AND DATE(created_at) = ?', [parsedProjectId, defaultDate]);
             autoData = {
-                workers: labor[0].total_workers || 0,
-                wages: labor[0].total_wage || 0,
-                notes: labor[0].labor_notes || 'Standard operational tasks completed per site specifications.',
+                workers: (labor[0] && labor[0].total_workers) ? labor[0].total_workers : 0,
+                wages: (labor[0] && labor[0].total_wage) ? labor[0].total_wage : 0,
+                notes: (labor[0] && labor[0].labor_notes) ? labor[0].labor_notes : 'Standard operational tasks completed per site specifications.',
                 transfersCount: transfers.length
             };
         }
@@ -56,31 +68,51 @@ async function showGenerateForm(req, res) {
             defaultDate, autoData, user: req.session.user
         });
     } catch (err) {
-        console.error('Error in report generate form:', err);
-        res.redirect('/site-reports');
+        console.error('Show Generate Report Form Error:', err);
+        res.render('error', { message: 'Database Error: Failed to initialize daily report generator.' });
     }
 }
 
-// Create Daily Site Report (Raw SQL)
+// Create Daily Site Report (Raw SQL with Validation)
 async function createReport(req, res) {
-    const { project_id, report_date, weather_condition, general_progress, safety_incidents } = req.body;
+    const project_id = parseInt(req.body.project_id, 10);
+    const report_date = req.body.report_date;
+    const weather_condition = sanitize(req.body.weather_condition) || 'Sunny & Clear';
+    const general_progress = sanitize(req.body.general_progress);
+    const safety_incidents = sanitize(req.body.safety_incidents) || 'No incidents reported. Zero harm site.';
     const site_engineer_id = req.session.user.id;
+
+    // Validation
+    if (isNaN(project_id)) {
+        return res.render('error', { message: 'Validation Error: Please select a valid project for this site report.' });
+    }
+    if (!report_date || !isValidDate(report_date)) {
+        return res.render('error', { message: 'Validation Error: A valid report date is required.' });
+    }
+    if (!isRequired(general_progress) || general_progress.length < 5) {
+        return res.render('error', { message: 'Validation Error: General progress field must have a descriptive summary (at least 5 characters).' });
+    }
+
     try {
         const [result] = await db.query(
             'INSERT INTO daily_site_reports (project_id, report_date, weather_condition, general_progress, safety_incidents, site_engineer_id) VALUES (?, ?, ?, ?, ?, ?)',
-            [project_id, report_date, weather_condition || 'Sunny & Clear', general_progress, safety_incidents || 'No incidents reported. Zero harm site.', site_engineer_id]
+            [project_id, report_date, weather_condition, general_progress, safety_incidents, site_engineer_id]
         );
         res.redirect(`/site-reports/${result.insertId}`);
     } catch (err) {
-        console.error('Error creating daily site report:', err);
-        res.redirect('/site-reports/generate');
+        console.error('Create Site Report Error:', err);
+        res.render('error', { message: 'Database Error: Could not save daily site report.' });
     }
 }
 
 // View Specific Report with Aggregated Data
 async function viewReport(req, res) {
+    const reportId = parseInt(req.params.id, 10);
+    if (isNaN(reportId)) {
+        return res.render('error', { message: 'Invalid report ID.' });
+    }
+
     try {
-        const reportId = req.params.id;
         const [reportRows] = await db.query(`
             SELECT dsr.*, p.name as project_name, p.location, u.name as engineer_name, u.email as engineer_email
             FROM daily_site_reports dsr
@@ -89,7 +121,7 @@ async function viewReport(req, res) {
             WHERE dsr.id = ?
         `, [reportId]);
 
-        if (reportRows.length === 0) return res.status(404).render('error', { message: 'Daily Site Report not found' });
+        if (reportRows.length === 0) return res.status(404).render('error', { message: 'Daily Site Report not found in database.' });
         const report = reportRows[0];
         const dateStr = new Date(report.report_date).toISOString().split('T')[0];
 
@@ -106,8 +138,8 @@ async function viewReport(req, res) {
             totalHeadcount, totalLaborCost, user: req.session.user
         });
     } catch (err) {
-        console.error('Error loading daily site report:', err);
-        res.redirect('/site-reports');
+        console.error('View Site Report Error:', err);
+        res.render('error', { message: 'Database Error: Failed to load detailed site report.' });
     }
 }
 
