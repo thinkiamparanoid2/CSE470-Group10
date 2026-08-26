@@ -19,11 +19,11 @@
 ## 🚀 How to Start the Application
 
 ```bash
-# Terminal 1: Start MySQL (if not running as service)
-"C:\Program Files\MySQL\MySQL Server 8.4\bin\mysqld.exe" --datadir="F:\UserRelocatedData\mysql-data" --console
+# Step 1: Start MySQL (via XAMPP Control Panel or command line)
+# Ensure MySQL is running on localhost:3306
 
-# Terminal 2: Start the application
-cd "e:\CSE 470 project\CSE470-Group10"
+# Step 2: Start the application
+cd "d:\CSE470-Project\CSE470-Group10"
 npm start
 ```
 
