@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="/images/logo-mark.svg">
     <title><%= title %></title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
@@ -15,7 +16,7 @@
             <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">Member D • Notice Board CMS</p>
 
             <% if (typeof error !== 'undefined' && error) { %>
-                <div style="background: rgba(220, 38, 38, 0.2); color: #fca5a5; padding: 1rem; border-radius: 6px; margin-bottom: 1rem;">
+                <div class="alert alert-error">
                     <%= error %>
                 </div>
             <% } %>

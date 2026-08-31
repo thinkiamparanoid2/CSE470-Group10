@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="/images/logo-mark.svg">
     <title><%= title %></title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
@@ -58,7 +59,7 @@
                                     <td><%= ms.assigned_to || 'Internal Mechanics' %></td>
                                     <td>৳<%= parseFloat(ms.cost_estimate || 0).toLocaleString() %></td>
                                     <td>
-                                        <span class="status-badge <%= ms.status === 'Completed' ? 'status-good' : (ms.status === 'In Progress' ? 'status-lowstock' : '') %>">
+                                        <span class="status-badge <%= ms.status === 'Completed' ? 'status-good' : (ms.status === 'In Progress' ? 'status-lowstock' : (ms.status === 'Overdue' ? 'status-lowstock' : 'status-ongoing')) %>">
                                             <%= ms.status %>
                                         </span>
                                     </td>
@@ -104,9 +105,22 @@
                     <tbody>
                         <% if (equipment && equipment.length > 0) { %>
                             <% equipment.forEach(eq => { %>
+                                <%
+                                    let eqIcon = 'equip-default.svg';
+                                    const cat = (eq.category || '').toLowerCase();
+                                    if (cat.includes('crane')) eqIcon = 'equip-crane.svg';
+                                    else if (cat.includes('mixer')) eqIcon = 'equip-mixer.svg';
+                                    else if (cat.includes('generator')) eqIcon = 'equip-generator.svg';
+                                    else if (cat.includes('excavator') || cat.includes('heavy machinery')) eqIcon = 'equip-excavator.svg';
+                                %>
                                 <tr>
                                     <td><strong><%= eq.equipment_code %></strong></td>
-                                    <td><%= eq.name %></td>
+                                    <td>
+                                        <div class="row-with-icon">
+                                            <img src="/images/<%= eqIcon %>" alt="<%= eq.category %>" class="icon-badge">
+                                            <%= eq.name %>
+                                        </div>
+                                    </td>
                                     <td><%= eq.category %></td>
                                     <td><%= eq.project_name || 'Central Depot / Available' %></td>
                                     <td>

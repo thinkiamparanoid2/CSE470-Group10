@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="/images/logo-mark.svg">
     <title><%= title %></title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
@@ -57,7 +58,7 @@
                                                 </form>
                                                 <form action="/inventory-transfers/status/<%= t.id %>" method="POST" style="display:inline; margin-left: 0.25rem;">
                                                     <input type="hidden" name="status" value="Rejected">
-                                                    <button type="submit" class="btn btn-secondary" style="padding: 0.2rem 0.5rem; font-size: 0.8rem; background: rgba(239, 68, 68, 0.2); color: #f87171; border-color: rgba(239, 68, 68, 0.4);">Reject</button>
+                                                    <button type="submit" class="btn btn-danger btn-sm">Reject</button>
                                                 </form>
                                             <% } else if (t.status === 'Approved') { %>
                                                 <form action="/inventory-transfers/status/<%= t.id %>" method="POST" style="display:inline;">

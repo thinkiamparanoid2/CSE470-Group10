@@ -1,4 +1,4 @@
-# 🏗️ Smarstruction - Project Master Roadmap & Progress Tracker
+# 🏗️ SmartConstruction - Project Master Roadmap & Progress Tracker
 
 > **CSE470 Group 10** | Smart Construction Management Platform in Bangladesh
 > **Tech Stack:** Node.js + Express.js + Raw MySQL (`mysql2`) + EJS Templating + Glassmorphism CSS

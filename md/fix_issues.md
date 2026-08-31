@@ -1,6 +1,6 @@
 # 🛠️ Fixes & Issue Resolution Report (fix_issues.md)
 
-**Project:** SmartConstruct BD (Smarstruction) — CSE470 Group 10  
+**Project:** SmartConstruct BD (SmartConstruction) — CSE470 Group 10  
 **Date:** August 25, 2026  
 **Tech Stack:** Node.js + Express.js + Raw MySQL (`mysql2/promise`) + EJS + Custom Glassmorphism CSS  
 

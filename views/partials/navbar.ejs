@@ -1,42 +1,99 @@
 <nav class="navbar">
     <a href="/" class="brand">
-        🏗️ Smarstruction
+        <img src="/images/logo-mark.svg" alt="SmartConstruction" class="brand-logo">
+        SmartConstruction
     </a>
-    <ul class="nav-links">
-        <li><a href="/" class="nav-link">Home (CMS)</a></li>
+
+    <% if (user) { %>
+        <button type="button" class="nav-toggle-btn" onclick="document.getElementById('navLinks').classList.toggle('mobile-open')">☰ Menu</button>
+    <% } %>
+
+    <ul class="nav-links" id="navLinks">
+        <li><a href="/" class="nav-link">Home</a></li>
+
         <% if (user) { %>
-            <li><a href="/dashboard" class="nav-link" style="font-weight: bold;">Dashboard</a></li>
+            <li><a href="/dashboard" class="nav-link">Dashboard</a></li>
+
             <% if (user.role !== 'Vendor') { %>
-                <li><a href="/materials" class="nav-link">Materials</a></li>
-                <li><a href="/vendors" class="nav-link">Vendors</a></li>
-                <li><a href="/projects" class="nav-link">Projects</a></li>
-                <li><a href="/milestones" class="nav-link">Milestones</a></li>
-                <li><a href="/purchase_orders" class="nav-link">POs</a></li>
-                <li><a href="/labor" class="nav-link">Labor</a></li>
-                <li><a href="/inventory-transfers" class="nav-link">Transfers</a></li>
-                <li><a href="/dashboard_projects" class="nav-link">Gantt</a></li>
-                <li><a href="/price-comparison" class="nav-link">Prices</a></li>
-                <li><a href="/material-requests" class="nav-link">Requests</a></li>
-                <li><a href="/waste-logs" class="nav-link">Waste</a></li>
-                <li><a href="/boq" class="nav-link" style="color: var(--accent-amber);">BOQ</a></li>
-                <li><a href="/expenses" class="nav-link" style="color: var(--accent-amber);">Expenses</a></li>
-                <li><a href="/site-reports" class="nav-link" style="color: var(--accent-amber);">Site Reports</a></li>
-                <li><a href="/equipment" class="nav-link" style="color: var(--accent-amber);">Equipment</a></li>
+                <li class="nav-item">
+                    <span class="nav-link dropdown-toggle">Materials</span>
+                    <div class="dropdown-menu">
+                        <a href="/materials">Stock Tracking</a>
+                        <a href="/purchase_orders">Purchase Orders</a>
+                        <a href="/inventory-transfers">Inventory Transfers</a>
+                        <a href="/waste-logs">Waste Log</a>
+                        <a href="/boq">BOQ Generator</a>
+                        <a href="/material-requests">Emergency Requests</a>
+                    </div>
+                </li>
+
+                <li class="nav-item">
+                    <span class="nav-link dropdown-toggle">Projects</span>
+                    <div class="dropdown-menu">
+                        <a href="/projects">All Projects</a>
+                        <a href="/milestones">Milestones</a>
+                        <a href="/dashboard_projects">Progress Dashboard</a>
+                        <a href="/labor">Labor Attendance</a>
+                        <a href="/site-reports">Daily Site Reports</a>
+                        <a href="/expenses">Expense Reports</a>
+                    </div>
+                </li>
             <% } %>
-            <li><a href="/payments" class="nav-link" style="color: var(--accent-amber);">Payments</a></li>
-            <li><a href="/contracts" class="nav-link">Contracts</a></li>
-            <li><a href="/deliveries" class="nav-link">Deliveries</a></li>
-            <li><a href="/notices/board" class="nav-link">Notice Board</a></li>
-            <% if (user.role === 'SuperAdmin' || user.role === 'Project Manager') { %>
-                <li><a href="/notices" class="nav-link">Notice CMS</a></li>
-            <% } %>
-            <li>
-                <span class="user-badge"><%= user.name %> (<%= user.role %>)</span>
+
+            <li class="nav-item">
+                <span class="nav-link dropdown-toggle">Vendors &amp; Finance</span>
+                <div class="dropdown-menu">
+                    <% if (user.role !== 'Vendor') { %>
+                        <a href="/vendors">Vendor Directory</a>
+                        <a href="/price-comparison">Price Comparison</a>
+                    <% } %>
+                    <a href="/payments">Payment Tracker</a>
+                    <a href="/contracts">Contracts</a>
+                    <a href="/deliveries">Deliveries</a>
+                </div>
             </li>
-            <li><a href="/logout" class="btn btn-secondary" style="padding: 0.35rem 0.75rem;">Logout</a></li>
+
+            <li class="nav-item">
+                <span class="nav-link dropdown-toggle">Admin</span>
+                <div class="dropdown-menu">
+                    <% if (user.role !== 'Vendor') { %>
+                        <a href="/equipment">Equipment Scheduler</a>
+                    <% } %>
+                    <a href="/notices/board">Notice Board</a>
+                    <% if (user.role === 'SuperAdmin' || user.role === 'Project Manager') { %>
+                        <a href="/notices">Notice CMS</a>
+                    <% } %>
+                </div>
+            </li>
+
+            <li><span class="user-badge"><%= user.name %> (<%= user.role %>)</span></li>
+            <li><a href="/logout" class="btn btn-secondary btn-sm">Logout</a></li>
         <% } else { %>
             <li><a href="/login" class="nav-link">Login</a></li>
-            <li><a href="/register" class="btn btn-primary" style="padding: 0.35rem 0.85rem;">Register</a></li>
+            <li><a href="/register" class="btn btn-primary btn-sm">Register</a></li>
         <% } %>
     </ul>
 </nav>
+
+<% if (user) { %>
+<script>
+    // Touch-friendly dropdown toggling (desktop still opens on hover via CSS).
+    document.querySelectorAll('.nav-item > .dropdown-toggle').forEach(function (toggle) {
+        toggle.addEventListener('click', function (e) {
+            var item = toggle.closest('.nav-item');
+            var wasOpen = item.classList.contains('open');
+            document.querySelectorAll('.nav-item.open').forEach(function (openItem) {
+                if (openItem !== item) openItem.classList.remove('open');
+            });
+            item.classList.toggle('open', !wasOpen);
+        });
+    });
+    document.addEventListener('click', function (e) {
+        if (!e.target.closest('.nav-item')) {
+            document.querySelectorAll('.nav-item.open').forEach(function (openItem) {
+                openItem.classList.remove('open');
+            });
+        }
+    });
+</script>
+<% } %>

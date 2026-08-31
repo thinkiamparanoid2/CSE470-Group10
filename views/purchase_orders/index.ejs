@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="/images/logo-mark.svg">
     <title><%= title %></title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
@@ -42,7 +43,7 @@
                                     <td><%= po.vendor_name %></td>
                                     <td>৳<%= parseFloat(po.total_amount).toLocaleString() %></td>
                                     <td>
-                                        <span class="status-badge <%= po.status === 'Approved' ? 'status-good' : (po.status === 'Pending' ? 'status-lowstock' : '') %>">
+                                        <span class="status-badge <%= (po.status === 'Approved' || po.status === 'Delivered') ? 'status-good' : (po.status === 'Pending' ? 'status-lowstock' : 'status-ongoing') %>">
                                             <%= po.status %>
                                         </span>
                                     </td>
