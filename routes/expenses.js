@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const { isAuthenticated } = require('../middleware/auth');
+const { isAuthenticated, hasRole } = require('../middleware/auth');
 const expenseController = require('../controllers/expenseController');
 
 // Member C: Project Expense Report Export
-router.get('/', isAuthenticated, expenseController.listExpenses);
-router.get('/report', isAuthenticated, expenseController.generateReport);
-router.get('/export-csv', isAuthenticated, expenseController.exportCsv);
+// Internal financials (budgets, expenditure, waste cost) — not for Vendor accounts.
+router.get('/', isAuthenticated, hasRole('SuperAdmin', 'Project Manager', 'Site Engineer'), expenseController.listExpenses);
+router.get('/report', isAuthenticated, hasRole('SuperAdmin', 'Project Manager', 'Site Engineer'), expenseController.generateReport);
+router.get('/export-csv', isAuthenticated, hasRole('SuperAdmin', 'Project Manager', 'Site Engineer'), expenseController.exportCsv);
 
 module.exports = router;

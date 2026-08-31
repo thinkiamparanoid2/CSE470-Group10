@@ -4,7 +4,7 @@ const { isValidEmail, isRequired, sanitize } = require('../middleware/validate')
 
 // Render Login Page
 function showLogin(req, res) {
-    res.render('login', { error: null, title: 'Login | Smarstruction' });
+    res.render('login', { error: null, title: 'Login | SmartConstruction' });
 }
 
 // Process Login (Raw SQL - No ORM with Validation & Error Handling)
@@ -14,17 +14,17 @@ async function processLogin(req, res) {
 
     // Input Validation
     if (!isRequired(email) || !isRequired(password)) {
-        return res.render('login', { error: 'Both email and password are required.', title: 'Login | Smarstruction' });
+        return res.render('login', { error: 'Both email and password are required.', title: 'Login | SmartConstruction' });
     }
 
     if (!isValidEmail(email)) {
-        return res.render('login', { error: 'Please enter a valid email address format.', title: 'Login | Smarstruction' });
+        return res.render('login', { error: 'Please enter a valid email address format.', title: 'Login | SmartConstruction' });
     }
 
     try {
         const [users] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
         if (users.length === 0) {
-            return res.render('login', { error: 'Invalid email or password.', title: 'Login | Smarstruction' });
+            return res.render('login', { error: 'Invalid email or password.', title: 'Login | SmartConstruction' });
         }
         const user = users[0];
         const match = await bcrypt.compare(password, user.password);
@@ -41,16 +41,16 @@ async function processLogin(req, res) {
             return res.redirect(returnTo);
         }
 
-        res.render('login', { error: 'Invalid email or password.', title: 'Login | Smarstruction' });
+        res.render('login', { error: 'Invalid email or password.', title: 'Login | SmartConstruction' });
     } catch (err) {
         console.error('Auth Login Error:', err);
-        res.render('login', { error: 'An unexpected database error occurred during login. Please try again.', title: 'Login | Smarstruction' });
+        res.render('login', { error: 'An unexpected database error occurred during login. Please try again.', title: 'Login | SmartConstruction' });
     }
 }
 
 // Render Register Page
 function showRegister(req, res) {
-    res.render('register', { error: null, title: 'Register | Smarstruction' });
+    res.render('register', { error: null, title: 'Register | SmartConstruction' });
 }
 
 // Process Registration (Raw SQL with Validation & Error Handling)
@@ -62,7 +62,9 @@ async function processRegister(req, res) {
     const phone = sanitize(req.body.phone);
 
     // Validation
-    const validRoles = ['SuperAdmin', 'Project Manager', 'Site Engineer', 'Vendor'];
+    // Public self-registration may only grant base operational roles.
+    // SuperAdmin / Project Manager accounts must be provisioned by an existing SuperAdmin.
+    const validRoles = ['Site Engineer', 'Vendor'];
     if (!isRequired(name) || name.length < 2) {
         return res.render('register', { error: 'Full Name must be at least 2 characters.', title: 'Register' });
     }
