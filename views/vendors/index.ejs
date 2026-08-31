@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="/images/logo-mark.svg">
     <title><%= title %></title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
@@ -40,7 +41,12 @@
                         <% if (vendors && vendors.length > 0) { %>
                             <% vendors.forEach(v => { %>
                                 <tr>
-                                    <td><strong><%= v.company_name %></strong></td>
+                                    <td>
+                                        <div class="row-with-icon">
+                                            <img src="/images/vendor-building.svg" alt="" class="icon-badge">
+                                            <strong><%= v.company_name %></strong>
+                                        </div>
+                                    </td>
                                     <td><%= v.contact_person || 'N/A' %></td>
                                     <td><%= v.material_category %></td>
                                     <td><%= v.phone %></td>
@@ -50,7 +56,7 @@
                                         <td>
                                             <a href="/vendors/edit/<%= v.id %>" class="btn btn-secondary" style="padding: 0.2rem 0.5rem; font-size: 0.8rem; margin-right: 0.25rem;">Edit</a>
                                             <form action="/vendors/delete/<%= v.id %>" method="POST" style="display:inline;">
-                                                <button type="submit" class="btn btn-secondary" style="padding: 0.2rem 0.5rem; font-size: 0.8rem; background: rgba(220, 38, 38, 0.2); color: #fca5a5; border-color: rgba(220, 38, 38, 0.4);" onclick="return confirm('Delete this vendor?');">Delete</button>
+                                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Delete this vendor?');">Delete</button>
                                             </form>
                                         </td>
                                     <% } %>

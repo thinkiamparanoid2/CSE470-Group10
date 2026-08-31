@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="/images/logo-mark.svg">
     <title><%= title %></title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
@@ -20,17 +21,17 @@
 
         <!-- Sprint 4 Highlight Metrics Bar -->
         <div class="grid-3" style="margin-bottom: 1.5rem;">
-            <div class="card" style="border-left: 4px solid var(--accent-amber); background: linear-gradient(135deg, rgba(251, 191, 36, 0.08), rgba(30, 41, 59, 0.7));">
+            <div class="card" style="border-left: 4px solid var(--accent-amber); background: var(--warning-bg);">
                 <p style="color: var(--text-muted); font-size: 0.85rem;">Generated BOQs (Member A)</p>
                 <h2 style="font-size: 2.2rem; margin-top: 0.2rem; color: var(--accent-amber);"><%= totalBoqs %></h2>
                 <a href="/boq" style="font-size: 0.85rem; margin-top: 0.4rem; display: inline-block;">View BOQ Generator &rarr;</a>
             </div>
-            <div class="card" style="border-left: 4px solid var(--accent-green); background: linear-gradient(135deg, rgba(52, 211, 153, 0.08), rgba(30, 41, 59, 0.7));">
+            <div class="card" style="border-left: 4px solid var(--accent-green); background: var(--success-bg);">
                 <p style="color: var(--text-muted); font-size: 0.85rem;">Daily Site Reports (Member C)</p>
                 <h2 style="font-size: 2.2rem; margin-top: 0.2rem; color: var(--accent-green);"><%= totalReports %></h2>
                 <a href="/site-reports" style="font-size: 0.85rem; margin-top: 0.4rem; display: inline-block;">View Progress Logs &rarr;</a>
             </div>
-            <div class="card" style="border-left: 4px solid var(--accent-blue); background: linear-gradient(135deg, rgba(56, 189, 248, 0.08), rgba(30, 41, 59, 0.7));">
+            <div class="card" style="border-left: 4px solid var(--accent-blue); background: var(--info-bg);">
                 <p style="color: var(--text-muted); font-size: 0.85rem;">Heavy Machinery Fleet (Member D)</p>
                 <h2 style="font-size: 2.2rem; margin-top: 0.2rem; color: var(--accent-blue);"><%= totalEquipment %> Units</h2>
                 <a href="/equipment" style="font-size: 0.85rem; margin-top: 0.4rem; display: inline-block;">View Fleet Scheduler &rarr;</a>
@@ -63,6 +64,7 @@
                     <h3>📋 Recent Daily Site Progress Logs</h3>
                     <a href="/site-reports" style="font-size: 0.8rem;">View All</a>
                 </div>
+                <div class="table-responsive">
                 <table>
                     <thead>
                         <tr>
@@ -87,6 +89,7 @@
                         <% } %>
                     </tbody>
                 </table>
+                </div>
             </div>
 
             <div class="card">
@@ -94,6 +97,7 @@
                     <h3>⚙️ Upcoming Equipment Maintenance</h3>
                     <a href="/equipment" style="font-size: 0.8rem;">Scheduler</a>
                 </div>
+                <div class="table-responsive">
                 <table>
                     <thead>
                         <tr>
@@ -118,6 +122,7 @@
                         <% } %>
                     </tbody>
                 </table>
+                </div>
             </div>
         </div>
 
@@ -125,7 +130,7 @@
         <div class="grid-2" style="margin-top: 1.5rem;">
             <div class="card">
                 <h3>📦 Recent Material Stock Levels</h3>
-                <table>
+                <div class="table-responsive"><table>
                     <thead>
                         <tr>
                             <th>Item</th>
@@ -150,12 +155,12 @@
                             <tr><td colspan="3">No materials tracked yet.</td></tr>
                         <% } %>
                     </tbody>
-                </table>
+                </table></div>
             </div>
 
             <div class="card">
                 <h3>🤝 Top Rated Material Suppliers</h3>
-                <table>
+                <div class="table-responsive"><table>
                     <thead>
                         <tr>
                             <th>Company</th>
@@ -176,7 +181,7 @@
                             <tr><td colspan="3">No vendors registered.</td></tr>
                         <% } %>
                     </tbody>
-                </table>
+                </table></div>
             </div>
         </div>
     </div>

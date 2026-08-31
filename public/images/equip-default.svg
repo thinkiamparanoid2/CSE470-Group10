@@ -1,0 +1,7 @@
+<svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Machinery icon">
+  <circle cx="20" cy="20" r="20" fill="#E7F0FA"/>
+  <g fill="none" stroke="#14508C" stroke-width="2" stroke-linejoin="round">
+    <path d="M20 11 L23 13.5 L26.5 12.3 L27.7 15.8 L31 17.5 L29.3 20.8 L31 24.1 L27.7 25.8 L26.5 29.3 L23 28.1 L20 30.6 L17 28.1 L13.5 29.3 L12.3 25.8 L9 24.1 L10.7 20.8 L9 17.5 L12.3 15.8 L13.5 12.3 L17 13.5 Z"/>
+    <circle cx="20" cy="20.8" r="4.3"/>
+  </g>
+</svg>

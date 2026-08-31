@@ -1,6 +1,6 @@
 # 💻 Laptop / XAMPP Environment Setup Guide (For User & AI Agents)
 
-**Project:** SmartConstruct BD (Smarstruction) — CSE470 Group 10  
+**Project:** SmartConstruct BD (SmartConstruction) — CSE470 Group 10  
 **Target Environment:** Windows Laptop running **XAMPP** for MySQL.
 
 > 🤖 **Instructions for AI Agents:**  
@@ -90,7 +90,7 @@ npm start
 
 Expected console output:
 ```
-🚀 Smarstruction Server running on http://localhost:3000
+🚀 SmartConstruction Server running on http://localhost:3000
 ✅ MySQL Database connected successfully!
 ```
 

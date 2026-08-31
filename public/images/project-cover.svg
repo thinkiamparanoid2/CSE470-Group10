@@ -1,0 +1,65 @@
+<svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Construction site illustration" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#DCEAFB"/>
+      <stop offset="1" stop-color="#F4F8FC"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="220" fill="url(#sky)"/>
+
+  <!-- clouds -->
+  <g fill="#FFFFFF" opacity="0.9">
+    <ellipse cx="70" cy="42" rx="28" ry="12"/>
+    <ellipse cx="95" cy="36" rx="20" ry="10"/>
+    <ellipse cx="330" cy="30" rx="24" ry="10"/>
+  </g>
+
+  <!-- distant buildings -->
+  <g opacity="0.5" fill="#9FBEE0">
+    <rect x="20" y="120" width="34" height="70"/>
+    <rect x="330" y="110" width="30" height="80"/>
+    <rect x="360" y="130" width="26" height="60"/>
+  </g>
+
+  <!-- ground -->
+  <rect x="0" y="188" width="400" height="32" fill="#C9BBA0"/>
+  <rect x="0" y="186" width="400" height="4" fill="#B4A382"/>
+
+  <!-- main building under construction (steel frame) -->
+  <g stroke="#0E3D6E" stroke-width="3" fill="none">
+    <rect x="150" y="70" width="110" height="118"/>
+    <line x1="150" y1="94"  x2="260" y2="94"/>
+    <line x1="150" y1="118" x2="260" y2="118"/>
+    <line x1="150" y1="142" x2="260" y2="142"/>
+    <line x1="150" y1="166" x2="260" y2="166"/>
+    <line x1="177" y1="70" x2="177" y2="188"/>
+    <line x1="204" y1="70" x2="204" y2="188"/>
+    <line x1="231" y1="70" x2="231" y2="188"/>
+  </g>
+
+  <!-- scaffolding accent -->
+  <g stroke="#F2A93B" stroke-width="2.5">
+    <line x1="140" y1="80" x2="140" y2="188"/>
+    <line x1="270" y1="80" x2="270" y2="188"/>
+    <line x1="140" y1="100" x2="270" y2="100"/>
+    <line x1="140" y1="150" x2="270" y2="150"/>
+  </g>
+
+  <!-- crane -->
+  <g stroke="#14508C" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <path d="M205 70 L205 20"/>
+    <path d="M205 20 L300 20"/>
+    <path d="M205 40 L188 70"/>
+    <path d="M205 40 L222 70"/>
+    <path d="M284 20 L284 42"/>
+  </g>
+  <rect x="280.5" y="40" width="7" height="7" rx="1" fill="#C2660D"/>
+
+  <!-- small site vehicle -->
+  <g>
+    <rect x="30" y="176" width="46" height="16" rx="3" fill="#C2660D"/>
+    <rect x="40" y="164" width="20" height="14" rx="2" fill="#C2660D"/>
+    <circle cx="42" cy="194" r="6" fill="#16233D"/>
+    <circle cx="66" cy="194" r="6" fill="#16233D"/>
+  </g>
+</svg>

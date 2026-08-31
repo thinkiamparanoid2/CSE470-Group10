@@ -12,7 +12,7 @@ app.use(express.json());
 
 // Session Middleware
 app.use(session({
-    secret: process.env.SESSION_SECRET || 'smarstruction_secret',
+    secret: process.env.SESSION_SECRET || 'smartconstruction_secret',
     resave: false,
     saveUninitialized: false,
     cookie: { maxAge: 24 * 60 * 60 * 1000 } // 1 day
@@ -90,5 +90,5 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`🚀 Smarstruction Server running on http://localhost:${PORT}`);
+    console.log(`🚀 SmartConstruction Server running on http://localhost:${PORT}`);
 });

@@ -1,6 +1,6 @@
 # CSE470 Project Feature Documentation
 
-## Project: SmartConstruct BD (Smarstruction)
+## Project: SmartConstruct BD (SmartConstruction)
 ### Construction Project & Material Management System
 
 ---

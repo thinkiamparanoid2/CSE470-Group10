@@ -1,5 +1,5 @@
 {
-  "name": "smarstruction",
+  "name": "smartconstruction",
   "version": "1.0.0",
   "description": "Smart Construction Management Platform for CSE470 Group 10",
   "main": "server.js",

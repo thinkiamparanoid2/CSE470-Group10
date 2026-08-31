@@ -4,12 +4,12 @@ const db = require('./config/db');
 const baseUrl = 'http://localhost:3000';
 let sessionCookie = null;
 
-async function request(method, path, data = null, isMultipart = false, boundary = '----SmarstructionUltraTest123') {
+async function request(method, path, data = null, isMultipart = false, boundary = '----SmartConstructionUltraTest123') {
     return new Promise((resolve, reject) => {
         const url = new URL(path, baseUrl);
         const options = {
             method: method,
-            headers: { 'User-Agent': 'Smarstruction-Ultra-Auditor/3.0' }
+            headers: { 'User-Agent': 'SmartConstruction-Ultra-Auditor/3.0' }
         };
 
         if (sessionCookie) {

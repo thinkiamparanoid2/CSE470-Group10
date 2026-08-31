@@ -3,13 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="/images/logo-mark.svg">
     <title><%= title %></title>
     <link rel="stylesheet" href="/css/style.css">
     <style>
         .form-row { display: flex; gap: 1rem; margin-bottom: 1rem; }
-        .form-row .form-group { flex: 1; }
-        .item-row { display: flex; gap: 1rem; align-items: flex-end; margin-bottom: 1rem; background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px; }
-        .remove-btn { background: rgba(220, 38, 38, 0.2); color: #fca5a5; border: 1px solid rgba(220, 38, 38, 0.4); }
+        .form-row .form-group { flex: 1; min-width: 0; }
+        .item-row { display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-end; margin-bottom: 1rem; background: rgba(20, 87, 153, 0.08); padding: 1rem; border-radius: 8px; }
+        .item-row .form-group { min-width: 140px; }
+        .remove-btn { background: var(--accent-red); color: #fff; border: 1px solid var(--accent-red); }
+
+        @media (max-width: 560px) {
+            .form-row { flex-direction: column; gap: 0; }
+        }
     </style>
 </head>
 <body>
@@ -36,7 +42,7 @@
                     </div>
                 </div>
 
-                <hr style="border: 1px solid rgba(255,255,255,0.1); margin: 2rem 0;">
+                <hr style="border: 1px solid rgba(20, 87, 153, 0.12); margin: 2rem 0;">
                 
                 <h3 style="margin-bottom: 1rem;">Order Items</h3>
                 <div id="items-container">

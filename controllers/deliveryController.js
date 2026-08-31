@@ -31,7 +31,7 @@ async function updateStatus(req, res) {
     const deliveryId = parseInt(req.params.id, 10);
     const { status } = req.body;
     const userId = req.session.user.id;
-    const validStatuses = ['Pending', 'In Transit', 'Delivered', 'Cancelled'];
+    const validStatuses = ['Pending', 'In Transit', 'Delivered'];
 
     if (isNaN(deliveryId) || !validStatuses.includes(status)) {
         return res.render('error', { message: 'Validation Error: Invalid delivery record or status update.' });

@@ -1,0 +1,69 @@
+<svg viewBox="0 0 620 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Construction site skyline illustration">
+  <defs>
+    <radialGradient id="heroGlow" cx="0.6" cy="0.35" r="0.6">
+      <stop offset="0" stop-color="#F2A93B" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#F2A93B" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="bldg1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2E6DB4"/>
+      <stop offset="1" stop-color="#1B4F91"/>
+    </linearGradient>
+    <linearGradient id="bldg2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3E7EC6"/>
+      <stop offset="1" stop-color="#245B9E"/>
+    </linearGradient>
+  </defs>
+
+  <circle cx="420" cy="150" r="220" fill="url(#heroGlow)"/>
+
+  <!-- distant skyline -->
+  <g opacity="0.55">
+    <rect x="40"  y="260" width="46" height="120" fill="#1B3E6B"/>
+    <rect x="96"  y="230" width="34" height="150" fill="#1B3E6B"/>
+    <rect x="480" y="245" width="40" height="135" fill="#1B3E6B"/>
+    <rect x="530" y="270" width="30" height="110" fill="#1B3E6B"/>
+  </g>
+
+  <!-- main buildings -->
+  <rect x="150" y="150" width="90" height="230" rx="2" fill="url(#bldg1)"/>
+  <rect x="255" y="90"  width="110" height="290" rx="2" fill="url(#bldg2)"/>
+  <rect x="380" y="190" width="80" height="190" rx="2" fill="url(#bldg1)"/>
+
+  <!-- window grids -->
+  <g fill="#EAF3FC" opacity="0.75">
+    <!-- left building -->
+    <rect x="163" y="168" width="10" height="10"/><rect x="183" y="168" width="10" height="10"/><rect x="203" y="168" width="10" height="10"/><rect x="223" y="168" width="10" height="10"/>
+    <rect x="163" y="192" width="10" height="10"/><rect x="183" y="192" width="10" height="10"/><rect x="203" y="192" width="10" height="10"/><rect x="223" y="192" width="10" height="10"/>
+    <rect x="163" y="216" width="10" height="10"/><rect x="183" y="216" width="10" height="10"/><rect x="203" y="216" width="10" height="10"/><rect x="223" y="216" width="10" height="10"/>
+    <rect x="163" y="240" width="10" height="10"/><rect x="183" y="240" width="10" height="10"/><rect x="203" y="240" width="10" height="10"/><rect x="223" y="240" width="10" height="10"/>
+    <!-- center tower -->
+    <rect x="270" y="108" width="10" height="10"/><rect x="290" y="108" width="10" height="10"/><rect x="310" y="108" width="10" height="10"/><rect x="330" y="108" width="10" height="10"/><rect x="350" y="108" width="10" height="10"/>
+    <rect x="270" y="132" width="10" height="10"/><rect x="290" y="132" width="10" height="10"/><rect x="310" y="132" width="10" height="10"/><rect x="330" y="132" width="10" height="10"/><rect x="350" y="132" width="10" height="10"/>
+    <rect x="270" y="156" width="10" height="10"/><rect x="290" y="156" width="10" height="10"/><rect x="310" y="156" width="10" height="10"/><rect x="330" y="156" width="10" height="10"/><rect x="350" y="156" width="10" height="10"/>
+    <rect x="270" y="180" width="10" height="10"/><rect x="290" y="180" width="10" height="10"/><rect x="310" y="180" width="10" height="10"/><rect x="330" y="180" width="10" height="10"/><rect x="350" y="180" width="10" height="10"/>
+    <rect x="270" y="204" width="10" height="10"/><rect x="290" y="204" width="10" height="10"/><rect x="310" y="204" width="10" height="10"/><rect x="330" y="204" width="10" height="10"/><rect x="350" y="204" width="10" height="10"/>
+    <!-- right building (under construction, sparser lit windows) -->
+    <rect x="393" y="208" width="10" height="10"/><rect x="413" y="208" width="10" height="10"/><rect x="433" y="208" width="10" height="10"/>
+    <rect x="393" y="232" width="10" height="10"/><rect x="433" y="232" width="10" height="10"/>
+  </g>
+
+  <!-- scaffolding accent on right building -->
+  <g stroke="#F2A93B" stroke-width="2" opacity="0.85">
+    <line x1="380" y1="190" x2="460" y2="190"/>
+    <line x1="380" y1="250" x2="460" y2="250"/>
+    <line x1="380" y1="310" x2="460" y2="310"/>
+  </g>
+
+  <!-- ground -->
+  <rect x="0" y="380" width="620" height="6" fill="#123B6B" opacity="0.5"/>
+
+  <!-- crane over center tower -->
+  <g stroke="#FDFEFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <path d="M300 90 L300 22"/>
+    <path d="M300 22 L410 22"/>
+    <path d="M300 44 L282 90"/>
+    <path d="M300 44 L318 90"/>
+    <path d="M390 22 L390 44"/>
+  </g>
+  <rect x="386.5" y="42" width="7" height="7" rx="1" fill="#F2A93B"/>
+</svg>

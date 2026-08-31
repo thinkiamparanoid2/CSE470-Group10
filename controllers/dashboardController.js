@@ -30,7 +30,7 @@ async function showDashboard(req, res) {
             recentVendors,
             recentSiteReports,
             upcomingMaintenance,
-            title: 'Dashboard | Smarstruction Platform'
+            title: 'Dashboard | SmartConstruction Platform'
         });
     } catch (err) {
         console.error(err);
@@ -39,7 +39,7 @@ async function showDashboard(req, res) {
             totalBoqs: 0, totalEquipment: 0, totalReports: 0,
             recentMaterials: [], recentVendors: [],
             recentSiteReports: [], upcomingMaintenance: [],
-            title: 'Dashboard | Smarstruction Platform'
+            title: 'Dashboard | SmartConstruction Platform'
         });
     }
 }
@@ -49,10 +49,10 @@ async function showHomePage(req, res) {
     try {
         const [notices] = await db.query('SELECT * FROM notices ORDER BY created_at DESC LIMIT 5');
         const [projects] = await db.query('SELECT * FROM projects LIMIT 3');
-        res.render('home', { notices, projects, title: 'Smarstruction | Smart Construction Platform' });
+        res.render('home', { notices, projects, title: 'SmartConstruction | Smart Construction Platform' });
     } catch (err) {
         console.error(err);
-        res.render('home', { notices: [], projects: [], title: 'Smarstruction' });
+        res.render('home', { notices: [], projects: [], title: 'SmartConstruction' });
     }
 }
 

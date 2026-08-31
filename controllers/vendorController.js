@@ -37,8 +37,8 @@ async function createVendor(req, res) {
     if (email && !isValidEmail(email)) {
         return res.render('error', { message: 'Validation Error: Invalid vendor email address format.' });
     }
-    if (rating && (!isPositiveNumber(rating) || parseFloat(rating) < 0 || parseFloat(rating) > 10)) {
-        return res.render('error', { message: 'Validation Error: Vendor rating must be a number between 0.0 and 10.0.' });
+    if (rating && (!isPositiveNumber(rating) || parseFloat(rating) < 0 || parseFloat(rating) > 9.99)) {
+        return res.render('error', { message: 'Validation Error: Vendor rating must be a number between 0.0 and 9.99.' });
     }
 
     try {
@@ -97,8 +97,8 @@ async function updateVendor(req, res) {
     if (email && !isValidEmail(email)) {
         return res.render('error', { message: 'Validation Error: Invalid email format.' });
     }
-    if (rating && (!isPositiveNumber(rating) || parseFloat(rating) < 0 || parseFloat(rating) > 10)) {
-        return res.render('error', { message: 'Validation Error: Rating must be between 0.0 and 10.0.' });
+    if (rating && (!isPositiveNumber(rating) || parseFloat(rating) < 0 || parseFloat(rating) > 9.99)) {
+        return res.render('error', { message: 'Validation Error: Rating must be between 0.0 and 9.99.' });
     }
 
     try {
