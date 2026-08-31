@@ -1,4 +1,4 @@
-# 🏗️ SmartConstruct BD (Smarstruction) — Project Progress & Handoff Document
+# 🏗️ SmartConstruct BD (SmartConstruction) — Project Progress & Handoff Document
 
 > **CSE470 Group 10** | Smart Construction Management Platform  
 > **Last Updated:** August 25, 2026  

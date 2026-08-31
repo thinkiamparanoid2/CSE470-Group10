@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="/images/logo-mark.svg">
     <title><%= title %></title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
@@ -78,7 +79,7 @@
                                         <td>
                                             <a href="/milestones/edit/<%= m.id %>" class="btn btn-secondary" style="padding: 0.2rem 0.5rem; font-size: 0.8rem; margin-right: 0.25rem;">Edit</a>
                                             <form action="/milestones/delete/<%= m.id %>" method="POST" style="display:inline;">
-                                                <button type="submit" class="btn btn-secondary" style="padding: 0.2rem 0.5rem; font-size: 0.8rem; background: rgba(220, 38, 38, 0.2); color: #fca5a5; border-color: rgba(220, 38, 38, 0.4);" onclick="return confirm('Delete this milestone?');">Delete</button>
+                                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Delete this milestone?');">Delete</button>
                                             </form>
                                         </td>
                                     </tr>

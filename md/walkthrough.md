@@ -96,7 +96,7 @@ if (match) {  // ← Only bcrypt comparison
 
 ### Server Startup
 ```
-🚀 Smarstruction Server running on http://localhost:3000
+🚀 SmartConstruction Server running on http://localhost:3000
 ✅ MySQL Database connected successfully!
 ```
 

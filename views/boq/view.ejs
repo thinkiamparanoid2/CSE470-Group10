@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="/images/logo-mark.svg">
     <title><%= title %></title>
     <link rel="stylesheet" href="/css/style.css">
     <style>
@@ -63,7 +64,10 @@
     <div class="container">
         <!-- Professional Corporate Print Letterhead (Hidden on Web, Visible in PDF) -->
         <div class="print-only print-header-box">
-            <h2 style="margin: 0; font-size: 18pt; text-transform: uppercase; letter-spacing: 0.5px;">Smarstruction Engineering & Infrastructure Ltd.</h2>
+            <div style="display:flex; align-items:center; gap:12px; margin-bottom:6px;">
+                <img src="/images/logo-mark.svg" alt="" class="letterhead-logo">
+                <h2 style="margin: 0; font-size: 18pt; text-transform: uppercase; letter-spacing: 0.5px;">SmartConstruction Engineering & Infrastructure Ltd.</h2>
+            </div>
             <h3 style="margin: 5px 0 0 0; font-size: 13pt; color: #333; font-weight: 600;">Official Bill of Quantities (BOQ) Tender & Cost Forecast Worksheet</h3>
         </div>
 
@@ -122,7 +126,7 @@
         </div>
 
         <% if (boq.notes) { %>
-            <div class="card" style="margin-bottom: 1.5rem; background: rgba(255,255,255,0.03);">
+            <div class="card" style="margin-bottom: 1.5rem; background: rgba(20, 87, 153, 0.06);">
                 <strong style="font-size: 1.05rem;">Technical Scope & Estimating Assumptions:</strong>
                 <p style="margin-top: 0.4rem; color: var(--text-light); line-height: 1.5; white-space: pre-line;"><%= boq.notes %></p>
             </div>
@@ -162,13 +166,13 @@
                                         <% if (user && (user.role === 'SuperAdmin' || user.role === 'Project Manager')) { %>
                                             <form action="/boq/delete-item/<%= item.id %>" method="POST" style="display:inline;" onsubmit="return confirm('Remove this item from BOQ?');">
                                                 <input type="hidden" name="boq_id" value="<%= boq.id %>">
-                                                <button type="submit" class="btn btn-secondary" style="background: rgba(255, 75, 75, 0.2); border-color: #ff4b4b; padding: 0.2rem 0.5rem; font-size: 0.75rem;">Delete</button>
+                                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                                             </form>
                                         <% } %>
                                     </td>
                                 </tr>
                             <% }) %>
-                            <tr class="grand-total-row" style="background: rgba(255,255,255,0.05); font-size: 1.08rem;">
+                            <tr class="grand-total-row" style="background: rgba(20, 87, 153, 0.08); font-size: 1.08rem;">
                                 <td colspan="6" style="text-align: right; font-weight: 700;">Grand Total Forecast Cost:</td>
                                 <td style="text-align: right; color: var(--accent-green); font-weight: 700;">
                                     ৳<%= totalCost.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) %>
@@ -203,7 +207,7 @@
             </div>
         </div>
         <div class="print-only" style="margin-top: 35px; font-size: 8.5pt; color: #666; border-top: 1px solid #ddd; padding-top: 8px;">
-            <em>Notice: This document contains proprietary engineering structural estimates and cost projections generated via Smarstruction Platform. All unit rates are estimated and subject to market quotation updates.</em>
+            <em>Notice: This document contains proprietary engineering structural estimates and cost projections generated via SmartConstruction Platform. All unit rates are estimated and subject to market quotation updates.</em>
         </div>
 
         <!-- Add Item Form (Only in view, hidden during print) -->

@@ -9,7 +9,7 @@ async function request(method, path, data = null) {
         const options = {
             method: method,
             headers: {
-                'User-Agent': 'Smarstruction-Automated-Auditor/1.0'
+                'User-Agent': 'SmartConstruction-Automated-Auditor/1.0'
             }
         };
 

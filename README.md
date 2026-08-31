@@ -1,4 +1,4 @@
-# 🏗️ SmartConstruct BD (Smarstruction)
+# 🏗️ SmartConstruction
 
 **Course:** CSE470 — Software Engineering  
 **Group:** 10  
