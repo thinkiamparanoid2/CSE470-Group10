@@ -35,3 +35,6 @@ Open your browser at **http://localhost:3000**
 - **Project Manager:** `pm@smarstruction.bd` / `admin123`
 - **Site Engineer:** `engineer@smarstruction.bd` / `admin123`
 - **Vendor:** `vendor@bsrm.bd` / `admin123`
+
+---
+*Maintained by CSE470 Group 10.*
