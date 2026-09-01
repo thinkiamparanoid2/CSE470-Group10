@@ -28,6 +28,58 @@
             </div>
         </div>
 
+        <!-- Trust / Stats Strip -->
+        <div class="stats-strip">
+            <div>
+                <div class="stat-number"><%= siteCount %></div>
+                <div class="stat-label">Active Construction Sites</div>
+            </div>
+            <div>
+                <div class="stat-number"><%= vendorCount %></div>
+                <div class="stat-label">Verified Material Vendors</div>
+            </div>
+            <div>
+                <div class="stat-number"><%= materialCount %></div>
+                <div class="stat-label">Material Categories Tracked</div>
+            </div>
+            <div>
+                <div class="stat-number">4</div>
+                <div class="stat-label">Role-Based Access Levels</div>
+            </div>
+        </div>
+
+        <!-- Platform Capabilities -->
+        <div class="section-intro">
+            <h2>Everything a Site Office Needs, in One Platform</h2>
+            <p>From procurement to payroll, SmartConstruction replaces scattered spreadsheets and phone calls with one connected system built for construction firms operating across multiple sites.</p>
+        </div>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <img src="/images/feature-inventory.svg" alt="">
+                <span class="feature-tag">Materials</span>
+                <h3>Stock &amp; Procurement Control</h3>
+                <p>Real-time material stock, purchase orders, and inter-site inventory transfers so a site never runs short — or over-orders.</p>
+            </div>
+            <div class="feature-card">
+                <img src="/images/vendor-building.svg" alt="">
+                <span class="feature-tag">Vendors</span>
+                <h3>Supplier &amp; Vendor Network</h3>
+                <p>Compare quotations, manage contracts, and track every disbursement against a rated directory of verified suppliers.</p>
+            </div>
+            <div class="feature-card">
+                <img src="/images/feature-tracking.svg" alt="">
+                <span class="feature-tag">Projects</span>
+                <h3>Progress &amp; Labor Tracking</h3>
+                <p>Gantt-lite progress dashboards, daily site reports, and labor attendance logs kept current for every active site.</p>
+            </div>
+            <div class="feature-card">
+                <img src="/images/feature-reports.svg" alt="">
+                <span class="feature-tag">Finance</span>
+                <h3>Reporting &amp; Compliance</h3>
+                <p>Exportable Bills of Quantities, expense reports, and vendor ledgers ready for audits, or handover to a client.</p>
+            </div>
+        </div>
+
         <!-- Featured Projects CMS (Member D) -->
         <h2 id="projects" style="margin-bottom: 1rem; color: var(--accent-amber);">🏢 Featured Active Construction Sites</h2>
         <div class="grid-2">
@@ -86,6 +138,16 @@
             <% } else { %>
                 <p style="color: var(--text-muted);">No urgent notices posted today.</p>
             <% } %>
+        </div>
+
+        <!-- Closing CTA -->
+        <div class="cta-banner">
+            <h2>Ready to bring your next site on-platform?</h2>
+            <p>Sign in with your team credentials, or register as a Site Engineer or Vendor to get started.</p>
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <a href="/login" class="btn btn-primary">Sign In</a>
+                <a href="/register" class="btn btn-secondary">Create an Account</a>
+            </div>
         </div>
     </div>
 

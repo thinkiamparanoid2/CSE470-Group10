@@ -49,10 +49,19 @@ async function showHomePage(req, res) {
     try {
         const [notices] = await db.query('SELECT * FROM notices ORDER BY created_at DESC LIMIT 5');
         const [projects] = await db.query('SELECT * FROM projects LIMIT 3');
-        res.render('home', { notices, projects, title: 'SmartConstruction | Smart Construction Platform' });
+        const [[{ siteCount }]] = await db.query('SELECT COUNT(*) AS siteCount FROM projects');
+        const [[{ vendorCount }]] = await db.query('SELECT COUNT(*) AS vendorCount FROM vendors');
+        const [[{ materialCount }]] = await db.query('SELECT COUNT(*) AS materialCount FROM materials');
+        res.render('home', {
+            notices, projects, siteCount, vendorCount, materialCount,
+            title: 'SmartConstruction | Smart Construction Platform'
+        });
     } catch (err) {
         console.error(err);
-        res.render('home', { notices: [], projects: [], title: 'SmartConstruction' });
+        res.render('home', {
+            notices: [], projects: [], siteCount: 0, vendorCount: 0, materialCount: 0,
+            title: 'SmartConstruction'
+        });
     }
 }
 

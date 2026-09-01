@@ -87,7 +87,7 @@ async function runExtremeAudit() {
     try {
         // Step 1: Authentication
         console.log('\n🔑 Phase 1: Authentication & Session Access');
-        const loginRes = await request('POST', '/login', { email: 'admin@smarstruction.bd', password: 'admin123' });
+        const loginRes = await request('POST', '/login', { email: 'admin@smartconstruction.bd', password: 'admin123' });
         check('Login as SuperAdmin returns 302 redirect to Dashboard', loginRes.statusCode === 302 && loginRes.headers.location === '/dashboard');
 
         // Step 2: Member A — BOQ Generator Full Lifecycle

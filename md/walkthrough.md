@@ -137,5 +137,5 @@ cd "e:\CSE 470 project\CSE470-Group10"
 npm start
 
 # Open: http://localhost:3000
-# Login: admin@smarstruction.bd / admin123
+# Login: admin@smartconstruction.bd / admin123
 ```

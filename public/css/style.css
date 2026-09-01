@@ -531,6 +531,128 @@ footer {
 }
 
 /* ==========================================================================
+   Homepage: stats strip, feature grid, section intros, CTA banner
+   ========================================================================== */
+.stats-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr));
+    gap: 1px;
+    background: var(--border-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 2rem;
+}
+
+.stats-strip > div {
+    background: #ffffff;
+    padding: 1.5rem 1rem;
+    text-align: center;
+}
+
+.stat-number {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--primary-700);
+    line-height: 1.1;
+}
+
+.stat-label {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin-top: 0.35rem;
+}
+
+.section-intro {
+    text-align: center;
+    max-width: 640px;
+    margin: 0 auto 2rem;
+}
+
+.section-intro h2 {
+    font-size: 1.7rem;
+    margin-bottom: 0.6rem;
+}
+
+.section-intro p {
+    color: var(--text-muted);
+    font-size: 0.98rem;
+}
+
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(230px, 100%), 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.feature-card {
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    padding: 1.75rem 1.5rem;
+    text-align: left;
+}
+
+.feature-card img {
+    width: 44px;
+    height: 44px;
+    margin-bottom: 1rem;
+}
+
+.feature-card h3 {
+    font-size: 1.05rem;
+    margin-bottom: 0.5rem;
+}
+
+.feature-card p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    line-height: 1.55;
+    margin: 0;
+}
+
+.feature-card .feature-tag {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    color: var(--primary-500);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+}
+
+.cta-banner {
+    background: linear-gradient(135deg, var(--primary-700), #0B3460);
+    border-radius: var(--radius);
+    padding: 2.75rem 2rem;
+    text-align: center;
+    margin: 3rem 0 2rem;
+}
+
+.cta-banner h2 {
+    color: #ffffff;
+    font-size: 1.6rem;
+    margin-bottom: 0.6rem;
+}
+
+.cta-banner p {
+    color: rgba(255,255,255,0.75);
+    max-width: 520px;
+    margin: 0 auto 1.5rem;
+}
+
+.cta-banner .btn-secondary {
+    background: rgba(255,255,255,0.1);
+    border-color: rgba(255,255,255,0.3);
+    color: #fff;
+}
+
+.cta-banner .btn-secondary:hover {
+    background: rgba(255,255,255,0.2);
+}
+
+/* ==========================================================================
    Project cover thumbnails
    ========================================================================== */
 .project-cover {

@@ -52,7 +52,7 @@ async function runAudit() {
     try {
         // 1. Log in as SuperAdmin
         console.log('\n🔑 Step 1: Logging in as SuperAdmin...');
-        const loginRes = await request('POST', '/login', { email: 'admin@smarstruction.bd', password: 'admin123' });
+        const loginRes = await request('POST', '/login', { email: 'admin@smartconstruction.bd', password: 'admin123' });
         if (loginRes.statusCode === 302 && loginRes.headers.location === '/dashboard') {
             console.log('✅ Login Successful! Session Cookie Established.');
         } else {

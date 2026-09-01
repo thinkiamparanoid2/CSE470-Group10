@@ -63,7 +63,7 @@ async function runUltraAudit() {
     try {
         // Auth
         console.log('\n--- SPRINT 0/1: Authentication ---');
-        const loginRes = await request('POST', '/login', { email: 'admin@smarstruction.bd', password: 'admin123' });
+        const loginRes = await request('POST', '/login', { email: 'admin@smartconstruction.bd', password: 'admin123' });
         check('POST /login as SuperAdmin succeeds (302 Redirect)', loginRes.statusCode === 302 && loginRes.headers.location === '/dashboard');
 
         // Sprint 1: Materials

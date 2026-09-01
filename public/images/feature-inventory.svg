@@ -1,0 +1,9 @@
+<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Material inventory icon">
+  <circle cx="24" cy="24" r="24" fill="#E7F0FA"/>
+  <g fill="none" stroke="#14508C" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M24 12 L35 17.5 L35 30.5 L24 36 L13 30.5 L13 17.5 Z"/>
+    <path d="M13 17.5 L24 23 L35 17.5"/>
+    <path d="M24 23 L24 36"/>
+  </g>
+  <path d="M19 14.7 L30 20.2" stroke="#C2660D" stroke-width="2.2" stroke-linecap="round"/>
+</svg>

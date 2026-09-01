@@ -9,9 +9,9 @@
 
 | Role | Email | Password |
 |------|-------|----------|
-| **SuperAdmin** | admin@smarstruction.bd | admin123 |
-| **Project Manager** | pm@smarstruction.bd | admin123 |
-| **Site Engineer** | engineer@smarstruction.bd | admin123 |
+| **SuperAdmin** | admin@smartconstruction.bd | admin123 |
+| **Project Manager** | pm@smartconstruction.bd | admin123 |
+| **Site Engineer** | engineer@smartconstruction.bd | admin123 |
 | **Vendor** | vendor@bsrm.bd | admin123 |
 
 ---
@@ -40,7 +40,7 @@ Then open **http://localhost:3000** in your browser.
 **Route:** `/materials`
 
 **Demonstration Steps:**
-1. Login as **SuperAdmin** (admin@smarstruction.bd / admin123)
+1. Login as **SuperAdmin** (admin@smartconstruction.bd / admin123)
 2. Click **"Materials"** in the navigation bar
 3. You will see the **Material Stock Tracking** page with a list of pre-loaded materials (Cement, TMT Steel Rod, etc.)
 4. Click **"+ Add New"** button
@@ -105,7 +105,7 @@ Then open **http://localhost:3000** in your browser.
 1. Go to **http://localhost:3000/login**
 2. Login as SuperAdmin → Show full navigation (all links visible)
 3. Logout (click "Logout" button)
-4. Login as **Site Engineer** (engineer@smarstruction.bd / admin123)
+4. Login as **Site Engineer** (engineer@smartconstruction.bd / admin123)
    - Notice: Cannot see "Notice CMS" link
    - Try to access materials → Can view but no Create/Edit/Delete buttons
 5. Logout → Login as **Vendor** (vendor@bsrm.bd / admin123)

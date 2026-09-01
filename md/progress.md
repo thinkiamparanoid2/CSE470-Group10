@@ -160,9 +160,9 @@ CSE470-Group10/
 
 | Email | Password | Role |
 |-------|----------|------|
-| admin@smarstruction.bd | admin123 | SuperAdmin |
-| pm@smarstruction.bd | admin123 | Project Manager |
-| engineer@smarstruction.bd | admin123 | Site Engineer |
+| admin@smartconstruction.bd | admin123 | SuperAdmin |
+| pm@smartconstruction.bd | admin123 | Project Manager |
+| engineer@smartconstruction.bd | admin123 | Site Engineer |
 
 ---
 

@@ -31,9 +31,9 @@ npm start
 Open your browser at **http://localhost:3000**
 
 ### Test Credentials (Pre-seeded):
-- **SuperAdmin:** `admin@smarstruction.bd` / `admin123`
-- **Project Manager:** `pm@smarstruction.bd` / `admin123`
-- **Site Engineer:** `engineer@smarstruction.bd` / `admin123`
+- **SuperAdmin:** `admin@smartconstruction.bd` / `admin123`
+- **Project Manager:** `pm@smartconstruction.bd` / `admin123`
+- **Site Engineer:** `engineer@smartconstruction.bd` / `admin123`
 - **Vendor:** `vendor@bsrm.bd` / `admin123`
 
 ---

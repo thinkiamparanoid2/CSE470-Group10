@@ -1,0 +1,12 @@
+<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Financial reporting icon">
+  <circle cx="24" cy="24" r="24" fill="#E7F0FA"/>
+  <g fill="none" stroke="#14508C" stroke-width="2.2" stroke-linejoin="round">
+    <path d="M16 11 L28 11 L33 16 L33 37 L16 37 Z"/>
+    <path d="M28 11 L28 16 L33 16"/>
+  </g>
+  <g stroke="#C2660D" stroke-width="2.2" stroke-linecap="round">
+    <path d="M20.5 26 L20.5 31.5"/>
+    <path d="M24.5 22.5 L24.5 31.5"/>
+    <path d="M28.5 25 L28.5 31.5"/>
+  </g>
+</svg>
