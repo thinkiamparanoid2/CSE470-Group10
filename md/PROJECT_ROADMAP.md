@@ -97,10 +97,10 @@
 
 ---
 
-## 🤖 AI ASSISTANT SESSION INSTRUCTIONS
+## 📋 Development Guidelines
 
-> **Note for AI Coding Assistant:**
-> When starting a new session or implementing a feature:
+> **Note for contributors:**
+> Before implementing a feature:
 > 1. Read this `PROJECT_ROADMAP.md` file first to understand context and constraints.
 > 2. Ensure all database interactions strictly use **RAW SQL** (`db.query('SELECT ...')` or `db.execute()`).
 > 3. After completing a feature or sprint, update the checklist `[x]` and log your progress under the **Recent Activity Log** below.

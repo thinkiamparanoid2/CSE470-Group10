@@ -1,10 +1,10 @@
-# 💻 Laptop / XAMPP Environment Setup Guide (For User & AI Agents)
+# 💻 Laptop / XAMPP Environment Setup Guide
 
 **Project:** SmartConstruct BD (SmartConstruction) — CSE470 Group 10  
 **Target Environment:** Windows Laptop running **XAMPP** for MySQL.
 
-> 🤖 **Instructions for AI Agents:**  
-> When setting up this project on the user's laptop where XAMPP is used, follow the exact steps below in order. Do not install a separate MySQL server if XAMPP is already installed.
+> **Setup Notes:**  
+> When setting up this project on a laptop where XAMPP is used, follow the exact steps below in order. Do not install a separate MySQL server if XAMPP is already installed.
 
 ---
 
@@ -14,7 +14,7 @@
 
 - **Option A (User GUI):**  
   Open **XAMPP Control Panel** and click **Start** next to **MySQL** (and optionally **Apache**).
-- **Option B (Agent CLI command):**  
+- **Option B (Command Line):**  
   ```powershell
   # Check if MySQL is listening on standard port 3306
   Test-NetConnection -ComputerName localhost -Port 3306
@@ -40,7 +40,7 @@ SESSION_SECRET=smarstruction_secret_key_cse470
 
 > **Note:** In XAMPP, the default MySQL user is `root` with **no password** (blank). If the user configured a custom MySQL root password in XAMPP, set `DB_PASSWORD=their_password`.
 
-#### PowerShell Command for Agent:
+#### PowerShell Command (Alternative):
 ```powershell
 Set-Content -Path ".env" -Value @"
 PORT=3000
@@ -64,7 +64,7 @@ Import the `database/schema.sql` file into XAMPP MySQL. This will create the `sm
   3. Click **Choose File** and select `database/schema.sql` from the project directory.
   4. Scroll to the bottom and click **Import** (or **Go**).
 
-- **Option B (Agent / PowerShell Command):**
+- **Option B (Command Line):**
   ```powershell
   Get-Content "database\schema.sql" | & "C:\xampp\mysql\bin\mysql.exe" -u root
   ```
@@ -102,14 +102,14 @@ All seed accounts are pre-configured with password **`admin123`**:
 
 | Role | Email | Password |
 | :--- | :--- | :--- |
-| **SuperAdmin** | `admin@smarstruction.bd` | `admin123` |
-| **Project Manager** | `pm@smarstruction.bd` | `admin123` |
-| **Site Engineer** | `engineer@smarstruction.bd` | `admin123` |
+| **SuperAdmin** | `admin@smartconstruction.bd` | `admin123` |
+| **Project Manager** | `pm@smartconstruction.bd` | `admin123` |
+| **Site Engineer** | `engineer@smartconstruction.bd` | `admin123` |
 | **Vendor** | `vendor@bsrm.bd` | `admin123` |
 
 ---
 
-## 🔍 Verification for AI Agents
+## 🔍 Automated Verification
 
 To verify the setup automatically in PowerShell, run:
 

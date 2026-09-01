@@ -3,5 +3,5 @@ node_modules/
 .DS_Store
 *.log
 
-# Claude Code local tooling (per-session browser preview config)
+# Local editor/tooling config (per-machine, not shared)
 .claude/
