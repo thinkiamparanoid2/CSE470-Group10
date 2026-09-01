@@ -6,83 +6,433 @@
     <link rel="icon" type="image/svg+xml" href="/images/logo-mark.svg">
     <title><%= title %></title>
     <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .enterprise-hero {
+            background: linear-gradient(135deg, #0C2140 0%, #164080 50%, #0F172A 100%);
+            border-radius: var(--radius-xl);
+            padding: 4rem 3.5rem;
+            color: #FFFFFF;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: var(--shadow-xl);
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 2.5rem;
+            align-items: center;
+            margin-bottom: 2.5rem;
+        }
+        .enterprise-hero::after {
+            content: '';
+            position: absolute;
+            top: -120px;
+            right: -120px;
+            width: 450px;
+            height: 450px;
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.35) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        .hero-badge-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(37, 99, 235, 0.25);
+            border: 1px solid rgba(147, 197, 253, 0.3);
+            color: #93C5FD;
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 0.3rem 0.85rem;
+            border-radius: var(--radius-pill);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 1.25rem;
+        }
+        .hero-headline {
+            font-family: 'Outfit', sans-serif;
+            font-size: 3rem;
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -0.02em;
+            color: #FFFFFF;
+            margin-bottom: 1.25rem;
+        }
+        .hero-headline span {
+            background: linear-gradient(120deg, #93C5FD, #60A5FA);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero-subtitle {
+            font-size: 1.1rem;
+            color: #CBD5E1;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            max-width: 580px;
+        }
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .hero-demo-bar {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.12);
+        }
+        .hero-demo-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #94A3B8;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.6rem;
+        }
+        .hero-demo-btns {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .demo-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            color: #FFFFFF;
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 0.35rem 0.75rem;
+            border-radius: var(--radius-pill);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+        .demo-btn:hover {
+            background: var(--primary-500);
+            border-color: var(--primary-400);
+            transform: translateY(-1px);
+        }
+        .hero-art-box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        .hero-art-box img {
+            max-height: 340px;
+            filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.35));
+        }
+
+        /* Stats Ribbon */
+        .stats-ribbon {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            background: #FFFFFF;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 2rem 2.5rem;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 3.5rem;
+        }
+        .ribbon-item {
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid var(--border-light);
+            padding-right: 1.5rem;
+        }
+        .ribbon-item:last-child {
+            border-right: none;
+            padding-right: 0;
+        }
+        .ribbon-value {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: var(--primary-700);
+            line-height: 1;
+            margin-bottom: 0.35rem;
+        }
+        .ribbon-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--slate-500);
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        /* Feature Cards */
+        .features-section-header {
+            text-align: center;
+            max-width: 720px;
+            margin: 0 auto 2.5rem;
+        }
+        .features-section-header h2 {
+            font-size: 2.2rem;
+            color: var(--slate-900);
+            margin-bottom: 0.75rem;
+        }
+        .features-section-header p {
+            font-size: 1.05rem;
+            color: var(--slate-600);
+        }
+
+        .feature-grid-corporate {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3.5rem;
+        }
+        .feature-card-corporate {
+            background: #FFFFFF;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            box-shadow: var(--shadow-sm);
+            transition: all var(--transition-fast);
+            position: relative;
+        }
+        .feature-card-corporate:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-300);
+        }
+        .feature-icon-wrapper {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-md);
+            background: var(--primary-50);
+            border: 1px solid var(--primary-100);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.25rem;
+        }
+        .feature-icon-wrapper img {
+            width: 26px;
+            height: 26px;
+        }
+        .feature-pill-tag {
+            display: inline-block;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--primary-600);
+            margin-bottom: 0.5rem;
+        }
+        .feature-card-corporate h3 {
+            font-size: 1.2rem;
+            color: var(--slate-900);
+            margin-bottom: 0.65rem;
+        }
+        .feature-card-corporate p {
+            font-size: 0.92rem;
+            color: var(--slate-600);
+            line-height: 1.55;
+        }
+
+        /* Portfolio Project Cards */
+        .project-corporate-card {
+            background: #FFFFFF;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: all var(--transition-fast);
+        }
+        .project-corporate-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--slate-300);
+        }
+        .project-image-banner {
+            height: 200px;
+            width: 100%;
+            object-fit: cover;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .project-content {
+            padding: 1.5rem;
+        }
+
+        .cta-enterprise {
+            background: linear-gradient(135deg, var(--slate-900) 0%, var(--primary-900) 100%);
+            border-radius: var(--radius-xl);
+            padding: 3.5rem 2rem;
+            text-align: center;
+            color: #FFFFFF;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: var(--shadow-xl);
+            margin: 3rem 0;
+        }
+        .cta-enterprise h2 {
+            font-size: 2.2rem;
+            color: #FFFFFF;
+            margin-bottom: 0.75rem;
+        }
+        .cta-enterprise p {
+            color: #CBD5E1;
+            font-size: 1.05rem;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        @media (max-width: 1024px) {
+            .enterprise-hero {
+                grid-template-columns: 1fr;
+                padding: 2.5rem 2rem;
+            }
+            .hero-art-box {
+                display: none;
+            }
+            .stats-ribbon {
+                grid-template-columns: 1fr 1fr;
+                gap: 1.25rem;
+            }
+            .ribbon-item:nth-child(2) {
+                border-right: none;
+            }
+        }
+        @media (max-width: 640px) {
+            .stats-ribbon {
+                grid-template-columns: 1fr;
+            }
+            .ribbon-item {
+                border-right: none;
+                border-bottom: 1px solid var(--border-light);
+                padding-bottom: 1rem;
+                padding-right: 0;
+            }
+            .ribbon-item:last-child {
+                border-bottom: none;
+                padding-bottom: 0;
+            }
+            .hero-headline {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
 </head>
 <body>
     <%- include('partials/navbar') %>
 
     <div class="container">
-        <!-- Hero Section -->
-        <div class="card hero" style="padding: 3rem 2.5rem; background: linear-gradient(135deg, rgba(30,41,59,0.95), rgba(15,23,42,0.95)); border: 1px solid rgba(30,41,59,0.4);">
-            <div class="hero-copy">
-                <h1 style="font-size: 2.6rem; margin-bottom: 1rem; color: #fff; line-height: 1.15;">Smart Construction Management in Bangladesh</h1>
-                <p style="font-size: 1.05rem; color: var(--text-muted); max-width: 520px; margin: 0 0 2rem;">
-                    Streamlining building material stock, vendor procurement, labor allocation, and site reports across ongoing construction projects.
+        <!-- Enterprise Hero Section -->
+        <div class="enterprise-hero">
+            <div>
+                <div class="hero-badge-pill">
+                    <span>⚡ Enterprise Construction OS</span>
+                </div>
+                <h1 class="hero-headline">
+                    Intelligent Construction Management <span>Across Bangladesh</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Streamlining material inventory, multi-vendor procurement, project Gantt milestones, and site compliance in one unified corporate platform.
                 </p>
-                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-                    <a href="/login" class="btn btn-primary">Access Platform Dashboard</a>
-                    <a href="#projects" class="btn btn-secondary">Explore Firm Portfolio</a>
+                <div class="hero-actions">
+                    <a href="/login" class="btn btn-primary btn-lg">Access Platform Dashboard</a>
+                    <a href="#projects" class="btn btn-secondary btn-lg" style="color: #FFFFFF; background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.25);">Explore Active Sites</a>
+                </div>
+
+                <!-- Instant 1-Click Role Switcher for Evaluators -->
+                <div class="hero-demo-bar">
+                    <div class="hero-demo-label">⚡ Instant 1-Click Demo Launcher:</div>
+                    <div class="hero-demo-btns">
+                        <button type="button" class="demo-btn" onclick="quickLogin('admin@smartconstruction.bd', 'admin123')">
+                            👑 SuperAdmin
+                        </button>
+                        <button type="button" class="demo-btn" onclick="quickLogin('pm@smartconstruction.bd', 'admin123')">
+                            📊 Project Manager
+                        </button>
+                        <button type="button" class="demo-btn" onclick="quickLogin('engineer@smartconstruction.bd', 'admin123')">
+                            👷 Site Engineer
+                        </button>
+                        <button type="button" class="demo-btn" onclick="quickLogin('vendor@bsrm.bd', 'admin123')">
+                            🏢 Vendor
+                        </button>
+                    </div>
                 </div>
             </div>
-            <div class="hero-art">
-                <img src="/images/hero-illustration.svg" alt="Construction site illustration">
+            <div class="hero-art-box">
+                <img src="/images/hero-illustration.svg" alt="SmartConstruction Architectural Illustration">
             </div>
         </div>
 
-        <!-- Trust / Stats Strip -->
-        <div class="stats-strip">
-            <div>
-                <div class="stat-number"><%= siteCount %></div>
-                <div class="stat-label">Active Construction Sites</div>
+        <!-- Real-time Statistics Ribbon -->
+        <div class="stats-ribbon">
+            <div class="ribbon-item">
+                <div class="ribbon-value"><%= siteCount %></div>
+                <div class="ribbon-label">Active Construction Sites</div>
             </div>
-            <div>
-                <div class="stat-number"><%= vendorCount %></div>
-                <div class="stat-label">Verified Material Vendors</div>
+            <div class="ribbon-item">
+                <div class="ribbon-value"><%= vendorCount %></div>
+                <div class="ribbon-label">Verified Suppliers &amp; Vendors</div>
             </div>
-            <div>
-                <div class="stat-number"><%= materialCount %></div>
-                <div class="stat-label">Material Categories Tracked</div>
+            <div class="ribbon-item">
+                <div class="ribbon-value"><%= materialCount %></div>
+                <div class="ribbon-label">Materials &amp; BOQ Categories</div>
             </div>
-            <div>
-                <div class="stat-number">4</div>
-                <div class="stat-label">Role-Based Access Levels</div>
-            </div>
-        </div>
-
-        <!-- Platform Capabilities -->
-        <div class="section-intro">
-            <h2>Everything a Site Office Needs, in One Platform</h2>
-            <p>From procurement to payroll, SmartConstruction replaces scattered spreadsheets and phone calls with one connected system built for construction firms operating across multiple sites.</p>
-        </div>
-        <div class="feature-grid">
-            <div class="feature-card">
-                <img src="/images/feature-inventory.svg" alt="">
-                <span class="feature-tag">Materials</span>
-                <h3>Stock &amp; Procurement Control</h3>
-                <p>Real-time material stock, purchase orders, and inter-site inventory transfers so a site never runs short — or over-orders.</p>
-            </div>
-            <div class="feature-card">
-                <img src="/images/vendor-building.svg" alt="">
-                <span class="feature-tag">Vendors</span>
-                <h3>Supplier &amp; Vendor Network</h3>
-                <p>Compare quotations, manage contracts, and track every disbursement against a rated directory of verified suppliers.</p>
-            </div>
-            <div class="feature-card">
-                <img src="/images/feature-tracking.svg" alt="">
-                <span class="feature-tag">Projects</span>
-                <h3>Progress &amp; Labor Tracking</h3>
-                <p>Gantt-lite progress dashboards, daily site reports, and labor attendance logs kept current for every active site.</p>
-            </div>
-            <div class="feature-card">
-                <img src="/images/feature-reports.svg" alt="">
-                <span class="feature-tag">Finance</span>
-                <h3>Reporting &amp; Compliance</h3>
-                <p>Exportable Bills of Quantities, expense reports, and vendor ledgers ready for audits, or handover to a client.</p>
+            <div class="ribbon-item">
+                <div class="ribbon-value">100%</div>
+                <div class="ribbon-label">Raw SQL MVC Architecture</div>
             </div>
         </div>
 
-        <!-- Featured Projects CMS (Member D) -->
-        <h2 id="projects" style="margin-bottom: 1rem; color: var(--accent-amber);">🏢 Featured Active Construction Sites</h2>
-        <div class="grid-2">
+        <!-- Corporate Features Showcase -->
+        <div class="features-section-header">
+            <span class="feature-pill-tag">Core Modules</span>
+            <h2>Integrated Construction ERP Modules</h2>
+            <p>Purpose-built for site engineers, project directors, procurement officers, and material suppliers.</p>
+        </div>
+
+        <div class="feature-grid-corporate">
+            <div class="feature-card-corporate">
+                <div class="feature-icon-wrapper">
+                    <img src="/images/feature-inventory.svg" alt="Inventory">
+                </div>
+                <span class="feature-pill-tag">Logistics</span>
+                <h3>Material &amp; Stock Hub</h3>
+                <p>Live inventory tracking, automated reorder thresholds, site-to-site stock transfers, and material waste auditing.</p>
+            </div>
+
+            <div class="feature-card-corporate">
+                <div class="feature-icon-wrapper">
+                    <img src="/images/vendor-building.svg" alt="Vendors">
+                </div>
+                <span class="feature-pill-tag">Procurement</span>
+                <h3>Vendor &amp; Bidding Directory</h3>
+                <p>Multi-vendor price comparison engine, verified contractor directory, legal contract tracking, and disbursement ledgers.</p>
+            </div>
+
+            <div class="feature-card-corporate">
+                <div class="feature-icon-wrapper">
+                    <img src="/images/feature-tracking.svg" alt="Projects">
+                </div>
+                <span class="feature-pill-tag">Operations</span>
+                <h3>Gantt &amp; Labor Logs</h3>
+                <p>Interactive milestone progress tracking, daily site engineer logs, weather impact records, and daily wage headcount auditing.</p>
+            </div>
+
+            <div class="feature-card-corporate">
+                <div class="feature-icon-wrapper">
+                    <img src="/images/feature-reports.svg" alt="Reports">
+                </div>
+                <span class="feature-pill-tag">Finance</span>
+                <h3>BOQ &amp; Financial Ledgers</h3>
+                <p>Dynamic Bill of Quantities generator with one-click Excel CSV export, project budget versus actual variances, and equipment maintenance schedules.</p>
+            </div>
+        </div>
+
+        <!-- Featured Construction Projects -->
+        <div class="page-header" id="projects" style="margin-top: 1rem;">
+            <div>
+                <h2 class="page-header-title">🏢 Featured Construction Sites</h2>
+                <p class="page-header-subtitle">Active ongoing infrastructure projects managed on SmartConstruction</p>
+            </div>
+            <a href="/projects" class="btn btn-secondary btn-sm">View All Projects &rarr;</a>
+        </div>
+
+        <div class="grid-2" style="margin-bottom: 3.5rem;">
             <% if (projects && projects.length > 0) { %>
                 <% projects.forEach(p => { %>
                     <%
@@ -91,23 +441,39 @@
                         if (pname.includes('dhanmondi')) coverImg = '/images/project-dhanmondi.jpg';
                         else if (pname.includes('uttara')) coverImg = '/images/project-uttara.jpg';
                     %>
-                    <div class="card">
-                        <img src="<%= coverImg %>" alt="<%= p.name %> site photo" class="project-cover">
-                        <h3><%= p.name %></h3>
-                        <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.2rem;">📍 <%= p.location %></p>
-                        <hr style="border-color: var(--border-color); margin: 0.8rem 0;">
-                        <p><strong>Budget:</strong> ৳<%= Number(p.budget).toLocaleString() %> BDT</p>
-                        <p><strong>Status:</strong> <span class="status-badge status-ongoing"><%= p.status %></span></p>
+                    <div class="project-corporate-card">
+                        <img src="<%= coverImg %>" alt="<%= p.name %>" class="project-image-banner">
+                        <div class="project-content">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                                <h3 style="font-size: 1.3rem;"><%= p.name %></h3>
+                                <span class="status-badge status-good"><%= p.status %></span>
+                            </div>
+                            <p style="color: var(--slate-500); font-size: 0.88rem; margin-bottom: 1rem;">📍 <%= p.location %></p>
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 0.75rem; border-top: 1px solid var(--border-light);">
+                                <div>
+                                    <span style="font-size: 0.75rem; color: var(--slate-500); text-transform: uppercase;">Allocated Budget</span>
+                                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; font-weight: 700; color: var(--slate-900);">৳<%= Number(p.budget).toLocaleString() %> BDT</div>
+                                </div>
+                                <a href="/projects" class="btn btn-secondary btn-sm">Site Overview</a>
+                            </div>
+                        </div>
                     </div>
                 <% }) %>
             <% } else { %>
-                <div class="card"><p>No public portfolio projects listed yet.</p></div>
+                <div class="card"><p style="color: var(--slate-500);">No public portfolio projects listed yet.</p></div>
             <% } %>
         </div>
 
-        <!-- Public Notice Board CMS (Member D) -->
-        <h2 style="margin: 2rem 0 1rem; color: var(--accent-blue);">📢 Company Announcements & Site Bulletins</h2>
-        <div class="card">
+        <!-- Corporate Announcements Board -->
+        <div class="page-header">
+            <div>
+                <h2 class="page-header-title">📢 Corporate Bulletins &amp; Notices</h2>
+                <p class="page-header-subtitle">Official announcements from executive project directors</p>
+            </div>
+            <a href="/notices/board" class="btn btn-secondary btn-sm">Full Notice Board &rarr;</a>
+        </div>
+
+        <div class="card" style="margin-bottom: 3.5rem;">
             <% if (notices && notices.length > 0) { %>
                 <div class="table-responsive">
                     <table>
@@ -115,41 +481,54 @@
                             <tr>
                                 <th>Date</th>
                                 <th>Priority</th>
-                                <th>Notice Title</th>
+                                <th>Notice Headline</th>
                                 <th>Details</th>
                             </tr>
                         </thead>
                         <tbody>
                             <% notices.forEach(n => { %>
                                 <tr>
-                                    <td><%= new Date(n.created_at).toLocaleDateString() %></td>
+                                    <td class="table-num"><%= new Date(n.created_at).toLocaleDateString() %></td>
                                     <td>
-                                        <span class="status-badge <%= n.priority === 'Emergency' ? 'status-lowstock' : (n.priority === 'High' ? 'status-moderate' : 'status-good') %>">
+                                        <span class="status-badge <%= n.priority === 'Emergency' ? 'status-critical' : (n.priority === 'High' ? 'status-warning' : 'status-info') %>">
                                             <%= n.priority %>
                                         </span>
                                     </td>
                                     <td><strong><%= n.title %></strong></td>
-                                    <td><%= n.content %></td>
+                                    <td style="color: var(--slate-600);"><%= n.content %></td>
                                 </tr>
                             <% }) %>
                         </tbody>
                     </table>
                 </div>
             <% } else { %>
-                <p style="color: var(--text-muted);">No urgent notices posted today.</p>
+                <p style="color: var(--slate-500); text-align: center; padding: 1.5rem;">No active bulletins posted today.</p>
             <% } %>
         </div>
 
         <!-- Closing CTA -->
-        <div class="cta-banner">
-            <h2>Ready to bring your next site on-platform?</h2>
-            <p>Sign in with your team credentials, or register as a Site Engineer or Vendor to get started.</p>
+        <div class="cta-enterprise">
+            <h2>Ready to Deploy on Your Construction Sites?</h2>
+            <p>Join engineering teams and material suppliers streamlining operations on SmartConstruction.</p>
             <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                <a href="/login" class="btn btn-primary">Sign In</a>
-                <a href="/register" class="btn btn-secondary">Create an Account</a>
+                <a href="/login" class="btn btn-primary btn-lg" style="background: #2563EB; border-color: #3B82F6;">Access Workspace</a>
+                <a href="/register" class="btn btn-secondary btn-lg" style="background: rgba(255,255,255,0.12); color: #FFFFFF; border-color: rgba(255,255,255,0.25);">Create New Account</a>
             </div>
         </div>
     </div>
+
+    <form id="quickLoginForm" action="/login" method="POST" style="display: none;">
+        <input type="hidden" name="email" id="quickEmail">
+        <input type="hidden" name="password" id="quickPassword">
+    </form>
+
+    <script>
+        function quickLogin(email, password) {
+            document.getElementById('quickEmail').value = email;
+            document.getElementById('quickPassword').value = password;
+            document.getElementById('quickLoginForm').submit();
+        }
+    </script>
 
     <%- include('partials/footer') %>
 </body>

@@ -11,177 +11,241 @@
     <%- include('partials/navbar') %>
 
     <div class="container">
+        <!-- Executive Page Header -->
         <div class="page-header">
             <div>
-                <h2>Executive Construction Dashboard</h2>
-                <p style="color: var(--text-muted);">Real-time monitoring of operations across Sprints 1, 2, 3, and 4</p>
+                <h1 class="page-header-title">Executive Operations Hub</h1>
+                <p class="page-header-subtitle">
+                    Real-time construction execution, material inventory, and financial auditing
+                </p>
             </div>
-            <span class="user-badge" style="font-size: 1rem;">Logged Role: <strong><%= user.role %></strong></span>
+            <div class="header-actions">
+                <div class="user-badge" style="background: #FFFFFF; color: var(--slate-900); border: 1px solid var(--border-color); box-shadow: var(--shadow-xs);">
+                    <span>Role:</span>
+                    <span class="user-badge-role"><%= user.role %></span>
+                </div>
+                <% if (user.role !== 'Vendor') { %>
+                    <a href="/site-reports/generate" class="btn btn-primary btn-sm">+ Site Report</a>
+                    <a href="/boq/create" class="btn btn-secondary btn-sm">+ Create BOQ</a>
+                <% } %>
+            </div>
         </div>
 
-        <!-- Sprint 4 Highlight Metrics Bar -->
-        <div class="grid-3" style="margin-bottom: 1.5rem;">
-            <div class="card" style="border-left: 4px solid var(--accent-amber); background: var(--warning-bg);">
-                <p style="color: var(--text-muted); font-size: 0.85rem;">Generated BOQs (Member A)</p>
-                <h2 style="font-size: 2.2rem; margin-top: 0.2rem; color: var(--accent-amber);"><%= totalBoqs %></h2>
-                <a href="/boq" style="font-size: 0.85rem; margin-top: 0.4rem; display: inline-block;">View BOQ Generator &rarr;</a>
+        <!-- High-Impact Enterprise KPI Stat Cards -->
+        <div class="grid-3" style="margin-bottom: 1.75rem;">
+            <div class="stat-card accent-amber">
+                <div class="stat-label">
+                    <span>Generated BOQs</span>
+                    <span>📑</span>
+                </div>
+                <div class="stat-value"><%= totalBoqs %></div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem;">
+                    <span class="stat-trend positive">✓ Live Forecasts</span>
+                    <a href="/boq" class="stat-link">Open Generator &rarr;</a>
+                </div>
             </div>
-            <div class="card" style="border-left: 4px solid var(--accent-green); background: var(--success-bg);">
-                <p style="color: var(--text-muted); font-size: 0.85rem;">Daily Site Reports (Member C)</p>
-                <h2 style="font-size: 2.2rem; margin-top: 0.2rem; color: var(--accent-green);"><%= totalReports %></h2>
-                <a href="/site-reports" style="font-size: 0.85rem; margin-top: 0.4rem; display: inline-block;">View Progress Logs &rarr;</a>
+
+            <div class="stat-card accent-emerald">
+                <div class="stat-label">
+                    <span>Daily Site Reports</span>
+                    <span>📋</span>
+                </div>
+                <div class="stat-value"><%= totalReports %></div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem;">
+                    <span class="stat-trend positive">✓ Active Today</span>
+                    <a href="/site-reports" class="stat-link">View Site Logs &rarr;</a>
+                </div>
             </div>
-            <div class="card" style="border-left: 4px solid var(--accent-blue); background: var(--info-bg);">
-                <p style="color: var(--text-muted); font-size: 0.85rem;">Heavy Machinery Fleet (Member D)</p>
-                <h2 style="font-size: 2.2rem; margin-top: 0.2rem; color: var(--accent-blue);"><%= totalEquipment %> Units</h2>
-                <a href="/equipment" style="font-size: 0.85rem; margin-top: 0.4rem; display: inline-block;">View Fleet Scheduler &rarr;</a>
+
+            <div class="stat-card">
+                <div class="stat-label">
+                    <span>Heavy Fleet Machinery</span>
+                    <span>🚜</span>
+                </div>
+                <div class="stat-value"><%= totalEquipment %> <span style="font-size: 1.1rem; font-weight: 600; color: var(--slate-500);">Units</span></div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem;">
+                    <span class="stat-trend positive">✓ Fleet Ready</span>
+                    <a href="/equipment" class="stat-link">Fleet Scheduler &rarr;</a>
+                </div>
             </div>
         </div>
 
         <!-- Core Operations Metrics Grid -->
-        <div class="grid-3">
-            <div class="card" style="border-left: 4px solid var(--accent-orange);">
-                <p style="color: var(--text-muted); font-size: 0.85rem;">Material Stock Items (Member A)</p>
-                <h2 style="font-size: 2rem; margin-top: 0.3rem;"><%= totalMaterials %></h2>
-                <a href="/materials" style="font-size: 0.85rem; margin-top: 0.5rem; display: inline-block;">View Stock Logs &rarr;</a>
-            </div>
-            <div class="card" style="border-left: 4px solid #f87171;">
-                <p style="color: var(--text-muted); font-size: 0.85rem;">Vendor Account Ledgers (Member B)</p>
-                <h2 style="font-size: 2rem; margin-top: 0.3rem;"><%= totalVendors %></h2>
-                <a href="/payments" style="font-size: 0.85rem; margin-top: 0.5rem; display: inline-block;">Payment Tracker &rarr;</a>
-            </div>
-            <div class="card" style="border-left: 4px solid #a855f7;">
-                <p style="color: var(--text-muted); font-size: 0.85rem;">Active Construction Sites (Member C)</p>
-                <h2 style="font-size: 2rem; margin-top: 0.3rem;"><%= totalProjects %></h2>
-                <a href="/expenses" style="font-size: 0.85rem; margin-top: 0.5rem; display: inline-block;">Expense Export &rarr;</a>
-            </div>
-        </div>
-
-        <!-- Sprint 4 Operations Widgets -->
-        <div class="grid-2" style="margin-top: 1.5rem;">
-            <div class="card">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <h3>📋 Recent Daily Site Progress Logs</h3>
-                    <a href="/site-reports" style="font-size: 0.8rem;">View All</a>
+        <div class="grid-3" style="margin-bottom: 2rem;">
+            <div class="stat-card accent-amber">
+                <div class="stat-label">
+                    <span>Material Inventory Items</span>
+                    <span>📦</span>
                 </div>
-                <div class="table-responsive">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Project Site</th>
-                            <th>Weather</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% if (recentSiteReports && recentSiteReports.length > 0) { %>
-                            <% recentSiteReports.forEach(rep => { %>
-                                <tr>
-                                    <td><%= new Date(rep.report_date).toLocaleDateString() %></td>
-                                    <td><strong><%= rep.project_name %></strong></td>
-                                    <td><span class="status-badge status-good"><%= rep.weather_condition %></span></td>
-                                    <td><a href="/site-reports/<%= rep.id %>" class="btn btn-secondary" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;">View</a></td>
-                                </tr>
-                            <% }) %>
-                        <% } else { %>
-                            <tr><td colspan="4" style="text-align: center; color: var(--text-muted); padding: 1rem;">No site reports generated today.</td></tr>
-                        <% } %>
-                    </tbody>
-                </table>
+                <div class="stat-value"><%= totalMaterials %></div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem;">
+                    <span class="stat-trend warning">Reorder Alerts Active</span>
+                    <a href="/materials" class="stat-link">Stock Tracking &rarr;</a>
                 </div>
             </div>
 
-            <div class="card">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <h3>⚙️ Upcoming Equipment Maintenance</h3>
-                    <a href="/equipment" style="font-size: 0.8rem;">Scheduler</a>
+            <div class="stat-card accent-red">
+                <div class="stat-label">
+                    <span>Vendor Account Ledgers</span>
+                    <span>🏢</span>
                 </div>
-                <div class="table-responsive">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Scheduled Date</th>
-                            <th>Equipment / Code</th>
-                            <th>Service Type</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% if (upcomingMaintenance && upcomingMaintenance.length > 0) { %>
-                            <% upcomingMaintenance.forEach(m => { %>
-                                <tr>
-                                    <td><%= new Date(m.scheduled_date).toLocaleDateString() %></td>
-                                    <td><strong><%= m.equipment_name %></strong> (<%= m.equipment_code %>)</td>
-                                    <td><%= m.maintenance_type %></td>
-                                    <td><span class="status-badge status-ongoing"><%= m.status %></span></td>
-                                </tr>
-                            <% }) %>
-                        <% } else { %>
-                            <tr><td colspan="4" style="text-align: center; color: var(--text-muted); padding: 1rem;">No urgent maintenance tasks scheduled.</td></tr>
-                        <% } %>
-                    </tbody>
-                </table>
+                <div class="stat-value"><%= totalVendors %></div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem;">
+                    <span class="stat-trend positive">✓ Verified Suppliers</span>
+                    <a href="/payments" class="stat-link">Payment Tracker &rarr;</a>
+                </div>
+            </div>
+
+            <div class="stat-card accent-purple">
+                <div class="stat-label">
+                    <span>Active Construction Sites</span>
+                    <span>🏗️</span>
+                </div>
+                <div class="stat-value"><%= totalProjects %></div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem;">
+                    <span class="stat-trend positive">✓ Ongoing Sites</span>
+                    <a href="/expenses" class="stat-link">Expense Ledgers &rarr;</a>
                 </div>
             </div>
         </div>
 
-        <!-- Quick Action Widgets (Legacy / Sprint 1-3) -->
-        <div class="grid-2" style="margin-top: 1.5rem;">
+        <!-- Operations Command Tables -->
+        <div class="grid-2" style="margin-bottom: 2rem;">
+            <!-- Recent Daily Site Progress Logs -->
             <div class="card">
-                <h3>📦 Recent Material Stock Levels</h3>
-                <div class="table-responsive"><table>
-                    <thead>
-                        <tr>
-                            <th>Item</th>
-                            <th>Stock</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% if (recentMaterials.length > 0) { %>
-                            <% recentMaterials.forEach(m => { %>
-                                <tr>
-                                    <td><%= m.name %></td>
-                                    <td><%= m.current_stock %> <%= m.unit %></td>
-                                    <td>
-                                        <span class="status-badge <%= Number(m.current_stock) <= Number(m.reorder_level) ? 'status-lowstock' : 'status-good' %>">
-                                            <%= Number(m.current_stock) <= Number(m.reorder_level) ? 'Reorder Alert' : 'Sufficient' %>
-                                        </span>
-                                    </td>
-                                </tr>
-                            <% }) %>
-                        <% } else { %>
-                            <tr><td colspan="3">No materials tracked yet.</td></tr>
-                        <% } %>
-                    </tbody>
-                </table></div>
+                <div class="card-header">
+                    <h3 class="card-title">📋 Daily Site Progress Logs</h3>
+                    <a href="/site-reports" class="btn btn-secondary btn-sm">All Logs</a>
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Project Site</th>
+                                <th>Weather</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (recentSiteReports && recentSiteReports.length > 0) { %>
+                                <% recentSiteReports.forEach(rep => { %>
+                                    <tr>
+                                        <td class="table-num"><%= new Date(rep.report_date).toLocaleDateString() %></td>
+                                        <td><strong><%= rep.project_name %></strong></td>
+                                        <td><span class="status-badge status-good"><%= rep.weather_condition %></span></td>
+                                        <td><a href="/site-reports/<%= rep.id %>" class="btn btn-secondary btn-sm">Inspect</a></td>
+                                    </tr>
+                                <% }) %>
+                            <% } else { %>
+                                <tr><td colspan="4" style="text-align: center; color: var(--slate-500); padding: 1.5rem;">No site reports generated today.</td></tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Upcoming Equipment Maintenance -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">⚙️ Fleet Maintenance Radar</h3>
+                    <a href="/equipment" class="btn btn-secondary btn-sm">Scheduler</a>
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Equipment</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (upcomingMaintenance && upcomingMaintenance.length > 0) { %>
+                                <% upcomingMaintenance.forEach(m => { %>
+                                    <tr>
+                                        <td class="table-num"><%= new Date(m.scheduled_date).toLocaleDateString() %></td>
+                                        <td><strong><%= m.equipment_name %></strong> (<%= m.equipment_code %>)</td>
+                                        <td><%= m.maintenance_type %></td>
+                                        <td><span class="status-badge status-warning"><%= m.status %></span></td>
+                                    </tr>
+                                <% }) %>
+                            <% } else { %>
+                                <tr><td colspan="4" style="text-align: center; color: var(--slate-500); padding: 1.5rem;">All heavy machinery operational. No service alerts.</td></tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Inventory & Supplier Summary Widgets -->
+        <div class="grid-2">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">📦 Material Stock Level Watchlist</h3>
+                    <a href="/materials" class="btn btn-secondary btn-sm">Manage Inventory</a>
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Current Stock</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (recentMaterials && recentMaterials.length > 0) { %>
+                                <% recentMaterials.forEach(m => { %>
+                                    <tr>
+                                        <td><strong><%= m.name %></strong></td>
+                                        <td class="table-num"><%= m.current_stock %> <%= m.unit %></td>
+                                        <td>
+                                            <span class="status-badge <%= Number(m.current_stock) <= Number(m.reorder_level) ? 'status-critical' : 'status-good' %>">
+                                                <%= Number(m.current_stock) <= Number(m.reorder_level) ? 'Reorder Alert' : 'Sufficient' %>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                <% }) %>
+                            <% } else { %>
+                                <tr><td colspan="3" style="text-align: center; color: var(--slate-500); padding: 1.5rem;">No stock items recorded.</td></tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             <div class="card">
-                <h3>🤝 Top Rated Material Suppliers</h3>
-                <div class="table-responsive"><table>
-                    <thead>
-                        <tr>
-                            <th>Company</th>
-                            <th>Category</th>
-                            <th>Rating</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% if (recentVendors.length > 0) { %>
-                            <% recentVendors.forEach(v => { %>
-                                <tr>
-                                    <td><%= v.company_name %></td>
-                                    <td><%= v.material_category %></td>
-                                    <td>⭐ <%= v.rating %></td>
-                                </tr>
-                            <% }) %>
-                        <% } else { %>
-                            <tr><td colspan="3">No vendors registered.</td></tr>
-                        <% } %>
-                    </tbody>
-                </table></div>
+                <div class="card-header">
+                    <h3 class="card-title">🤝 Top-Rated Material Suppliers</h3>
+                    <a href="/vendors" class="btn btn-secondary btn-sm">Directory</a>
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Supplier</th>
+                                <th>Specialty Category</th>
+                                <th>Quality Score</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (recentVendors && recentVendors.length > 0) { %>
+                                <% recentVendors.forEach(v => { %>
+                                    <tr>
+                                        <td><strong><%= v.company_name %></strong></td>
+                                        <td><span class="status-badge status-info"><%= v.material_category %></span></td>
+                                        <td><strong style="color: #D97706;">★ <%= v.rating %></strong> / 5.0</td>
+                                    </tr>
+                                <% }) %>
+                            <% } else { %>
+                                <tr><td colspan="3" style="text-align: center; color: var(--slate-500); padding: 1.5rem;">No suppliers found.</td></tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

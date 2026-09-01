@@ -10,41 +10,97 @@
 <body>
     <%- include('partials/navbar') %>
 
-    <div class="auth-shell">
-        <div class="auth-art">
-            <img src="/images/auth-illustration.svg" alt="Engineering blueprint illustration">
-        </div>
-        <div class="auth-form-side">
-            <h2 style="margin-bottom: 1.5rem; color: var(--accent-orange);">Portal Login</h2>
-
-            <% if (error) { %>
-                <div class="alert alert-error">
-                    <%= error %>
+    <div class="auth-split-wrapper">
+        <div class="auth-split-card">
+            <!-- Left Brand Showcase -->
+            <div class="auth-brand-side">
+                <div>
+                    <div style="display: flex; align-items: center; gap: 0.65rem; margin-bottom: 2rem;">
+                        <img src="/images/logo-mark.svg" alt="SmartConstruction Logo" style="width: 38px; height: 38px; border-radius: 9px; box-shadow: 0 4px 12px rgba(37,99,235,0.4);">
+                        <span style="font-family: 'Outfit', sans-serif; font-size: 1.5rem; font-weight: 800; color: #FFFFFF;">SmartConstruction</span>
+                    </div>
+                    <h2 style="color: #FFFFFF; font-size: 2rem; line-height: 1.25; margin-bottom: 1rem;">
+                        The Operating System for Enterprise Infrastructure.
+                    </h2>
+                    <p style="color: #BFDBFE; font-size: 0.98rem; line-height: 1.6;">
+                        Secure role-based access for Project Managers, Site Engineers, Suppliers, and Executives.
+                    </p>
                 </div>
-            <% } %>
 
-            <form action="/login" method="POST">
-                <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" id="email" name="email" required placeholder="e.g. pm@smartconstruction.bd">
+                <div>
+                    <img src="/images/auth-illustration.svg" alt="Architecture Blueprint" style="max-height: 180px; margin: 1.5rem 0; opacity: 0.95;">
+                    <div class="auth-brand-quote">
+                        "Precision in material procurement and real-time site logging across all projects."
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" required placeholder="••••••••">
-                </div>
-                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;">Sign In</button>
-            </form>
+            </div>
 
-            <div style="margin-top: 1.5rem; font-size: 0.85rem; color: var(--text-muted); background: var(--primary-50); border: 1px solid var(--border-color); padding: 0.8rem; border-radius: 8px;">
-                <strong>Test Accounts (Seed Data):</strong><br>
-                • <code>admin@smartconstruction.bd</code> (SuperAdmin)<br>
-                • <code>pm@smartconstruction.bd</code> (Project Manager)<br>
-                • <code>engineer@smartconstruction.bd</code> (Site Engineer)<br>
-                • <code>vendor@bsrm.bd</code> (Vendor)<br>
-                <em>Default password for demo: <code>admin123</code></em>
+            <!-- Right Form Panel -->
+            <div class="auth-form-side">
+                <div style="margin-bottom: 1.75rem;">
+                    <span style="font-size: 0.78rem; font-weight: 700; color: var(--primary-600); text-transform: uppercase; letter-spacing: 0.05em;">Welcome Back</span>
+                    <h2 style="font-size: 1.85rem; color: var(--slate-900); margin-top: 0.25rem;">Sign in to Workspace</h2>
+                    <p style="color: var(--slate-500); font-size: 0.9rem; margin-top: 0.25rem;">Enter your verified credentials to continue</p>
+                </div>
+
+                <% if (error) { %>
+                    <div class="alert alert-error">
+                        <span>⚠️</span>
+                        <div><%= error %></div>
+                    </div>
+                <% } %>
+
+                <form action="/login" method="POST" id="mainLoginForm">
+                    <div class="form-group">
+                        <label for="email">Work Email</label>
+                        <input type="email" id="email" name="email" required placeholder="e.g. admin@smartconstruction.bd">
+                    </div>
+                    <div class="form-group">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.45rem;">
+                            <label for="password" style="margin-bottom: 0;">Password</label>
+                        </div>
+                        <input type="password" id="password" name="password" required placeholder="••••••••">
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.75rem; padding: 0.8rem;">
+                        Sign In &rarr;
+                    </button>
+                </form>
+
+                <!-- Instant 1-Click Role Switcher for Evaluators & Demo -->
+                <div class="auth-role-switcher">
+                    <div style="font-size: 0.76rem; font-weight: 700; color: var(--slate-600); text-transform: uppercase; letter-spacing: 0.04em;">
+                        ⚡ 1-Click Demo Login (Pre-seeded Accounts)
+                    </div>
+                    <div class="role-pills-grid">
+                        <button type="button" class="role-pill-btn" onclick="fillAndLogin('admin@smartconstruction.bd', 'admin123')">
+                            👑 <strong>SuperAdmin</strong>
+                        </button>
+                        <button type="button" class="role-pill-btn" onclick="fillAndLogin('pm@smartconstruction.bd', 'admin123')">
+                            📊 <strong>Project Mgr</strong>
+                        </button>
+                        <button type="button" class="role-pill-btn" onclick="fillAndLogin('engineer@smartconstruction.bd', 'admin123')">
+                            👷 <strong>Site Engineer</strong>
+                        </button>
+                        <button type="button" class="role-pill-btn" onclick="fillAndLogin('vendor@bsrm.bd', 'admin123')">
+                            🏢 <strong>Vendor (BSRM)</strong>
+                        </button>
+                    </div>
+                </div>
+
+                <div style="margin-top: 1.5rem; text-align: center; font-size: 0.88rem; color: var(--slate-500);">
+                    New contractor or engineer? <a href="/register" style="font-weight: 600; color: var(--primary-600);">Register an Account</a>
+                </div>
             </div>
         </div>
     </div>
+
+    <script>
+        function fillAndLogin(email, password) {
+            document.getElementById('email').value = email;
+            document.getElementById('password').value = password;
+            document.getElementById('mainLoginForm').submit();
+        }
+    </script>
 
     <%- include('partials/footer') %>
 </body>

@@ -1,12 +1,13 @@
 <nav class="navbar">
     <a href="/" class="brand">
-        <img src="/images/logo-mark.svg" alt="SmartConstruction" class="brand-logo">
-        SmartConstruction
+        <img src="/images/logo-mark.svg" alt="SmartConstruction Logo" class="brand-logo">
+        <span>SmartConstruction</span>
+        <span class="brand-badge">Enterprise</span>
     </a>
 
-    <% if (user) { %>
-        <button type="button" class="nav-toggle-btn" onclick="document.getElementById('navLinks').classList.toggle('mobile-open')">☰ Menu</button>
-    <% } %>
+    <button type="button" class="nav-toggle-btn" aria-label="Toggle navigation menu" onclick="document.getElementById('navLinks').classList.toggle('mobile-open')">
+        ☰ Menu
+    </button>
 
     <ul class="nav-links" id="navLinks">
         <li><a href="/" class="nav-link">Home</a></li>
@@ -18,24 +19,84 @@
                 <li class="nav-item">
                     <span class="nav-link dropdown-toggle">Materials</span>
                     <div class="dropdown-menu">
-                        <a href="/materials">Stock Tracking</a>
-                        <a href="/purchase_orders">Purchase Orders</a>
-                        <a href="/inventory-transfers">Inventory Transfers</a>
-                        <a href="/waste-logs">Waste Log</a>
-                        <a href="/boq">BOQ Generator</a>
-                        <a href="/material-requests">Emergency Requests</a>
+                        <a href="/materials">
+                            <div>
+                                <strong>Stock Tracking</strong>
+                                <span class="dropdown-item-desc">Live inventory, reorder thresholds</span>
+                            </div>
+                        </a>
+                        <a href="/purchase_orders">
+                            <div>
+                                <strong>Purchase Orders</strong>
+                                <span class="dropdown-item-desc">Procurement requests &amp; approval</span>
+                            </div>
+                        </a>
+                        <a href="/inventory-transfers">
+                            <div>
+                                <strong>Site Transfers</strong>
+                                <span class="dropdown-item-desc">Inter-site material logistics</span>
+                            </div>
+                        </a>
+                        <a href="/waste-logs">
+                            <div>
+                                <strong>Waste Audit Logs</strong>
+                                <span class="dropdown-item-desc">Scrap tracking &amp; cost variance</span>
+                            </div>
+                        </a>
+                        <a href="/boq">
+                            <div>
+                                <strong>BOQ Generator</strong>
+                                <span class="dropdown-item-desc">Bill of Quantities &amp; CSV export</span>
+                            </div>
+                        </a>
+                        <a href="/material-requests">
+                            <div>
+                                <strong>Emergency Requests</strong>
+                                <span class="dropdown-item-desc">Priority site material requisitions</span>
+                            </div>
+                        </a>
                     </div>
                 </li>
 
                 <li class="nav-item">
                     <span class="nav-link dropdown-toggle">Projects</span>
                     <div class="dropdown-menu">
-                        <a href="/projects">All Projects</a>
-                        <a href="/milestones">Milestones</a>
-                        <a href="/dashboard_projects">Progress Dashboard</a>
-                        <a href="/labor">Labor Attendance</a>
-                        <a href="/site-reports">Daily Site Reports</a>
-                        <a href="/expenses">Expense Reports</a>
+                        <a href="/projects">
+                            <div>
+                                <strong>All Projects</strong>
+                                <span class="dropdown-item-desc">Site portfolio &amp; status</span>
+                            </div>
+                        </a>
+                        <a href="/milestones">
+                            <div>
+                                <strong>Milestones</strong>
+                                <span class="dropdown-item-desc">Construction phase scheduling</span>
+                            </div>
+                        </a>
+                        <a href="/dashboard_projects">
+                            <div>
+                                <strong>Progress Gantt</strong>
+                                <span class="dropdown-item-desc">Visual execution timelines</span>
+                            </div>
+                        </a>
+                        <a href="/labor">
+                            <div>
+                                <strong>Labor Attendance</strong>
+                                <span class="dropdown-item-desc">Daily headcounts &amp; wage costs</span>
+                            </div>
+                        </a>
+                        <a href="/site-reports">
+                            <div>
+                                <strong>Daily Site Reports</strong>
+                                <span class="dropdown-item-desc">Weather &amp; engineer logs</span>
+                            </div>
+                        </a>
+                        <a href="/expenses">
+                            <div>
+                                <strong>Financial Reports</strong>
+                                <span class="dropdown-item-desc">Site budget versus actuals</span>
+                            </div>
+                        </a>
                     </div>
                 </li>
             <% } %>
@@ -44,56 +105,110 @@
                 <span class="nav-link dropdown-toggle">Vendors &amp; Finance</span>
                 <div class="dropdown-menu">
                     <% if (user.role !== 'Vendor') { %>
-                        <a href="/vendors">Vendor Directory</a>
-                        <a href="/price-comparison">Price Comparison</a>
+                        <a href="/vendors">
+                            <div>
+                                <strong>Vendor Directory</strong>
+                                <span class="dropdown-item-desc">Suppliers &amp; performance ratings</span>
+                            </div>
+                        </a>
+                        <a href="/price-comparison">
+                            <div>
+                                <strong>Price Comparison</strong>
+                                <span class="dropdown-item-desc">Multi-vendor bidding analysis</span>
+                            </div>
+                        </a>
                     <% } %>
-                    <a href="/payments">Payment Tracker</a>
-                    <a href="/contracts">Contracts</a>
-                    <a href="/deliveries">Deliveries</a>
+                    <a href="/payments">
+                        <div>
+                            <strong>Payment Tracker</strong>
+                            <span class="dropdown-item-desc">Disbursements &amp; vendor balances</span>
+                        </div>
+                    </a>
+                    <a href="/contracts">
+                        <div>
+                            <strong>Contracts</strong>
+                            <span class="dropdown-item-desc">Legal agreements &amp; uploads</span>
+                        </div>
+                    </a>
+                    <a href="/deliveries">
+                        <div>
+                            <strong>Delivery Scheduling</strong>
+                            <span class="dropdown-item-desc">Truck dispatches &amp; receipts</span>
+                        </div>
+                    </a>
                 </div>
             </li>
 
             <li class="nav-item">
-                <span class="nav-link dropdown-toggle">Admin</span>
+                <span class="nav-link dropdown-toggle">Admin &amp; Ops</span>
                 <div class="dropdown-menu">
                     <% if (user.role !== 'Vendor') { %>
-                        <a href="/equipment">Equipment Scheduler</a>
+                        <a href="/equipment">
+                            <div>
+                                <strong>Equipment Fleet</strong>
+                                <span class="dropdown-item-desc">Heavy machinery maintenance</span>
+                            </div>
+                        </a>
                     <% } %>
-                    <a href="/notices/board">Notice Board</a>
+                    <a href="/notices/board">
+                        <div>
+                            <strong>Notice Board</strong>
+                            <span class="dropdown-item-desc">Company broadcasts &amp; alerts</span>
+                        </div>
+                    </a>
                     <% if (user.role === 'SuperAdmin' || user.role === 'Project Manager') { %>
-                        <a href="/notices">Notice CMS</a>
+                        <a href="/notices">
+                            <div>
+                                <strong>Notice CMS</strong>
+                                <span class="dropdown-item-desc">Publish &amp; manage announcements</span>
+                            </div>
+                        </a>
                     <% } %>
                 </div>
             </li>
 
-            <li><span class="user-badge"><%= user.name %> (<%= user.role %>)</span></li>
-            <li><a href="/logout" class="btn btn-secondary btn-sm">Logout</a></li>
+            <li>
+                <div class="user-badge">
+                    <span><%= user.name %></span>
+                    <span class="user-badge-role"><%= user.role %></span>
+                </div>
+            </li>
+            <li><a href="/logout" class="btn btn-secondary btn-sm" style="color: #0F172A; border-color: rgba(255,255,255,0.3); background: #FFFFFF;">Logout</a></li>
         <% } else { %>
-            <li><a href="/login" class="nav-link">Login</a></li>
-            <li><a href="/register" class="btn btn-primary btn-sm">Register</a></li>
+            <li><a href="/login" class="nav-link">Sign In</a></li>
+            <li><a href="/register" class="btn btn-primary btn-sm">Get Started</a></li>
         <% } %>
     </ul>
 </nav>
 
-<% if (user) { %>
 <script>
-    // Touch-friendly dropdown toggling (desktop still opens on hover via CSS).
-    document.querySelectorAll('.nav-item > .dropdown-toggle').forEach(function (toggle) {
-        toggle.addEventListener('click', function (e) {
-            var item = toggle.closest('.nav-item');
-            var wasOpen = item.classList.contains('open');
-            document.querySelectorAll('.nav-item.open').forEach(function (openItem) {
-                if (openItem !== item) openItem.classList.remove('open');
-            });
-            item.classList.toggle('open', !wasOpen);
+    // Highlight active link matching current path
+    (function () {
+        var currentPath = window.location.pathname;
+        document.querySelectorAll('.nav-links a.nav-link').forEach(function (link) {
+            if (link.getAttribute('href') === currentPath) {
+                link.classList.add('active');
+            }
         });
-    });
-    document.addEventListener('click', function (e) {
-        if (!e.target.closest('.nav-item')) {
-            document.querySelectorAll('.nav-item.open').forEach(function (openItem) {
-                openItem.classList.remove('open');
+
+        // Touch-friendly dropdown toggling
+        document.querySelectorAll('.nav-item > .dropdown-toggle').forEach(function (toggle) {
+            toggle.addEventListener('click', function (e) {
+                var item = toggle.closest('.nav-item');
+                var wasOpen = item.classList.contains('open');
+                document.querySelectorAll('.nav-item.open').forEach(function (openItem) {
+                    if (openItem !== item) openItem.classList.remove('open');
+                });
+                item.classList.toggle('open', !wasOpen);
             });
-        }
-    });
+        });
+
+        document.addEventListener('click', function (e) {
+            if (!e.target.closest('.nav-item')) {
+                document.querySelectorAll('.nav-item.open').forEach(function (openItem) {
+                    openItem.classList.remove('open');
+                });
+            }
+        });
+    })();
 </script>
-<% } %>

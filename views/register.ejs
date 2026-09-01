@@ -10,48 +10,82 @@
 <body>
     <%- include('partials/navbar') %>
 
-    <div class="auth-shell">
-        <div class="auth-art">
-            <img src="/images/auth-illustration.svg" alt="Engineering blueprint illustration">
-        </div>
-        <div class="auth-form-side">
-            <h2 style="margin-bottom: 1.5rem; color: var(--accent-orange);">Account Registration</h2>
+    <div class="auth-split-wrapper">
+        <div class="auth-split-card">
+            <!-- Left Brand Showcase -->
+            <div class="auth-brand-side">
+                <div>
+                    <div style="display: flex; align-items: center; gap: 0.65rem; margin-bottom: 2rem;">
+                        <img src="/images/logo-mark.svg" alt="SmartConstruction Logo" style="width: 38px; height: 38px; border-radius: 9px; box-shadow: 0 4px 12px rgba(37,99,235,0.4);">
+                        <span style="font-family: 'Outfit', sans-serif; font-size: 1.5rem; font-weight: 800; color: #FFFFFF;">SmartConstruction</span>
+                    </div>
+                    <h2 style="color: #FFFFFF; font-size: 2rem; line-height: 1.25; margin-bottom: 1rem;">
+                        Join the Connected Construction Network.
+                    </h2>
+                    <p style="color: #BFDBFE; font-size: 0.98rem; line-height: 1.6;">
+                        Register your site engineering account or join as an authorized materials supplier to submit quotations and fulfill purchase orders.
+                    </p>
+                </div>
 
-            <% if (error) { %>
-                <div class="alert alert-error">
-                    <%= error %>
+                <div>
+                    <img src="/images/auth-illustration.svg" alt="Architecture Blueprint" style="max-height: 180px; margin: 1.5rem 0; opacity: 0.95;">
+                    <div class="auth-brand-quote">
+                        "Seamless collaboration between site offices and material suppliers."
+                    </div>
                 </div>
-            <% } %>
+            </div>
 
-            <form action="/register" method="POST">
-                <div class="form-group">
-                    <label for="name">Full Name</label>
-                    <input type="text" id="name" name="name" required placeholder="e.g. Engr. Tanvir Alam">
+            <!-- Right Form Panel -->
+            <div class="auth-form-side">
+                <div style="margin-bottom: 1.5rem;">
+                    <span style="font-size: 0.78rem; font-weight: 700; color: var(--primary-600); text-transform: uppercase; letter-spacing: 0.05em;">Get Started</span>
+                    <h2 style="font-size: 1.85rem; color: var(--slate-900); margin-top: 0.25rem;">Create Account</h2>
+                    <p style="color: var(--slate-500); font-size: 0.9rem; margin-top: 0.25rem;">Fill in your details to request operational access</p>
                 </div>
-                <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" id="email" name="email" required placeholder="user@company.bd">
+
+                <% if (error) { %>
+                    <div class="alert alert-error">
+                        <span>⚠️</span>
+                        <div><%= error %></div>
+                    </div>
+                <% } %>
+
+                <form action="/register" method="POST">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" name="name" required placeholder="e.g. Engr. Tanvir Alam">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Corporate Email Address</label>
+                        <input type="email" id="email" name="email" required placeholder="user@company.bd">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required placeholder="•••••••• (Min 6 characters)">
+                    </div>
+                    <div class="form-group">
+                        <label for="role">Account Role</label>
+                        <select id="role" name="role">
+                            <option value="Site Engineer">👷 Site Engineer (Field Ops &amp; Daily Reports)</option>
+                            <option value="Vendor">🏢 Vendor / Supplier (Bidding &amp; Deliveries)</option>
+                        </select>
+                        <div class="input-hint">
+                            ℹ️ SuperAdmin and Project Manager accounts are provisioned internally by existing SuperAdmins.
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Contact</label>
+                        <input type="text" id="phone" name="phone" placeholder="+8801700000000">
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.75rem; padding: 0.8rem;">
+                        Register Account &rarr;
+                    </button>
+                </form>
+
+                <div style="margin-top: 1.5rem; text-align: center; font-size: 0.88rem; color: var(--slate-500);">
+                    Already have an account? <a href="/login" style="font-weight: 600; color: var(--primary-600);">Sign In to Workspace</a>
                 </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" required placeholder="••••••••">
-                </div>
-                <div class="form-group">
-                    <label for="role">Account Type</label>
-                    <select id="role" name="role">
-                        <option value="Site Engineer">Site Engineer</option>
-                        <option value="Vendor">Vendor / Supplier</option>
-                    </select>
-                    <small style="color: var(--text-muted); display: block; margin-top: 0.4rem;">
-                        SuperAdmin and Project Manager accounts are provisioned internally by a SuperAdmin.
-                    </small>
-                </div>
-                <div class="form-group">
-                    <label for="phone">Phone Number</label>
-                    <input type="text" id="phone" name="phone" placeholder="+8801700000000">
-                </div>
-                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;">Create Account</button>
-            </form>
+            </div>
         </div>
     </div>
 
