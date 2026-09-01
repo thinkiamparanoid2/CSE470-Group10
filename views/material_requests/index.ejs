@@ -77,18 +77,18 @@
                     <tr><td colspan="8" style="text-align: center;">No material requests found.</td></tr>
                 <% } else { %>
                     <% requests.forEach(r => { %>
-                        <tr style="background: <%= r.priority === 'Emergency' ? 'rgba(255, 107, 107, 0.1)' : 'transparent' %>;">
-                            <td>#<%= r.id %></td>
-                            <td><%= r.project_name %></td>
+                        <tr style="background: <%= r.priority === 'Emergency' ? 'var(--danger-bg)' : 'transparent' %>;">
+                            <td class="table-num">#<%= r.id %></td>
+                            <td><strong><%= r.project_name %></strong></td>
                             <td><%= r.material_name %></td>
-                            <td><%= r.quantity %></td>
+                            <td class="table-num"><%= r.quantity %></td>
                             <td>
-                                <span class="badge badge-<%= r.priority === 'Emergency' ? 'emergency' : (r.priority === 'High' ? 'high' : 'normal') %>">
+                                <span class="status-badge <%= r.priority === 'Emergency' ? 'status-critical' : (r.priority === 'High' ? 'status-warning' : 'status-info') %>">
                                     <%= r.priority %>
                                 </span>
                             </td>
                             <td>
-                                <span class="badge badge-<%= r.status === 'Pending' ? 'pending' : (r.status === 'Approved' ? 'approved' : (r.status === 'Rejected' ? 'emergency' : 'normal')) %>">
+                                <span class="status-badge <%= r.status === 'Pending' ? 'status-warning' : (r.status === 'Approved' ? 'status-good' : (r.status === 'Rejected' ? 'status-critical' : 'status-info')) %>">
                                     <%= r.status %>
                                 </span>
                             </td>
