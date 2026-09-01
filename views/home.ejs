@@ -232,6 +232,13 @@
         }
 
         /* Portfolio Project Cards */
+        .projects-portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3.5rem;
+            align-items: stretch;
+        }
         .project-corporate-card {
             background: #FFFFFF;
             border: 1px solid var(--border-color);
@@ -239,6 +246,9 @@
             overflow: hidden;
             box-shadow: var(--shadow-sm);
             transition: all var(--transition-fast);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
         }
         .project-corporate-card:hover {
             transform: translateY(-3px);
@@ -246,13 +256,50 @@
             border-color: var(--slate-300);
         }
         .project-image-banner {
-            height: 200px;
+            height: 220px;
             width: 100%;
             object-fit: cover;
             border-bottom: 1px solid var(--border-color);
+            display: block;
+            background: var(--slate-100);
         }
         .project-content {
             padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+        .project-title-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 0.75rem;
+            min-height: 3.6rem;
+            margin-bottom: 0.35rem;
+        }
+        .project-title-row h3 {
+            font-size: 1.25rem;
+            line-height: 1.35;
+            margin: 0;
+            font-weight: 700;
+            color: var(--slate-900);
+        }
+        .project-location {
+            color: var(--slate-500);
+            font-size: 0.88rem;
+            margin-bottom: 1.25rem;
+            min-height: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+        .project-footer-row {
+            margin-top: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-light);
         }
 
         .cta-enterprise {
@@ -432,29 +479,31 @@
             <a href="/projects" class="btn btn-secondary btn-sm">View All Projects &rarr;</a>
         </div>
 
-        <div class="grid-2" style="margin-bottom: 3.5rem;">
+        <div class="projects-portfolio-grid">
             <% if (projects && projects.length > 0) { %>
                 <% projects.forEach(p => { %>
                     <%
-                        let coverImg = '/images/project-cover.svg';
+                        let coverImg = '/images/project-commercial.jpg';
                         const pname = (p.name || '').toLowerCase();
+                        const ploc = (p.location || '').toLowerCase();
                         if (pname.includes('dhanmondi')) coverImg = '/images/project-dhanmondi.jpg';
-                        else if (pname.includes('uttara')) coverImg = '/images/project-uttara.jpg';
+                        else if (pname.includes('uttara') || pname.includes('villa')) coverImg = '/images/project-uttara.jpg';
+                        else if (pname.includes('highway') || pname.includes('road') || pname.includes('expressway') || ploc.includes('highway') || ploc.includes('expressway')) coverImg = '/images/project-highway.jpg';
                     %>
                     <div class="project-corporate-card">
-                        <img src="<%= coverImg %>" alt="<%= p.name %>" class="project-image-banner">
+                        <img src="<%= coverImg %>" alt="<%= p.name %> construction site" class="project-image-banner">
                         <div class="project-content">
-                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
-                                <h3 style="font-size: 1.3rem;"><%= p.name %></h3>
+                            <div class="project-title-row">
+                                <h3><%= p.name %></h3>
                                 <span class="status-badge status-good"><%= p.status %></span>
                             </div>
-                            <p style="color: var(--slate-500); font-size: 0.88rem; margin-bottom: 1rem;">📍 <%= p.location %></p>
-                            <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 0.75rem; border-top: 1px solid var(--border-light);">
+                            <p class="project-location">📍 <%= p.location || 'Dhaka, Bangladesh' %></p>
+                            <div class="project-footer-row">
                                 <div>
-                                    <span style="font-size: 0.75rem; color: var(--slate-500); text-transform: uppercase;">Allocated Budget</span>
-                                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; font-weight: 700; color: var(--slate-900);">৳<%= Number(p.budget).toLocaleString() %> BDT</div>
+                                    <span style="font-size: 0.72rem; font-weight: 700; color: var(--slate-500); text-transform: uppercase; letter-spacing: 0.04em;">Allocated Budget</span>
+                                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 1.15rem; font-weight: 700; color: var(--slate-900);">৳<%= Number(p.budget).toLocaleString() %> BDT</div>
                                 </div>
-                                <a href="/projects" class="btn btn-secondary btn-sm">Site Overview</a>
+                                <a href="/projects" class="btn btn-secondary btn-sm" style="font-weight: 600;">Site Overview</a>
                             </div>
                         </div>
                     </div>

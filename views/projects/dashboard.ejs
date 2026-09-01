@@ -25,10 +25,12 @@
             <div style="display: flex; flex-direction: column; gap: 2rem;">
                 <% projects.forEach(project => { %>
                     <%
-                        let thumbImg = '/images/project-cover.svg';
+                        let thumbImg = '/images/project-commercial.jpg';
                         const pname2 = (project.name || '').toLowerCase();
+                        const ploc2 = (project.location || '').toLowerCase();
                         if (pname2.includes('dhanmondi')) thumbImg = '/images/project-dhanmondi.jpg';
-                        else if (pname2.includes('uttara')) thumbImg = '/images/project-uttara.jpg';
+                        else if (pname2.includes('uttara') || pname2.includes('villa')) thumbImg = '/images/project-uttara.jpg';
+                        else if (pname2.includes('highway') || pname2.includes('road') || pname2.includes('expressway') || ploc2.includes('highway') || ploc2.includes('expressway')) thumbImg = '/images/project-highway.jpg';
                     %>
                     <div style="background: #FFFFFF; padding: 1.5rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">
                         <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; margin-bottom: 1rem; gap: 0.75rem 1rem;">
