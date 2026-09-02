@@ -12,7 +12,10 @@
 
     <div class="container" style="max-width: 780px;">
         <div class="card" style="margin-top: 2rem;">
-            <h2 style="margin-bottom: 1.5rem; color: var(--accent-orange);">✏️ Edit Project</h2>
+            <div class="page-header">
+                <h2>Edit Project</h2>
+                <a href="/projects" class="btn btn-secondary btn-sm">Back</a>
+            </div>
 
             <form action="/projects/edit/<%= project.id %>" method="POST">
                 <div class="grid-2">
