@@ -1,5 +1,7 @@
 @echo off
-title MySQL Server (SmartConstruction)
-echo Starting MySQL Server with data at F:\UserRelocatedData\mysql-data...
-"C:\Program Files\MySQL\MySQL Server 8.4\bin\mysqld.exe" --datadir="F:\UserRelocatedData\mysql-data" --console
-pause
+title MySQL Server (SmartConstruction - via XAMPP)
+echo Starting XAMPP's MySQL server...
+echo If this window closes immediately, XAMPP is not installed at C:\xampp
+echo -- open the XAMPP Control Panel and start MySQL from there instead.
+echo.
+call "C:\xampp\mysql_start.bat"
