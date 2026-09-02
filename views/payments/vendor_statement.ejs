@@ -103,7 +103,9 @@
             </div>
             <div style="display: flex; gap: 0.5rem;">
                 <button onclick="window.print()" class="btn btn-secondary">🖨️ Print / Statement PDF</button>
-                <a href="/payments/create?vendor_id=<%= vendor.id %>" class="btn btn-primary">➕ Record Payment</a>
+                <% if (user && (user.role === 'SuperAdmin' || user.role === 'Project Manager')) { %>
+                    <a href="/payments/create?vendor_id=<%= vendor.id %>" class="btn btn-primary">➕ Record Payment</a>
+                <% } %>
                 <a href="/payments" class="btn btn-secondary">&larr; Back to Payments</a>
             </div>
         </div>

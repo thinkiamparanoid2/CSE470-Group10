@@ -11,12 +11,16 @@
 <%- include('../partials/navbar') %>
 
 <div class="container" style="margin-top: 2rem;">
-    <div class="header-flex" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <div class="page-header">
         <div>
-            <h2>🗑️ Material Waste Log</h2>
-            <p style="color: var(--text-muted);">Sprint 3 Feature &bull; Member A</p>
+            <h1 class="page-header-title"><img src="/images/icon-waste.svg" alt="" class="page-header-icon">Material Waste Log</h1>
+            <p class="page-header-subtitle">Scrap tracking and cost variance auditing across construction sites.</p>
         </div>
-        <button class="btn btn-primary" onclick="document.getElementById('wasteModal').style.display='block'">+ Log Waste</button>
+        <% if (user && user.role !== 'Vendor') { %>
+            <div class="header-actions">
+                <button class="btn btn-primary" onclick="document.getElementById('wasteModal').style.display='block'">+ Log Waste</button>
+            </div>
+        <% } %>
     </div>
 
     <!-- Modal for Logging Waste -->

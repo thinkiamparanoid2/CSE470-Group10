@@ -13,11 +13,13 @@
     <div class="container">
         <div class="page-header">
             <div>
-                <h2>📢 Notice Board CMS</h2>
-                <p style="color: var(--text-muted); font-size: 0.9rem;">Sprint 1 Feature • Member D</p>
+                <h1 class="page-header-title"><img src="/images/icon-notices.svg" alt="" class="page-header-icon">Notice Board CMS</h1>
+                <p class="page-header-subtitle">Publish and manage company-wide announcements and alerts.</p>
             </div>
             <% if (user && (user.role === 'SuperAdmin' || user.role === 'Project Manager')) { %>
-                <a href="/notices/create" class="btn btn-primary">+ Create Notice</a>
+                <div class="header-actions">
+                    <a href="/notices/create" class="btn btn-primary">+ Create Notice</a>
+                </div>
             <% } %>
         </div>
 
@@ -46,10 +48,12 @@
                                     <td><strong><%= n.title %></strong></td>
                                     <td><%= n.author || 'System Admin' %></td>
                                     <td>
-                                        <a href="/notices/edit/<%= n.id %>" class="btn btn-secondary" style="padding: 0.2rem 0.5rem; font-size: 0.8rem; margin-right: 0.25rem;">Edit</a>
-                                        <form action="/notices/delete/<%= n.id %>" method="POST" style="display:inline;">
-                                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Delete this notice?');">Delete</button>
-                                        </form>
+                                        <div style="display: flex; gap: 0.4rem;">
+                                            <a href="/notices/edit/<%= n.id %>" class="btn btn-secondary btn-xs">Edit</a>
+                                            <form action="/notices/delete/<%= n.id %>" method="POST">
+                                                <button type="submit" class="btn btn-danger btn-xs" onclick="return confirm('Delete this notice?');">Delete</button>
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
                             <% }) %>

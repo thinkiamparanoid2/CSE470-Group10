@@ -3,7 +3,7 @@
         <div class="footer-col">
             <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.85rem;">
                 <img src="/images/logo-mark.svg" alt="SmartConstruction Logo" style="width: 28px; height: 28px; border-radius: 7px;">
-                <span style="font-family: 'Outfit', sans-serif; font-size: 1.2rem; font-weight: 800; color: #FFFFFF;">SmartConstruction</span>
+                <span style="font-family: 'Space Grotesk', 'Outfit', sans-serif; font-size: 1.2rem; font-weight: 700; letter-spacing: -0.01em; color: #FFFFFF;">SmartConstruction</span>
             </div>
             <p style="color: #94A3B8; font-size: 0.88rem; line-height: 1.6; max-width: 380px;">
                 The next-generation enterprise platform for construction resource planning, real-time material inventory, multi-vendor procurement, and site execution.
@@ -16,11 +16,15 @@
         <div class="footer-col">
             <h4>Platform</h4>
             <ul>
-                <li><a href="/materials">Material Stock</a></li>
-                <li><a href="/projects">Site Projects</a></li>
-                <li><a href="/purchase_orders">Purchase Orders</a></li>
-                <li><a href="/boq">BOQ Generator</a></li>
-                <li><a href="/site-reports">Daily Reports</a></li>
+                <% if (!user || user.role !== 'Vendor') { %>
+                    <li><a href="/materials">Material Stock</a></li>
+                    <li><a href="/projects">Site Projects</a></li>
+                    <li><a href="/purchase_orders">Purchase Orders</a></li>
+                    <li><a href="/boq">BOQ Generator</a></li>
+                    <li><a href="/site-reports">Daily Reports</a></li>
+                <% } else { %>
+                    <li><a href="/deliveries">My Deliveries</a></li>
+                <% } %>
             </ul>
         </div>
 
@@ -29,24 +33,26 @@
             <ul>
                 <li><a href="/payments">Vendor Payments</a></li>
                 <li><a href="/contracts">Legal Contracts</a></li>
-                <li><a href="/equipment">Equipment Fleet</a></li>
-                <li><a href="/labor">Labor Logs</a></li>
+                <% if (!user || user.role !== 'Vendor') { %>
+                    <li><a href="/equipment">Equipment Fleet</a></li>
+                    <li><a href="/labor">Labor Logs</a></li>
+                <% } %>
                 <li><a href="/notices/board">Notice Board</a></li>
             </ul>
         </div>
 
         <div class="footer-col">
-            <h4>Academic Project</h4>
+            <h4>Platform Info</h4>
             <p style="color: #94A3B8; font-size: 0.85rem; line-height: 1.6;">
-                <strong>Course:</strong> CSE470 (Software Engineering)<br>
-                <strong>Team:</strong> Group 10<br>
-                <strong>Architecture:</strong> Strict MVC + Raw MySQL (No ORM)
+                <strong>Version:</strong> 1.0.0<br>
+                <strong>Region:</strong> Dhaka, Bangladesh<br>
+                <strong>Stack:</strong> Node.js, Express &amp; MySQL
             </p>
         </div>
     </div>
 
     <div class="footer-bottom">
         <p>&copy; <%= new Date().getFullYear() %> SmartConstruction BD. All rights reserved.</p>
-        <p style="color: #64748B;">Crafted with Enterprise Precision for CSE470 Software Engineering</p>
+        <p style="color: #64748B;">Built for reliability, security, and scale.</p>
     </div>
 </footer>

@@ -5,7 +5,7 @@ const pool = mysql.createPool({
     host: process.env.DB_HOST || 'localhost',
     user: process.env.DB_USER || 'root',
     password: process.env.DB_PASSWORD || '',
-    database: process.env.DB_NAME || 'smarstruction_db',
+    database: process.env.DB_NAME || 'smartconstruct',
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0
@@ -19,7 +19,7 @@ async function testConnection() {
         connection.release();
     } catch (err) {
         console.error('⚠️ MySQL Connection Warning:', err.message);
-        console.log('👉 Make sure MySQL is running and database "smarstruction_db" is created using database/schema.sql');
+        console.log('👉 Make sure MySQL is running and database "smartconstruct" is created using database/schema.sql');
     }
 }
 

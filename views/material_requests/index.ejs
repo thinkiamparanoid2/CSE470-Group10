@@ -11,12 +11,16 @@
 <%- include('../partials/navbar') %>
 
 <div class="container" style="margin-top: 2rem;">
-    <div class="header-flex" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <div class="page-header">
         <div>
-            <h2>🚨 Emergency Material Requests</h2>
-            <p style="color: var(--text-muted);">Sprint 3 Feature &bull; Member D</p>
+            <h1 class="page-header-title"><img src="/images/icon-material-requests.svg" alt="" class="page-header-icon">Emergency Material Requests</h1>
+            <p class="page-header-subtitle">Priority site material requisitions and fulfillment status.</p>
         </div>
-        <button class="btn btn-primary" onclick="document.getElementById('requestModal').style.display='block'">+ New Request</button>
+        <% if (user && user.role !== 'Vendor') { %>
+            <div class="header-actions">
+                <button class="btn btn-primary" onclick="document.getElementById('requestModal').style.display='block'">+ New Request</button>
+            </div>
+        <% } %>
     </div>
 
     <!-- Modal for New Request -->
@@ -96,18 +100,20 @@
                             <td>
                                 <% if (user.role === 'SuperAdmin' || user.role === 'Project Manager') { %>
                                     <% if (r.status === 'Pending') { %>
-                                        <form action="/material-requests/<%= r.id %>/status" method="POST" style="display:inline;">
-                                            <input type="hidden" name="status" value="Approved">
-                                            <button type="submit" class="btn btn-primary" style="padding: 0.2rem 0.5rem; font-size: 0.8rem;">Approve</button>
-                                        </form>
-                                        <form action="/material-requests/<%= r.id %>/status" method="POST" style="display:inline;">
-                                            <input type="hidden" name="status" value="Rejected">
-                                            <button type="submit" class="btn btn-danger btn-sm">Reject</button>
-                                        </form>
+                                        <div style="display: flex; gap: 0.4rem;">
+                                            <form action="/material-requests/<%= r.id %>/status" method="POST">
+                                                <input type="hidden" name="status" value="Approved">
+                                                <button type="submit" class="btn btn-primary btn-xs">Approve</button>
+                                            </form>
+                                            <form action="/material-requests/<%= r.id %>/status" method="POST">
+                                                <input type="hidden" name="status" value="Rejected">
+                                                <button type="submit" class="btn btn-danger btn-xs">Reject</button>
+                                            </form>
+                                        </div>
                                     <% } else if (r.status === 'Approved') { %>
                                         <form action="/material-requests/<%= r.id %>/status" method="POST" style="display:inline;">
                                             <input type="hidden" name="status" value="Fulfilled">
-                                            <button type="submit" class="btn btn-success btn-sm">Mark Fulfilled</button>
+                                            <button type="submit" class="btn btn-success btn-xs">Mark Fulfilled</button>
                                         </form>
                                     <% } else { %>
                                         <span style="color: var(--text-muted); font-size: 0.8rem;">None</span>

@@ -13,11 +13,13 @@
     <div class="container">
         <div class="page-header">
             <div>
-                <h2>🤝 Vendor Directory & Ratings</h2>
-                <p style="color: var(--text-muted); font-size: 0.9rem;">Sprint 1 Feature • Member B</p>
+                <h1 class="page-header-title"><img src="/images/vendor-building.svg" alt="" class="page-header-icon">Vendor Directory &amp; Ratings</h1>
+                <p class="page-header-subtitle">Verified suppliers, contact details, and performance ratings for procurement.</p>
             </div>
             <% if (user && (user.role === 'SuperAdmin' || user.role === 'Project Manager')) { %>
-                <a href="/vendors/create" class="btn btn-primary">+ Add New Supplier</a>
+                <div class="header-actions">
+                    <a href="/vendors/create" class="btn btn-primary">+ Add New Supplier</a>
+                </div>
             <% } %>
         </div>
 
@@ -54,10 +56,12 @@
                                     <td>⭐ <%= v.rating %> / 5.0</td>
                                     <% if (user && (user.role === 'SuperAdmin' || user.role === 'Project Manager')) { %>
                                         <td>
-                                            <a href="/vendors/edit/<%= v.id %>" class="btn btn-secondary" style="padding: 0.2rem 0.5rem; font-size: 0.8rem; margin-right: 0.25rem;">Edit</a>
-                                            <form action="/vendors/delete/<%= v.id %>" method="POST" style="display:inline;">
-                                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Delete this vendor?');">Delete</button>
-                                            </form>
+                                            <div style="display: flex; gap: 0.4rem;">
+                                                <a href="/vendors/edit/<%= v.id %>" class="btn btn-secondary btn-xs">Edit</a>
+                                                <form action="/vendors/delete/<%= v.id %>" method="POST">
+                                                    <button type="submit" class="btn btn-danger btn-xs" onclick="return confirm('Delete this vendor?');">Delete</button>
+                                                </form>
+                                            </div>
                                         </td>
                                     <% } %>
                                 </tr>

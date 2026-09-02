@@ -1,5 +1,5 @@
 const db = require('../config/db');
-const { isRequired, isPositiveNumber, isValidDate, sanitize } = require('../middleware/validate');
+const { isRequired, isPositiveNumber, isValidDate, sanitize, toDateInputValue } = require('../middleware/validate');
 
 // Equipment Dashboard - Member D
 async function listEquipment(req, res) {
@@ -17,15 +17,28 @@ async function listEquipment(req, res) {
             JOIN equipment e ON ms.equipment_id = e.id
             LEFT JOIN projects p ON e.current_project_id = p.id
             LEFT JOIN users u ON ms.created_by = u.id
-            ORDER BY 
-                CASE ms.status WHEN 'In Progress' THEN 1 WHEN 'Scheduled' THEN 2 WHEN 'Overdue' THEN 3 ELSE 4 END, 
-                ms.scheduled_date ASC
         `);
 
-        res.render('equipment/index', { title: 'Equipment Maintenance Scheduler', equipment, maintenance, user: req.session.user });
+        // "Overdue" is a valid status the UI already knows how to display and sort,
+        // but nothing ever wrote it to the database — a Scheduled task whose date has
+        // passed just sat there looking "Scheduled" forever. Compute it here instead
+        // of persisting it, so it's always accurate without needing a cron job.
+        const todayStr = toDateInputValue();
+        maintenance.forEach(ms => {
+            if (ms.status === 'Scheduled' && toDateInputValue(ms.scheduled_date) < todayStr) {
+                ms.status = 'Overdue';
+            }
+        });
+        const statusRank = { 'In Progress': 1, 'Scheduled': 2, 'Overdue': 3 };
+        maintenance.sort((a, b) => {
+            const rankDiff = (statusRank[a.status] || 4) - (statusRank[b.status] || 4);
+            return rankDiff !== 0 ? rankDiff : new Date(a.scheduled_date) - new Date(b.scheduled_date);
+        });
+
+        res.render('equipment/index', { title: 'Equipment Maintenance Scheduler & Fleet Inventory', equipment, maintenance, user: req.session.user });
     } catch (err) {
         console.error('List Equipment Error:', err);
-        res.render('equipment/index', { title: 'Equipment Maintenance Scheduler', equipment: [], maintenance: [], user: req.session.user, error: 'Could not load equipment inventory.' });
+        res.render('equipment/index', { title: 'Equipment Maintenance Scheduler & Fleet Inventory', equipment: [], maintenance: [], user: req.session.user, error: 'Could not load equipment inventory.' });
     }
 }
 
@@ -75,6 +88,68 @@ async function createEquipment(req, res) {
     } catch (err) {
         console.error('Create Equipment Error:', err);
         res.render('error', { message: 'Database Error: Failed to register equipment asset. Asset code may already exist.' });
+    }
+}
+
+// Show Edit Equipment Form
+async function showEditForm(req, res) {
+    const equipmentId = parseInt(req.params.id, 10);
+    if (isNaN(equipmentId)) {
+        return res.render('error', { message: 'Invalid equipment ID provided.' });
+    }
+
+    try {
+        const [rows] = await db.query('SELECT * FROM equipment WHERE id = ?', [equipmentId]);
+        if (rows.length === 0) {
+            return res.render('error', { message: 'Equipment asset not found.' });
+        }
+        const [projects] = await db.query('SELECT id, name FROM projects ORDER BY name ASC');
+        res.render('equipment/edit', { equipment: rows[0], projects, title: 'Edit Equipment' });
+    } catch (err) {
+        console.error('Show Edit Equipment Error:', err);
+        res.render('error', { message: 'Database Error: Could not retrieve equipment details.' });
+    }
+}
+
+// Update Equipment (Raw SQL with Validation)
+async function updateEquipment(req, res) {
+    const equipmentId = parseInt(req.params.id, 10);
+    if (isNaN(equipmentId)) {
+        return res.render('error', { message: 'Invalid equipment ID provided.' });
+    }
+
+    const name = sanitize(req.body.name);
+    const equipment_code = sanitize(req.body.equipment_code);
+    const category = sanitize(req.body.category) || 'Heavy Machinery';
+    const status = sanitize(req.body.status) || 'Available';
+    const purchase_date = req.body.purchase_date;
+    const projectVal = req.body.current_project_id ? parseInt(req.body.current_project_id, 10) : null;
+
+    const validStatuses = ['Operational', 'Available', 'In Use', 'Under Maintenance', 'Out of Service', 'Decommissioned'];
+
+    // Validation
+    if (!isRequired(name) || name.length < 2) {
+        return res.render('error', { message: 'Validation Error: Equipment name is required.' });
+    }
+    if (!isRequired(equipment_code) || equipment_code.length < 2) {
+        return res.render('error', { message: 'Validation Error: Unique equipment asset code is required (e.g. EXC-001).' });
+    }
+    if (!validStatuses.includes(status)) {
+        return res.render('error', { message: 'Validation Error: Invalid equipment operational status.' });
+    }
+    if (purchase_date && !isValidDate(purchase_date)) {
+        return res.render('error', { message: 'Validation Error: Invalid purchase date format.' });
+    }
+
+    try {
+        await db.query(
+            'UPDATE equipment SET name = ?, equipment_code = ?, category = ?, current_project_id = ?, status = ?, purchase_date = ? WHERE id = ?',
+            [name, equipment_code, category, projectVal && !isNaN(projectVal) ? projectVal : null, status, purchase_date || null, equipmentId]
+        );
+        res.redirect('/equipment');
+    } catch (err) {
+        console.error('Update Equipment Error:', err);
+        res.render('error', { message: 'Database Error: Failed to update equipment asset. Asset code may already be in use.' });
     }
 }
 
@@ -139,7 +214,6 @@ async function scheduleMaintenance(req, res) {
 // Update Maintenance Status (Raw SQL with Transaction & Validation)
 async function updateMaintenanceStatus(req, res) {
     const maintenanceId = parseInt(req.params.id, 10);
-    const equipment_id = parseInt(req.body.equipment_id, 10);
     const { status } = req.body;
     const validStatuses = ['Scheduled', 'In Progress', 'Completed', 'Overdue'];
 
@@ -150,16 +224,26 @@ async function updateMaintenanceStatus(req, res) {
     const connection = await db.getConnection();
     try {
         await connection.beginTransaction();
-        let completedDateSql = status === 'Completed' ? new Date().toISOString().split('T')[0] : null;
+
+        // Look up the real equipment link server-side rather than trusting the
+        // client-submitted equipment_id hidden field — otherwise a tampered request
+        // could flip a completely different equipment asset's status.
+        const [[schedule]] = await connection.query('SELECT equipment_id FROM maintenance_schedules WHERE id = ?', [maintenanceId]);
+        if (!schedule) {
+            await connection.rollback();
+            return res.status(404).render('error', { message: 'Validation Error: Maintenance schedule not found.' });
+        }
+        const equipment_id = schedule.equipment_id;
+
+        let completedDateSql = status === 'Completed' ? toDateInputValue() : null;
         await connection.query('UPDATE maintenance_schedules SET status = ?, completed_date = ? WHERE id = ?', [status, completedDateSql, maintenanceId]);
 
-        if (!isNaN(equipment_id)) {
-            if (status === 'Completed') {
-                await connection.query('UPDATE equipment SET status = ? WHERE id = ?', ['Operational', equipment_id]);
-            } else if (status === 'In Progress') {
-                await connection.query('UPDATE equipment SET status = ? WHERE id = ?', ['Under Maintenance', equipment_id]);
-            }
+        if (status === 'Completed') {
+            await connection.query('UPDATE equipment SET status = ? WHERE id = ?', ['Operational', equipment_id]);
+        } else if (status === 'In Progress') {
+            await connection.query('UPDATE equipment SET status = ? WHERE id = ?', ['Under Maintenance', equipment_id]);
         }
+
         await connection.commit();
         res.redirect('/equipment');
     } catch (err) {
@@ -175,6 +259,8 @@ module.exports = {
     listEquipment,
     showCreateForm,
     createEquipment,
+    showEditForm,
+    updateEquipment,
     showScheduleForm,
     scheduleMaintenance,
     updateMaintenanceStatus

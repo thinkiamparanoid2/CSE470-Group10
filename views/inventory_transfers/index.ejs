@@ -13,11 +13,13 @@
     <div class="container">
         <div class="page-header">
             <div>
-                <h2>🔄 Site-wise Inventory Transfer</h2>
-                <p style="color: var(--text-muted); font-size: 0.9rem;">Sprint 2 Feature • Member A</p>
+                <h1 class="page-header-title"><img src="/images/icon-transfers.svg" alt="" class="page-header-icon">Site-wise Inventory Transfer</h1>
+                <p class="page-header-subtitle">Inter-site material logistics with approval and dispatch tracking.</p>
             </div>
             <% if (user && (user.role === 'SuperAdmin' || user.role === 'Project Manager' || user.role === 'Site Engineer')) { %>
-                <a href="/inventory-transfers/create" class="btn btn-primary">+ Request Transfer</a>
+                <div class="header-actions">
+                    <a href="/inventory-transfers/create" class="btn btn-primary">+ Request Transfer</a>
+                </div>
             <% } %>
         </div>
 
@@ -52,23 +54,25 @@
                                     <td>
                                         <% if (user && (user.role === 'SuperAdmin' || user.role === 'Project Manager')) { %>
                                             <% if (t.status === 'Requested') { %>
-                                                <form action="/inventory-transfers/status/<%= t.id %>" method="POST" style="display:inline;">
-                                                    <input type="hidden" name="status" value="Approved">
-                                                    <button type="submit" class="btn btn-primary" style="padding: 0.2rem 0.5rem; font-size: 0.8rem;">Approve</button>
-                                                </form>
-                                                <form action="/inventory-transfers/status/<%= t.id %>" method="POST" style="display:inline; margin-left: 0.25rem;">
-                                                    <input type="hidden" name="status" value="Rejected">
-                                                    <button type="submit" class="btn btn-danger btn-sm">Reject</button>
-                                                </form>
+                                                <div style="display: flex; gap: 0.4rem;">
+                                                    <form action="/inventory-transfers/status/<%= t.id %>" method="POST">
+                                                        <input type="hidden" name="status" value="Approved">
+                                                        <button type="submit" class="btn btn-primary btn-xs">Approve</button>
+                                                    </form>
+                                                    <form action="/inventory-transfers/status/<%= t.id %>" method="POST">
+                                                        <input type="hidden" name="status" value="Rejected">
+                                                        <button type="submit" class="btn btn-danger btn-xs">Reject</button>
+                                                    </form>
+                                                </div>
                                             <% } else if (t.status === 'Approved') { %>
                                                 <form action="/inventory-transfers/status/<%= t.id %>" method="POST" style="display:inline;">
                                                     <input type="hidden" name="status" value="In Transit">
-                                                    <button type="submit" class="btn btn-secondary" style="padding: 0.2rem 0.5rem; font-size: 0.8rem;">Mark In Transit</button>
+                                                    <button type="submit" class="btn btn-secondary btn-xs">Mark In Transit</button>
                                                 </form>
                                             <% } else if (t.status === 'In Transit') { %>
                                                 <form action="/inventory-transfers/status/<%= t.id %>" method="POST" style="display:inline;">
                                                     <input type="hidden" name="status" value="Completed">
-                                                    <button type="submit" class="btn btn-primary" style="padding: 0.2rem 0.5rem; font-size: 0.8rem;">Complete Transfer</button>
+                                                    <button type="submit" class="btn btn-primary btn-xs">Complete Transfer</button>
                                                 </form>
                                             <% } %>
                                         <% } else { %>

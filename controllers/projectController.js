@@ -5,7 +5,7 @@ const { isRequired, isPositiveNumber, isValidDate, sanitize } = require('../midd
 async function listProjects(req, res) {
     try {
         const [projects] = await db.query('SELECT * FROM projects ORDER BY created_at DESC');
-        res.render('projects/index', { projects, title: 'Project Management' });
+        res.render('projects/index', { projects, title: 'Project Portfolio' });
     } catch (err) {
         console.error('List Projects Error:', err);
         res.render('projects/index', { projects: [], title: 'Project Management', error: 'Failed to retrieve project list.' });
@@ -157,7 +157,7 @@ async function progressDashboard(req, res) {
         });
 
         res.render('projects/dashboard', {
-            title: 'Project Progress Dashboard',
+            title: 'Progress Gantt Dashboard',
             user: req.session.user,
             projects: projects
         });

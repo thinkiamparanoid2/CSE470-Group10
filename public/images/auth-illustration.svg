@@ -1,69 +1,91 @@
-<svg viewBox="0 0 500 700" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Engineering blueprint illustration" preserveAspectRatio="xMidYMid slice">
+<svg viewBox="0 0 460 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Isometric construction skyline illustration">
   <defs>
-    <linearGradient id="authBg" x1="0" y1="0" x2="0" y2="1">
+    <linearGradient id="authBg" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#123B6B"/>
-      <stop offset="1" stop-color="#0A2647"/>
+      <stop offset="1" stop-color="#081D38"/>
     </linearGradient>
-    <pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse">
-      <path d="M 28 0 L 0 0 0 28" fill="none" stroke="#FFFFFF" stroke-opacity="0.06" stroke-width="1"/>
+    <pattern id="grid" width="26" height="26" patternUnits="userSpaceOnUse">
+      <path d="M 26 0 L 0 0 0 26" fill="none" stroke="#FFFFFF" stroke-opacity="0.045" stroke-width="1"/>
     </pattern>
+    <clipPath id="frameClip">
+      <rect width="460" height="200" rx="14"/>
+    </clipPath>
   </defs>
 
-  <rect width="500" height="700" fill="url(#authBg)"/>
-  <rect width="500" height="700" fill="url(#grid)"/>
+  <g clip-path="url(#frameClip)">
+    <rect width="460" height="200" fill="url(#authBg)"/>
+    <rect width="460" height="200" fill="url(#grid)"/>
 
-  <circle cx="410" cy="120" r="150" fill="#F2A93B" opacity="0.08"/>
+    <circle cx="55" cy="35" r="95" fill="#F2A93B" opacity="0.07"/>
+    <circle cx="420" cy="40" r="110" fill="#3B82F6" opacity="0.14"/>
 
-  <!-- blueprint building outline -->
-  <g stroke="#7FB2E8" stroke-width="2" fill="none" opacity="0.85">
-    <rect x="140" y="260" width="220" height="330"/>
-    <line x1="140" y1="310" x2="360" y2="310"/>
-    <line x1="140" y1="360" x2="360" y2="360"/>
-    <line x1="140" y1="410" x2="360" y2="410"/>
-    <line x1="140" y1="460" x2="360" y2="460"/>
-    <line x1="140" y1="510" x2="360" y2="510"/>
-    <line x1="140" y1="560" x2="360" y2="560"/>
-    <line x1="190" y1="260" x2="190" y2="590"/>
-    <line x1="250" y1="260" x2="250" y2="590"/>
-    <line x1="310" y1="260" x2="310" y2="590"/>
-  </g>
-  <g fill="#F2A93B" opacity="0.9">
-    <rect x="158" y="278" width="16" height="16"/>
-    <rect x="206" y="278" width="16" height="16"/>
-    <rect x="266" y="278" width="16" height="16"/>
-    <rect x="326" y="278" width="16" height="16"/>
-  </g>
+    <!-- ground shadow -->
+    <ellipse cx="205" cy="181" rx="175" ry="9" fill="#020B18" opacity="0.35"/>
 
-  <!-- crane beside building -->
-  <g stroke="#EAF3FC" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none">
-    <path d="M395 590 L395 150"/>
-    <path d="M395 150 L235 150"/>
-    <path d="M395 190 L365 240"/>
-    <path d="M395 190 L425 240"/>
-  </g>
-  <path d="M245 150 L245 210" stroke="#F2A93B" stroke-width="3" stroke-linecap="round"/>
-  <rect x="240.5" y="208" width="9" height="9" rx="1.5" fill="#F2A93B"/>
+    <!-- distant background block -->
+    <g opacity="0.55">
+      <polygon points="310,120 328,110 310,100 292,110" fill="#7FAEDD"/>
+      <polygon points="310,168 292,158 292,110 310,120" fill="#3D6C9C"/>
+      <polygon points="310,168 328,158 328,110 310,120" fill="#234B78"/>
+    </g>
 
-  <!-- dimension line + label, blueprint styling -->
-  <g stroke="#7FB2E8" stroke-width="1.4" opacity="0.7">
-    <line x1="140" y1="610" x2="360" y2="610"/>
-    <line x1="140" y1="602" x2="140" y2="618"/>
-    <line x1="360" y1="602" x2="360" y2="618"/>
-  </g>
-  <text x="250" y="636" fill="#9FC3EE" font-family="Arial, sans-serif" font-size="13" text-anchor="middle" letter-spacing="2">SITE PLAN — TOWER A</text>
+    <!-- building A (short) -->
+    <polygon points="104,123 124,112 104,101 84,112" fill="#A9D2F5"/>
+    <polygon points="104,178 84,167 84,112 104,123" fill="#4A7FB5"/>
+    <polygon points="104,178 124,167 124,112 104,123" fill="#234B78"/>
 
-  <!-- compass mark -->
-  <g transform="translate(70,90)" stroke="#7FB2E8" stroke-width="1.5" fill="none" opacity="0.8">
-    <circle r="26"/>
-    <line x1="0" y1="-26" x2="0" y2="26"/>
-    <line x1="-26" y1="0" x2="26" y2="0"/>
-  </g>
-  <text x="70" y="58" fill="#9FC3EE" font-family="Arial, sans-serif" font-size="12" text-anchor="middle">N</text>
+    <!-- building B (medium) -->
+    <polygon points="160,93 184,80 160,67 136,80" fill="#B9D9F7"/>
+    <polygon points="160,178 136,165 136,80 160,93" fill="#4A7FB5"/>
+    <polygon points="160,178 184,165 184,80 160,93" fill="#234B78"/>
+    <g fill="#DCEBFB" opacity="0.4">
+      <rect x="149" y="146" width="6" height="8"/>
+      <rect x="149" y="126" width="6" height="8"/>
+      <rect x="149" y="106" width="6" height="8"/>
+    </g>
+    <g fill="#F2A93B" opacity="0.85">
+      <rect x="165" y="148" width="6" height="8"/>
+      <rect x="165" y="127" width="6" height="8"/>
+      <rect x="165" y="105" width="6" height="8"/>
+    </g>
 
-  <!-- floating dots -->
-  <g fill="#F2A93B" opacity="0.6">
-    <circle cx="440" cy="330" r="3"/>
-    <circle cx="80" cy="480" r="3"/>
-    <circle cx="120" cy="200" r="2.5"/>
+    <!-- building C (hero tower) -->
+    <polygon points="222,50 252,34 222,18 192,34" fill="#C4E0FB"/>
+    <polygon points="222,178 192,162 192,34 222,50" fill="#5583B8"/>
+    <polygon points="222,178 252,162 252,34 222,50" fill="#20486F"/>
+    <g fill="#DCEBFB" opacity="0.35">
+      <rect x="203" y="150" width="6" height="8"/>
+      <rect x="203" y="130" width="6" height="8"/>
+      <rect x="203" y="110" width="6" height="8"/>
+      <rect x="203" y="90" width="6" height="8"/>
+      <rect x="203" y="70" width="6" height="8"/>
+    </g>
+    <g fill="#F2A93B" opacity="0.9">
+      <rect x="228" y="150" width="6" height="8"/>
+      <rect x="228" y="129" width="6" height="8"/>
+      <rect x="228" y="108" width="6" height="8"/>
+      <rect x="228" y="87" width="6" height="8"/>
+      <rect x="228" y="66" width="6" height="8"/>
+    </g>
+
+    <!-- tower crane -->
+    <g stroke="#EAF3FC" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none">
+      <path d="M272 179 L272 15"/>
+      <path d="M272 15 L410 15"/>
+      <path d="M272 15 L250 15"/>
+      <path d="M272 2 L410 15"/>
+      <path d="M272 2 L250 15"/>
+      <path d="M272 2 L272 15"/>
+      <path d="M350 15 L350 52"/>
+    </g>
+    <rect x="238" y="10" width="15" height="9" rx="1.5" fill="#8FB9E6"/>
+    <rect x="345.5" y="51" width="9" height="9" rx="1.5" fill="#F2A93B"/>
+
+    <!-- floating accent dots -->
+    <g fill="#F2A93B" opacity="0.55">
+      <circle cx="60" cy="150" r="2.4"/>
+      <circle cx="435" cy="150" r="2.4"/>
+      <circle cx="70" cy="60" r="2"/>
+    </g>
   </g>
 </svg>

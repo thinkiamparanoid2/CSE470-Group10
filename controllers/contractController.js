@@ -64,7 +64,7 @@ async function listContracts(req, res) {
         }
 
         res.render('contracts/index', {
-            title: 'Vendor Contracts',
+            title: 'Vendor Contract Documents',
             user: req.session.user,
             contracts, vendors,
             error: null

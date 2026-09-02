@@ -11,10 +11,10 @@ async function listLaborLogs(req, res) {
             LEFT JOIN users u ON ll.created_by = u.id
             ORDER BY ll.log_date DESC, ll.created_at DESC
         `);
-        res.render('labor/index', { laborLogs, title: 'Labor Attendance & Cost' });
+        res.render('labor/index', { laborLogs, title: 'Labor Attendance & Cost Log' });
     } catch (err) {
         console.error('List Labor Logs Error:', err);
-        res.render('labor/index', { laborLogs: [], title: 'Labor Attendance & Cost', error: 'Failed to load labor logs.' });
+        res.render('labor/index', { laborLogs: [], title: 'Labor Attendance & Cost Log', error: 'Failed to load labor logs.' });
     }
 }
 

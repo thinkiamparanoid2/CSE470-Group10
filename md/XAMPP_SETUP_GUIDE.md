@@ -34,8 +34,8 @@ PORT=3000
 DB_HOST=localhost
 DB_USER=root
 DB_PASSWORD=
-DB_NAME=smarstruction_db
-SESSION_SECRET=smarstruction_secret_key_cse470
+DB_NAME=smartconstruct
+SESSION_SECRET=smartconstruct_secret_key_cse470
 ```
 
 > **Note:** In XAMPP, the default MySQL user is `root` with **no password** (blank). If the user configured a custom MySQL root password in XAMPP, set `DB_PASSWORD=their_password`.
@@ -47,8 +47,8 @@ PORT=3000
 DB_HOST=localhost
 DB_USER=root
 DB_PASSWORD=
-DB_NAME=smarstruction_db
-SESSION_SECRET=smarstruction_secret_key_cse470
+DB_NAME=smartconstruct
+SESSION_SECRET=smartconstruct_secret_key_cse470
 "@
 ```
 
@@ -56,7 +56,7 @@ SESSION_SECRET=smarstruction_secret_key_cse470
 
 ### Step 3: Import Database Schema & Seed Data
 
-Import the `database/schema.sql` file into XAMPP MySQL. This will create the `smarstruction_db` database, 21 relational tables, and seed accounts with bcrypt-hashed passwords.
+Import the `database/schema.sql` file into XAMPP MySQL. This will create the `smartconstruct` database, 21 relational tables, and seed accounts with bcrypt-hashed passwords.
 
 - **Option A (Using phpMyAdmin GUI):**
   1. Open browser at: **http://localhost/phpmyadmin**

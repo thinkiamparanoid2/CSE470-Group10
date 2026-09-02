@@ -178,6 +178,82 @@
             </div>
         </div>
 
+        <div class="card" style="margin-bottom: 1.5rem;">
+            <h3 style="margin-bottom: 0.8rem;">📦 Emergency Material Request Log</h3>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: -0.4rem; margin-bottom: 0.8rem;">Only <strong>Approved</strong> and <strong>Fulfilled</strong> requests count toward the expenditure total above — Pending and Rejected requests are shown for visibility only.</p>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 15%;">Requested</th>
+                            <th style="width: 25%;">Material</th>
+                            <th style="width: 12%;">Quantity</th>
+                            <th style="width: 15%; text-align: right;">Est. Cost (৳)</th>
+                            <th style="width: 15%;">Status</th>
+                            <th style="width: 18%;">Priority</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (matRequests && matRequests.length > 0) { %>
+                            <% matRequests.forEach(r => { %>
+                                <% const counted = r.status === 'Approved' || r.status === 'Fulfilled'; %>
+                                <tr style="<%= counted ? '' : 'opacity: 0.55;' %>">
+                                    <td><%= new Date(r.created_at).toLocaleDateString('en-GB') %></td>
+                                    <td><strong><%= r.material_name %></strong></td>
+                                    <td><%= r.quantity %> <%= r.unit %></td>
+                                    <td style="text-align: right; font-weight: 600; color: <%= counted ? 'var(--accent-green)' : 'var(--text-muted)' %>;">৳<%= parseFloat(r.est_cost || 0).toLocaleString(undefined, {minimumFractionDigits: 2}) %></td>
+                                    <td>
+                                        <span class="status-badge <%= r.status === 'Fulfilled' || r.status === 'Approved' ? 'status-good' : (r.status === 'Rejected' ? 'status-lowstock' : 'status-ongoing') %>"><%= r.status %></span>
+                                    </td>
+                                    <td><%= r.priority %></td>
+                                </tr>
+                            <% }) %>
+                        <% } else { %>
+                            <tr><td colspan="6" style="text-align: center; padding: 1.5rem;">No emergency material requests raised for this project.</td></tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card" style="margin-bottom: 1.5rem;">
+            <h3 style="margin-bottom: 0.8rem;">🔄 Site Transfers Received</h3>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: -0.4rem; margin-bottom: 0.8rem;">Only <strong>Completed</strong> transfers count toward the expenditure total above.</p>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 15%;">Date</th>
+                            <th style="width: 22%;">Material</th>
+                            <th style="width: 12%;">Quantity</th>
+                            <th style="width: 15%; text-align: right;">Est. Cost (৳)</th>
+                            <th style="width: 18%;">From Site</th>
+                            <th style="width: 18%;">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (transfersIn && transfersIn.length > 0) { %>
+                            <% transfersIn.forEach(t => { %>
+                                <% const counted = t.status === 'Completed'; %>
+                                <tr style="<%= counted ? '' : 'opacity: 0.55;' %>">
+                                    <td><%= new Date(t.created_at).toLocaleDateString('en-GB') %></td>
+                                    <td><strong><%= t.material_name %></strong></td>
+                                    <td><%= t.quantity %> <%= t.unit %></td>
+                                    <td style="text-align: right; font-weight: 600; color: <%= counted ? 'var(--accent-green)' : 'var(--text-muted)' %>;">৳<%= parseFloat(t.est_cost || 0).toLocaleString(undefined, {minimumFractionDigits: 2}) %></td>
+                                    <td><%= t.from_project_name %></td>
+                                    <td>
+                                        <span class="status-badge <%= t.status === 'Completed' ? 'status-good' : (t.status === 'Rejected' ? 'status-lowstock' : 'status-ongoing') %>"><%= t.status %></span>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        <% } else { %>
+                            <tr><td colspan="6" style="text-align: center; padding: 1.5rem;">No inter-site material transfers received for this project.</td></tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
         <div class="card">
             <h3 style="margin-bottom: 0.8rem;">🗑️ Material Waste & Efficiency Valuation Log</h3>
             <div class="table-responsive">

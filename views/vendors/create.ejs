@@ -10,31 +10,35 @@
 <body>
     <%- include('../partials/navbar') %>
 
-    <div class="container" style="max-width: 550px;">
+    <div class="container" style="max-width: 780px;">
         <div class="card" style="margin-top: 2rem;">
-            <h2>Register Material Vendor/Supplier</h2>
-            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">Member B • Vendor Directory Setup</p>
+            <h2 class="page-header-title" style="margin-bottom: 0.35rem;"><img src="/images/vendor-building.svg" alt="" class="page-header-icon" style="width: 30px; height: 30px;">Register Material Vendor/Supplier</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">Add a new supplier to the verified vendor directory.</p>
 
             <form action="/vendors/create" method="POST">
                 <div class="form-group">
                     <label for="company_name">Company Name</label>
                     <input type="text" id="company_name" name="company_name" required placeholder="e.g. BSRM Steels Bangladesh">
                 </div>
-                <div class="form-group">
-                    <label for="contact_person">Contact Representative</label>
-                    <input type="text" id="contact_person" name="contact_person" placeholder="Mr. Tanvir Alam">
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label for="contact_person">Contact Representative</label>
+                        <input type="text" id="contact_person" name="contact_person" placeholder="Mr. Tanvir Alam">
+                    </div>
+                    <div class="form-group">
+                        <label for="material_category">Material Category Provided</label>
+                        <input type="text" id="material_category" name="material_category" placeholder="Steel/Rod, Cement, Bricks, Tiles">
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="material_category">Material Category Provided</label>
-                    <input type="text" id="material_category" name="material_category" placeholder="Steel/Rod, Cement, Bricks, Tiles">
-                </div>
-                <div class="form-group">
-                    <label for="phone">Phone Number</label>
-                    <input type="text" id="phone" name="phone" required placeholder="+8801700000000">
-                </div>
-                <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" id="email" name="email" placeholder="sales@vendor.bd">
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="text" id="phone" name="phone" required placeholder="+8801700000000">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" placeholder="sales@vendor.bd">
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="address">Office / Yard Address</label>
@@ -44,7 +48,19 @@
                     <label for="rating">Initial Rating (1.0 to 5.0)</label>
                     <input type="number" step="0.1" min="1.0" max="5.0" id="rating" name="rating" value="5.0">
                 </div>
-                <button type="submit" class="btn btn-primary" style="width: 100%;">Save Vendor Record</button>
+                <div class="form-group">
+                    <label for="user_id">Link Vendor Login Account (Optional)</label>
+                    <select id="user_id" name="user_id">
+                        <option value="">-- No Login Account (Manual Entry Only) --</option>
+                        <% (unlinkedUsers || []).forEach(u => { %>
+                            <option value="<%= u.id %>"><%= u.name %> (<%= u.email %>)</option>
+                        <% }) %>
+                    </select>
+                    <div class="input-hint">
+                        ℹ️ Linking a self-registered Vendor account lets that user log in and see their own POs, deliveries, payments, and contracts here.
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Save Vendor Record</button>
             </form>
         </div>
     </div>

@@ -16,10 +16,10 @@ async function listTransfers(req, res) {
             LEFT JOIN users u ON it.created_by = u.id
             ORDER BY it.created_at DESC
         `);
-        res.render('inventory_transfers/index', { transfers, title: 'Inventory Transfers' });
+        res.render('inventory_transfers/index', { transfers, title: 'Site-wise Inventory Transfer' });
     } catch (err) {
         console.error('List Transfers Error:', err);
-        res.render('inventory_transfers/index', { transfers: [], title: 'Inventory Transfers', error: 'Failed to load transfer records.' });
+        res.render('inventory_transfers/index', { transfers: [], title: 'Site-wise Inventory Transfer', error: 'Failed to load transfer records.' });
     }
 }
 

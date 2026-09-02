@@ -23,7 +23,7 @@ async function listRequests(req, res) {
         const [materials] = await db.query('SELECT id, name FROM materials ORDER BY name ASC');
 
         res.render('material_requests/index', {
-            title: 'Material Requests',
+            title: 'Emergency Material Requests',
             user: req.session.user,
             requests, projects, materials,
             error: null
@@ -76,12 +76,38 @@ async function updateStatus(req, res) {
         return res.render('error', { message: 'Validation Error: Invalid request record or status update.' });
     }
 
+    const connection = await db.getConnection();
     try {
-        await db.query('UPDATE material_requests SET status = ? WHERE id = ?', [status, requestId]);
+        await connection.beginTransaction();
+
+        const [[existing]] = await connection.query(
+            'SELECT status, material_id, quantity FROM material_requests WHERE id = ?', [requestId]
+        );
+        if (!existing) {
+            await connection.rollback();
+            return res.status(404).render('error', { message: 'Validation Error: Material request not found.' });
+        }
+
+        await connection.query('UPDATE material_requests SET status = ? WHERE id = ?', [status, requestId]);
+
+        // Only deduct stock the moment the request transitions INTO Fulfilled — guards
+        // against double-deducting if this endpoint is ever called again on an
+        // already-fulfilled request.
+        if (status === 'Fulfilled' && existing.status !== 'Fulfilled') {
+            await connection.query(
+                'UPDATE materials SET current_stock = current_stock - ? WHERE id = ?',
+                [existing.quantity, existing.material_id]
+            );
+        }
+
+        await connection.commit();
         res.redirect('/material-requests');
     } catch (err) {
+        await connection.rollback();
         console.error('Update Request Status Error:', err);
         res.render('error', { message: 'Database Error: Could not update material request status.' });
+    } finally {
+        connection.release();
     }
 }
 

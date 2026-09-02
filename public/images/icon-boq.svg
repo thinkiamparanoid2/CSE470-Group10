@@ -1,0 +1,7 @@
+<svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Bill of quantities icon">
+  <circle cx="20" cy="20" r="20" fill="#E7F0FA"/>
+  <rect x="12" y="9" width="16" height="22" rx="1.5" fill="none" stroke="#14508C" stroke-width="2"/>
+  <path d="M12 15.5 L28 15.5 M12 21 L28 21 M12 26.5 L28 26.5" stroke="#14508C" stroke-width="1.4"/>
+  <path d="M17 9 L17 31 M23 9 L23 31" stroke="#14508C" stroke-width="1.4"/>
+  <rect x="12" y="9" width="16" height="6.5" fill="#C2660D" opacity="0.85"/>
+</svg>

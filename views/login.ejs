@@ -17,7 +17,7 @@
                 <div>
                     <div style="display: flex; align-items: center; gap: 0.65rem; margin-bottom: 2rem;">
                         <img src="/images/logo-mark.svg" alt="SmartConstruction Logo" style="width: 38px; height: 38px; border-radius: 9px; box-shadow: 0 4px 12px rgba(37,99,235,0.4);">
-                        <span style="font-family: 'Outfit', sans-serif; font-size: 1.5rem; font-weight: 800; color: #FFFFFF;">SmartConstruction</span>
+                        <span style="font-family: 'Space Grotesk', 'Outfit', sans-serif; font-size: 1.5rem; font-weight: 700; letter-spacing: -0.01em; color: #FFFFFF;">SmartConstruction</span>
                     </div>
                     <h2 style="color: #FFFFFF; font-size: 2rem; line-height: 1.25; margin-bottom: 1rem;">
                         The Operating System for Enterprise Infrastructure.
@@ -28,7 +28,7 @@
                 </div>
 
                 <div>
-                    <img src="/images/auth-illustration.svg" alt="Architecture Blueprint" style="max-height: 180px; margin: 1.5rem 0; opacity: 0.95;">
+                    <img src="/images/auth-illustration.svg" alt="Architecture Blueprint" style="width: 100%; height: auto; display: block; margin: 1.5rem 0; opacity: 0.95; border-radius: 14px; box-shadow: 0 10px 30px rgba(0,0,0,0.25);">
                     <div class="auth-brand-quote">
                         "Precision in material procurement and real-time site logging across all projects."
                     </div>
@@ -50,7 +50,7 @@
                     </div>
                 <% } %>
 
-                <form action="/login" method="POST" id="mainLoginForm">
+                <form action="/login" method="POST">
                     <div class="form-group">
                         <label for="email">Work Email</label>
                         <input type="email" id="email" name="email" required placeholder="e.g. admin@smartconstruction.bd">
@@ -61,31 +61,10 @@
                         </div>
                         <input type="password" id="password" name="password" required placeholder="••••••••">
                     </div>
-                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.75rem; padding: 0.8rem;">
+                    <button type="submit" class="btn btn-primary btn-lg btn-block" style="margin-top: 0.75rem;">
                         Sign In &rarr;
                     </button>
                 </form>
-
-                <!-- Instant 1-Click Role Switcher for Evaluators & Demo -->
-                <div class="auth-role-switcher">
-                    <div style="font-size: 0.76rem; font-weight: 700; color: var(--slate-600); text-transform: uppercase; letter-spacing: 0.04em;">
-                        ⚡ 1-Click Demo Login (Pre-seeded Accounts)
-                    </div>
-                    <div class="role-pills-grid">
-                        <button type="button" class="role-pill-btn" onclick="fillAndLogin('admin@smartconstruction.bd', 'admin123')">
-                            👑 <strong>SuperAdmin</strong>
-                        </button>
-                        <button type="button" class="role-pill-btn" onclick="fillAndLogin('pm@smartconstruction.bd', 'admin123')">
-                            📊 <strong>Project Mgr</strong>
-                        </button>
-                        <button type="button" class="role-pill-btn" onclick="fillAndLogin('engineer@smartconstruction.bd', 'admin123')">
-                            👷 <strong>Site Engineer</strong>
-                        </button>
-                        <button type="button" class="role-pill-btn" onclick="fillAndLogin('vendor@bsrm.bd', 'admin123')">
-                            🏢 <strong>Vendor (BSRM)</strong>
-                        </button>
-                    </div>
-                </div>
 
                 <div style="margin-top: 1.5rem; text-align: center; font-size: 0.88rem; color: var(--slate-500);">
                     New contractor or engineer? <a href="/register" style="font-weight: 600; color: var(--primary-600);">Register an Account</a>
@@ -93,14 +72,6 @@
             </div>
         </div>
     </div>
-
-    <script>
-        function fillAndLogin(email, password) {
-            document.getElementById('email').value = email;
-            document.getElementById('password').value = password;
-            document.getElementById('mainLoginForm').submit();
-        }
-    </script>
 
     <%- include('partials/footer') %>
 </body>

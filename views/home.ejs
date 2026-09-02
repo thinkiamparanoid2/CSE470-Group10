@@ -8,7 +8,8 @@
     <link rel="stylesheet" href="/css/style.css">
     <style>
         .enterprise-hero {
-            background: linear-gradient(135deg, #0C2140 0%, #164080 50%, #0F172A 100%);
+            background:
+                linear-gradient(135deg, #0C2140 0%, #164080 50%, #0F172A 100%);
             border-radius: var(--radius-xl);
             padding: 4rem 3.5rem;
             color: #FFFFFF;
@@ -17,10 +18,27 @@
             border: 1px solid rgba(255, 255, 255, 0.12);
             box-shadow: var(--shadow-xl);
             display: grid;
-            grid-template-columns: 1.2fr 0.8fr;
+            grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
             gap: 2.5rem;
             align-items: center;
             margin-bottom: 2.5rem;
+        }
+        .enterprise-hero > * {
+            min-width: 0;
+            position: relative;
+        }
+        /* Faint blueprint grid — a quiet nod to construction drafting, felt more
+           than seen, sitting under the glow layers so it never competes with them. */
+        .enterprise-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 42px 42px;
+            mask-image: radial-gradient(ellipse 90% 90% at 30% 40%, #000 40%, transparent 85%);
+            pointer-events: none;
         }
         .enterprise-hero::after {
             content: '';
@@ -33,25 +51,20 @@
             border-radius: 50%;
             pointer-events: none;
         }
-        .hero-badge-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: rgba(37, 99, 235, 0.25);
-            border: 1px solid rgba(147, 197, 253, 0.3);
-            color: #93C5FD;
-            font-size: 0.8rem;
-            font-weight: 700;
-            padding: 0.3rem 0.85rem;
-            border-radius: var(--radius-pill);
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-            margin-bottom: 1.25rem;
+        .hero-glow-accent {
+            position: absolute;
+            bottom: -140px;
+            left: -80px;
+            width: 380px;
+            height: 380px;
+            background: radial-gradient(circle, var(--brand-orange-glow) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
         }
         .hero-headline {
-            font-family: 'Outfit', sans-serif;
+            font-family: 'Space Grotesk', 'Outfit', sans-serif;
             font-size: 3rem;
-            font-weight: 800;
+            font-weight: 700;
             line-height: 1.15;
             letter-spacing: -0.02em;
             color: #FFFFFF;
@@ -66,50 +79,41 @@
             font-size: 1.1rem;
             color: #CBD5E1;
             line-height: 1.6;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             max-width: 580px;
+        }
+        .hero-checklist {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .hero-checklist span {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: #E2E8F0;
+        }
+        .hero-checklist span::before {
+            content: '✓';
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--brand-orange);
+            color: #FFFFFF;
+            font-size: 0.68rem;
+            font-weight: 800;
+            flex-shrink: 0;
         }
         .hero-actions {
             display: flex;
             gap: 1rem;
             flex-wrap: wrap;
-        }
-        .hero-demo-bar {
-            margin-top: 2rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.12);
-        }
-        .hero-demo-label {
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: #94A3B8;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 0.6rem;
-        }
-        .hero-demo-btns {
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-        }
-        .demo-btn {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            color: #FFFFFF;
-            font-size: 0.8rem;
-            font-weight: 600;
-            padding: 0.35rem 0.75rem;
-            border-radius: var(--radius-pill);
-            cursor: pointer;
-            transition: all var(--transition-fast);
-            display: inline-flex;
-            align-items: center;
-            gap: 0.35rem;
-        }
-        .demo-btn:hover {
-            background: var(--primary-500);
-            border-color: var(--primary-400);
-            transform: translateY(-1px);
         }
         .hero-art-box {
             display: flex;
@@ -129,10 +133,22 @@
             gap: 1.5rem;
             background: #FFFFFF;
             border: 1px solid var(--border-color);
+            border-top: none;
             border-radius: var(--radius-lg);
             padding: 2rem 2.5rem;
             box-shadow: var(--shadow-sm);
             margin-bottom: 3.5rem;
+            position: relative;
+        }
+        .stats-ribbon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+            background: linear-gradient(90deg, var(--primary-600) 0%, var(--brand-orange) 100%);
         }
         .ribbon-item {
             display: flex;
@@ -167,6 +183,8 @@
             margin: 0 auto 2.5rem;
         }
         .features-section-header h2 {
+            font-family: 'Space Grotesk', 'Outfit', sans-serif;
+            font-weight: 700;
             font-size: 2.2rem;
             color: var(--slate-900);
             margin-bottom: 0.75rem;
@@ -178,7 +196,7 @@
 
         .feature-grid-corporate {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
             gap: 1.5rem;
             margin-bottom: 3.5rem;
         }
@@ -190,11 +208,27 @@
             box-shadow: var(--shadow-sm);
             transition: all var(--transition-fast);
             position: relative;
+            overflow: hidden;
+        }
+        .feature-card-corporate::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-600), var(--brand-orange));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform var(--transition-fast);
         }
         .feature-card-corporate:hover {
             transform: translateY(-4px);
             box-shadow: var(--shadow-lg);
             border-color: var(--primary-300);
+        }
+        .feature-card-corporate:hover::before {
+            transform: scaleX(1);
         }
         .feature-icon-wrapper {
             width: 48px;
@@ -234,7 +268,7 @@
         /* Portfolio Project Cards */
         .projects-portfolio-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
             gap: 1.5rem;
             margin-bottom: 3.5rem;
             align-items: stretch;
@@ -313,6 +347,8 @@
             margin: 3rem 0;
         }
         .cta-enterprise h2 {
+            font-family: 'Space Grotesk', 'Outfit', sans-serif;
+            font-weight: 700;
             font-size: 2.2rem;
             color: #FFFFFF;
             margin-bottom: 0.75rem;
@@ -357,6 +393,14 @@
             .hero-headline {
                 font-size: 2.2rem;
             }
+            .hero-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .hero-actions .btn {
+                white-space: normal;
+                text-align: center;
+            }
         }
     </style>
 </head>
@@ -366,38 +410,22 @@
     <div class="container">
         <!-- Enterprise Hero Section -->
         <div class="enterprise-hero">
+            <div class="hero-glow-accent"></div>
             <div>
-                <div class="hero-badge-pill">
-                    <span>⚡ Enterprise Construction OS</span>
-                </div>
                 <h1 class="hero-headline">
                     Intelligent Construction Management <span>Across Bangladesh</span>
                 </h1>
                 <p class="hero-subtitle">
                     Streamlining material inventory, multi-vendor procurement, project Gantt milestones, and site compliance in one unified corporate platform.
                 </p>
-                <div class="hero-actions">
-                    <a href="/login" class="btn btn-primary btn-lg">Access Platform Dashboard</a>
-                    <a href="#projects" class="btn btn-secondary btn-lg" style="color: #FFFFFF; background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.25);">Explore Active Sites</a>
+                <div class="hero-checklist">
+                    <span>Real-time inventory</span>
+                    <span>Multi-vendor bidding</span>
+                    <span>Site compliance logs</span>
                 </div>
-
-                <!-- Instant 1-Click Role Switcher for Evaluators -->
-                <div class="hero-demo-bar">
-                    <div class="hero-demo-label">⚡ Instant 1-Click Demo Launcher:</div>
-                    <div class="hero-demo-btns">
-                        <button type="button" class="demo-btn" onclick="quickLogin('admin@smartconstruction.bd', 'admin123')">
-                            👑 SuperAdmin
-                        </button>
-                        <button type="button" class="demo-btn" onclick="quickLogin('pm@smartconstruction.bd', 'admin123')">
-                            📊 Project Manager
-                        </button>
-                        <button type="button" class="demo-btn" onclick="quickLogin('engineer@smartconstruction.bd', 'admin123')">
-                            👷 Site Engineer
-                        </button>
-                        <button type="button" class="demo-btn" onclick="quickLogin('vendor@bsrm.bd', 'admin123')">
-                            🏢 Vendor
-                        </button>
-                    </div>
+                <div class="hero-actions">
+                    <a href="/login" class="btn btn-brand btn-lg">Access Platform Dashboard</a>
+                    <a href="#projects" class="btn btn-secondary btn-on-dark btn-lg">Explore Active Sites</a>
                 </div>
             </div>
             <div class="hero-art-box">
@@ -420,15 +448,15 @@
                 <div class="ribbon-label">Materials &amp; BOQ Categories</div>
             </div>
             <div class="ribbon-item">
-                <div class="ribbon-value">100%</div>
-                <div class="ribbon-label">Raw SQL MVC Architecture</div>
+                <div class="ribbon-value" style="color: var(--brand-orange);">100%</div>
+                <div class="ribbon-label">Platform Uptime &amp; Reliability</div>
             </div>
         </div>
 
         <!-- Corporate Features Showcase -->
         <div class="features-section-header">
-            <span class="feature-pill-tag">Core Modules</span>
-            <h2>Integrated Construction ERP Modules</h2>
+            <span class="feature-pill-tag">Platform Capabilities</span>
+            <h2>Everything It Takes to Run Your Site</h2>
             <p>Purpose-built for site engineers, project directors, procurement officers, and material suppliers.</p>
         </div>
 
@@ -473,7 +501,7 @@
         <!-- Featured Construction Projects -->
         <div class="page-header" id="projects" style="margin-top: 1rem;">
             <div>
-                <h2 class="page-header-title">🏢 Featured Construction Sites</h2>
+                <h2 class="page-header-title"><img src="/images/icon-projects.svg" alt="" class="page-header-icon">Featured Construction Sites</h2>
                 <p class="page-header-subtitle">Active ongoing infrastructure projects managed on SmartConstruction</p>
             </div>
             <a href="/projects" class="btn btn-secondary btn-sm">View All Projects &rarr;</a>
@@ -503,7 +531,7 @@
                                     <span style="font-size: 0.72rem; font-weight: 700; color: var(--slate-500); text-transform: uppercase; letter-spacing: 0.04em;">Allocated Budget</span>
                                     <div style="font-family: 'JetBrains Mono', monospace; font-size: 1.15rem; font-weight: 700; color: var(--slate-900);">৳<%= Number(p.budget).toLocaleString() %> BDT</div>
                                 </div>
-                                <a href="/projects" class="btn btn-secondary btn-sm" style="font-weight: 600;">Site Overview</a>
+                                <a href="/projects" class="btn btn-secondary btn-sm">Site Overview</a>
                             </div>
                         </div>
                     </div>
@@ -516,7 +544,7 @@
         <!-- Corporate Announcements Board -->
         <div class="page-header">
             <div>
-                <h2 class="page-header-title">📢 Corporate Bulletins &amp; Notices</h2>
+                <h2 class="page-header-title"><img src="/images/icon-notices.svg" alt="" class="page-header-icon">Corporate Bulletins &amp; Notices</h2>
                 <p class="page-header-subtitle">Official announcements from executive project directors</p>
             </div>
             <a href="/notices/board" class="btn btn-secondary btn-sm">Full Notice Board &rarr;</a>
@@ -560,24 +588,11 @@
             <h2>Ready to Deploy on Your Construction Sites?</h2>
             <p>Join engineering teams and material suppliers streamlining operations on SmartConstruction.</p>
             <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                <a href="/login" class="btn btn-primary btn-lg" style="background: #2563EB; border-color: #3B82F6;">Access Workspace</a>
-                <a href="/register" class="btn btn-secondary btn-lg" style="background: rgba(255,255,255,0.12); color: #FFFFFF; border-color: rgba(255,255,255,0.25);">Create New Account</a>
+                <a href="/login" class="btn btn-brand btn-lg">Access Workspace</a>
+                <a href="/register" class="btn btn-secondary btn-on-dark btn-lg">Create New Account</a>
             </div>
         </div>
     </div>
-
-    <form id="quickLoginForm" action="/login" method="POST" style="display: none;">
-        <input type="hidden" name="email" id="quickEmail">
-        <input type="hidden" name="password" id="quickPassword">
-    </form>
-
-    <script>
-        function quickLogin(email, password) {
-            document.getElementById('quickEmail').value = email;
-            document.getElementById('quickPassword').value = password;
-            document.getElementById('quickLoginForm').submit();
-        }
-    </script>
 
     <%- include('partials/footer') %>
 </body>

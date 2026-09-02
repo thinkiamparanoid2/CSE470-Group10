@@ -11,7 +11,7 @@ async function listMilestones(req, res) {
             JOIN projects p ON m.project_id = p.id 
             ORDER BY m.due_date ASC
         `);
-        res.render('milestones/index', { projects, milestones, title: 'Milestone Tracker | Member C' });
+        res.render('milestones/index', { projects, milestones, title: 'Milestone Tracker' });
     } catch (err) {
         console.error('List Milestones Error:', err);
         res.render('milestones/index', { projects: [], milestones: [], title: 'Milestone Tracker' });

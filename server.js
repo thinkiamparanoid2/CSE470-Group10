@@ -1,6 +1,7 @@
 const express = require('express');
 const session = require('express-session');
 const path = require('path');
+const { toDateInputValue } = require('./middleware/validate');
 require('dotenv').config();
 
 const app = express();
@@ -28,6 +29,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Global locals for templates
 app.use((req, res, next) => {
     res.locals.user = req.session.user || null;
+    res.locals.toDateInputValue = toDateInputValue;
     next();
 });
 

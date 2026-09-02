@@ -23,7 +23,7 @@
                     <select name="vendor_id" id="vendor_id" class="form-control" required onchange="filterPOs()">
                         <option value="">-- Choose Supplier --</option>
                         <% vendors.forEach(v => { %>
-                            <option value="<%= v.id %>"><%= v.company_name %></option>
+                            <option value="<%= v.id %>" <%= (selectedVendorId && v.id === selectedVendorId) ? 'selected' : '' %>><%= v.company_name %></option>
                         <% }) %>
                     </select>
                 </div>
@@ -67,7 +67,7 @@
                     </div>
                     <div class="form-group">
                         <label for="payment_date">Date of Disbursement:</label>
-                        <input type="date" name="payment_date" id="payment_date" class="form-control" value="<%= new Date().toISOString().split('T')[0] %>" required>
+                        <input type="date" name="payment_date" id="payment_date" class="form-control" value="<%= toDateInputValue() %>" required>
                     </div>
                 </div>
 
@@ -81,9 +81,9 @@
                     <textarea name="notes" id="notes" class="form-control" rows="3" placeholder="Additional commentary on invoices covered or delivery shipments..."></textarea>
                 </div>
 
-                <div style="margin-top: 1.5rem; display: flex; gap: 1rem;">
-                    <button type="submit" class="btn btn-primary" style="flex: 1;">Save Payment & Update Balance</button>
-                    <a href="/payments" class="btn btn-secondary" style="text-align: center;">Cancel</a>
+                <div class="form-actions-row">
+                    <button type="submit" class="btn btn-primary">Save Payment & Update Balance</button>
+                    <a href="/payments" class="btn btn-secondary">Cancel</a>
                 </div>
             </form>
         </div>
@@ -91,7 +91,8 @@
 
     <script>
         // Master list of purchase orders supplied by EJS backend
-        const masterPOs = <%- JSON.stringify(pos || []) %>;
+        // (</script>-safe: escape '<' so no field value can break out of this script block)
+        const masterPOs = <%- JSON.stringify(pos || []).replace(/</g, '\\u003c') %>;
 
         function filterPOs() {
             const selectedVendor = document.getElementById('vendor_id').value;

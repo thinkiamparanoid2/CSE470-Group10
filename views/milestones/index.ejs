@@ -13,11 +13,13 @@
     <div class="container">
         <div class="page-header">
             <div>
-                <h2>📅 Milestone Tracker</h2>
-                <p style="color: var(--text-muted); font-size: 0.9rem;">Sprint 1 Feature • Member C</p>
+                <h1 class="page-header-title"><img src="/images/icon-milestones.svg" alt="" class="page-header-icon">Milestone Tracker</h1>
+                <p class="page-header-subtitle">Construction phase scheduling and completion tracking per project.</p>
             </div>
             <% if (user && (user.role === 'SuperAdmin' || user.role === 'Project Manager')) { %>
-                <a href="/projects/create" class="btn btn-primary">+ Create Project</a>
+                <div class="header-actions">
+                    <a href="/projects/create" class="btn btn-primary">+ Create Project</a>
+                </div>
             <% } %>
         </div>
 
@@ -50,7 +52,7 @@
                         <label for="due_date">Target Completion Date</label>
                         <input type="date" id="due_date" name="due_date" required>
                     </div>
-                    <button type="submit" class="btn btn-primary" style="width: 100%;">Create Project Milestone</button>
+                    <button type="submit" class="btn btn-primary btn-block">Create Project Milestone</button>
                 </form>
             </div>
 
@@ -77,10 +79,12 @@
                                         <td><%= new Date(m.due_date).toLocaleDateString() %></td>
                                         <td><span class="status-badge status-ongoing"><%= m.status %></span></td>
                                         <td>
-                                            <a href="/milestones/edit/<%= m.id %>" class="btn btn-secondary" style="padding: 0.2rem 0.5rem; font-size: 0.8rem; margin-right: 0.25rem;">Edit</a>
-                                            <form action="/milestones/delete/<%= m.id %>" method="POST" style="display:inline;">
-                                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Delete this milestone?');">Delete</button>
-                                            </form>
+                                            <div style="display: flex; gap: 0.4rem;">
+                                                <a href="/milestones/edit/<%= m.id %>" class="btn btn-secondary btn-xs">Edit</a>
+                                                <form action="/milestones/delete/<%= m.id %>" method="POST">
+                                                    <button type="submit" class="btn btn-danger btn-xs" onclick="return confirm('Delete this milestone?');">Delete</button>
+                                                </form>
+                                            </div>
                                         </td>
                                     </tr>
                                 <% }) %>

@@ -13,11 +13,11 @@
     <div class="container">
         <div class="page-header">
             <div>
-                <h2>⚙️ Equipment Maintenance Scheduler & Fleet Inventory</h2>
-                <p style="color: var(--text-muted); font-size: 0.9rem;">Sprint 4 Feature • Member D (System Admin, RBAC & Notices)</p>
+                <h1 class="page-header-title"><img src="/images/icon-equipment.svg" alt="" class="page-header-icon">Equipment Maintenance Scheduler &amp; Fleet Inventory</h1>
+                <p class="page-header-subtitle">Heavy machinery tracking, service schedules, and operational status.</p>
             </div>
             <% if (user && user.role !== 'Vendor') { %>
-                <div style="display: flex; gap: 0.5rem;">
+                <div class="header-actions">
                     <a href="/equipment/create" class="btn btn-secondary">+ Register Machinery</a>
                     <a href="/equipment/schedule" class="btn btn-primary">+ Schedule Maintenance</a>
                 </div>
@@ -26,7 +26,7 @@
 
         <!-- Section 1: Maintenance Schedule & Alerts Calendar -->
         <div class="card" style="margin-bottom: 2rem;">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.5rem;">
                 <h3>🔧 Active & Upcoming Maintenance Schedule</h3>
                 <span class="status-badge status-good">Preventive & Routine Workflows</span>
             </div>
@@ -67,12 +67,12 @@
                                         <% if (user && user.role !== 'Vendor' && ms.status !== 'Completed') { %>
                                             <form action="/equipment/maintenance/<%= ms.id %>/status" method="POST" style="display: inline-block;">
                                                 <input type="hidden" name="equipment_id" value="<%= ms.equipment_id %>">
-                                                <% if (ms.status === 'Scheduled') { %>
+                                                <% if (ms.status === 'Scheduled' || ms.status === 'Overdue') { %>
                                                     <input type="hidden" name="status" value="In Progress">
-                                                    <button type="submit" class="btn btn-secondary" style="padding: 0.25rem 0.6rem; font-size: 0.8rem;">Start Work</button>
+                                                    <button type="submit" class="btn btn-secondary btn-xs">Start Work</button>
                                                 <% } else if (ms.status === 'In Progress') { %>
                                                     <input type="hidden" name="status" value="Completed">
-                                                    <button type="submit" class="btn btn-primary" style="padding: 0.25rem 0.6rem; font-size: 0.8rem; background-color: var(--accent-green);">Mark Complete & ✓ Operational</button>
+                                                    <button type="submit" class="btn btn-success btn-xs">Mark Complete & ✓ Operational</button>
                                                 <% } %>
                                             </form>
                                         <% } %>
@@ -129,9 +129,14 @@
                                         </span>
                                     </td>
                                     <td>
-                                        <% if (user && user.role !== 'Vendor') { %>
-                                            <a href="/equipment/schedule?equipment_id=<%= eq.id %>" class="btn btn-secondary" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">+ Schedule Service</a>
-                                        <% } %>
+                                        <div style="display: flex; gap: 0.4rem;">
+                                            <% if (user && user.role !== 'Vendor') { %>
+                                                <a href="/equipment/schedule?equipment_id=<%= eq.id %>" class="btn btn-secondary btn-xs">+ Schedule Service</a>
+                                            <% } %>
+                                            <% if (user && (user.role === 'SuperAdmin' || user.role === 'Project Manager')) { %>
+                                                <a href="/equipment/edit/<%= eq.id %>" class="btn btn-secondary btn-xs">Edit</a>
+                                            <% } %>
+                                        </div>
                                     </td>
                                 </tr>
                             <% }) %>

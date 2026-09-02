@@ -65,7 +65,10 @@ async function showCreateForm(req, res) {
     try {
         const [vendors] = await db.query('SELECT id, company_name FROM vendors ORDER BY company_name ASC');
         const [pos] = await db.query('SELECT id, vendor_id, total_amount, status FROM purchase_orders ORDER BY id DESC');
-        res.render('payments/create', { vendors, pos, title: 'Record Vendor Payment' });
+        // "Record Payment" links from a vendor's ledger statement pass ?vendor_id= so
+        // the form opens pre-scoped to that supplier — honor it here.
+        const selectedVendorId = req.query.vendor_id ? parseInt(req.query.vendor_id, 10) : null;
+        res.render('payments/create', { vendors, pos, selectedVendorId: !isNaN(selectedVendorId) ? selectedVendorId : null, title: 'Record Vendor Payment' });
     } catch (err) {
         console.error('Show Create Payment Form Error:', err);
         res.render('error', { message: 'Database Error: Could not load vendors or POs for payment entry.' });

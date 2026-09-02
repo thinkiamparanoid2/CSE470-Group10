@@ -12,9 +12,14 @@
 
     <div class="container">
         <div class="page-header">
-            <h2>📋 Project Management</h2>
+            <div>
+                <h1 class="page-header-title"><img src="/images/icon-projects.svg" alt="" class="page-header-icon">Project Portfolio</h1>
+                <p class="page-header-subtitle">Active and completed construction sites with budget, schedule, and status.</p>
+            </div>
             <% if (user && (user.role === 'SuperAdmin' || user.role === 'Project Manager')) { %>
-                <a href="/projects/create" class="btn btn-primary">+ New Project</a>
+                <div class="header-actions">
+                    <a href="/projects/create" class="btn btn-primary">+ New Project</a>
+                </div>
             <% } %>
         </div>
 
@@ -52,10 +57,12 @@
                                     <td><%= p.target_completion_date ? new Date(p.target_completion_date).toLocaleDateString() : 'N/A' %></td>
                                     <% if (user && (user.role === 'SuperAdmin' || user.role === 'Project Manager')) { %>
                                         <td>
-                                            <a href="/projects/edit/<%= p.id %>" class="btn btn-secondary btn-sm">Edit</a>
-                                            <form action="/projects/delete/<%= p.id %>" method="POST" style="display: inline;" onsubmit="return confirm('Delete this project?')">
-                                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                                            </form>
+                                            <div style="display: flex; gap: 0.4rem;">
+                                                <a href="/projects/edit/<%= p.id %>" class="btn btn-secondary btn-xs">Edit</a>
+                                                <form action="/projects/delete/<%= p.id %>" method="POST" onsubmit="return confirm('Delete this project?')">
+                                                    <button type="submit" class="btn btn-danger btn-xs">Delete</button>
+                                                </form>
+                                            </div>
                                         </td>
                                     <% } %>
                                 </tr>

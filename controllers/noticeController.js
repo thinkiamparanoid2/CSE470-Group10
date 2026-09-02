@@ -26,7 +26,7 @@ async function listNotices(req, res) {
             LEFT JOIN users ON notices.created_by = users.id 
             ORDER BY created_at DESC
         `);
-        res.render('notices/index', { notices, title: 'Notice Board CMS | Member D' });
+        res.render('notices/index', { notices, title: 'Notice Board CMS' });
     } catch (err) {
         console.error('List Notices CMS Error:', err);
         res.render('notices/index', { notices: [], title: 'Notice Board CMS', error: 'Failed to load notices list.' });

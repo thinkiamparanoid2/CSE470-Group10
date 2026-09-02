@@ -86,7 +86,7 @@ if (match) {  // ← Only bcrypt comparison
 | Dependencies | 132 packages | `node_modules/` |
 
 **Files created:**
-- `.env` — Database connection credentials (root, no password, smarstruction_db)
+- `.env` — Database connection credentials (root, no password, smartconstruct)
 
 **Database:** 21 tables imported from `database/schema.sql` with seed data (4 users, 2 projects, 5 vendors, 4 materials)
 

@@ -13,11 +13,13 @@
     <div class="container">
         <div class="page-header">
             <div>
-                <h2>📋 Daily Site Progress Reports</h2>
-                <p style="color: var(--text-muted); font-size: 0.9rem;">Sprint 4 Feature • Member C (Projects, Labor & Milestones)</p>
+                <h1 class="page-header-title"><img src="/images/icon-site-reports.svg" alt="" class="page-header-icon">Daily Site Progress Reports</h1>
+                <p class="page-header-subtitle">Weather conditions and engineer logs submitted per site.</p>
             </div>
             <% if (user && (user.role === 'SuperAdmin' || user.role === 'Project Manager' || user.role === 'Site Engineer')) { %>
-                <a href="/site-reports/generate" class="btn btn-primary">+ Generate New Daily Report</a>
+                <div class="header-actions">
+                    <a href="/site-reports/generate" class="btn btn-primary">+ Generate New Daily Report</a>
+                </div>
             <% } %>
         </div>
 
@@ -37,10 +39,10 @@
                     <label for="report_date">Filter by Report Date:</label>
                     <input type="date" name="report_date" id="report_date" class="form-control" value="<%= selectedDate %>">
                 </div>
-                <div>
-                    <button type="submit" class="btn btn-secondary" style="padding: 0.45rem 1rem;">Filter Reports</button>
+                <div style="display: flex; gap: 0.5rem;">
+                    <button type="submit" class="btn btn-secondary btn-sm">Filter Reports</button>
                     <% if (selectedProject || selectedDate) { %>
-                        <a href="/site-reports" class="btn btn-secondary" style="padding: 0.45rem 0.8rem; margin-left: 0.5rem;">Reset</a>
+                        <a href="/site-reports" class="btn btn-secondary btn-sm">Reset</a>
                     <% } %>
                 </div>
             </form>
@@ -71,7 +73,7 @@
                                     <td><span class="status-badge status-good"><%= r.weather_condition || 'Sunny' %></span></td>
                                     <td><%= r.engineer_name || 'Site Engineer' %></td>
                                     <td>
-                                        <a href="/site-reports/<%= r.id %>" class="btn btn-secondary" style="padding: 0.3rem 0.6rem; font-size: 0.85rem;">View & Print Report &rarr;</a>
+                                        <a href="/site-reports/<%= r.id %>" class="btn btn-secondary btn-xs">View & Print Report &rarr;</a>
                                     </td>
                                 </tr>
                             <% }) %>

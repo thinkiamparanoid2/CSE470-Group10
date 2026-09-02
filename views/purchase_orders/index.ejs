@@ -13,11 +13,13 @@
     <div class="container">
         <div class="page-header">
             <div>
-                <h2>🛒 Purchase Orders</h2>
-                <p style="color: var(--text-muted); font-size: 0.9rem;">Sprint 2 Feature • Member A</p>
+                <h1 class="page-header-title"><img src="/images/icon-purchase-orders.svg" alt="" class="page-header-icon">Purchase Orders</h1>
+                <p class="page-header-subtitle">Procurement requests, vendor assignment, and approval workflow.</p>
             </div>
             <% if (user && (user.role === 'SuperAdmin' || user.role === 'Project Manager')) { %>
-                <a href="/purchase_orders/create" class="btn btn-primary">+ Create PO</a>
+                <div class="header-actions">
+                    <a href="/purchase_orders/create" class="btn btn-primary">+ Create PO</a>
+                </div>
             <% } %>
         </div>
 
@@ -52,7 +54,7 @@
                                             <% if (po.status === 'Pending') { %>
                                                 <form action="/purchase_orders/status/<%= po.id %>" method="POST" style="display:inline;">
                                                     <input type="hidden" name="status" value="Approved">
-                                                    <button type="submit" class="btn btn-primary" style="padding: 0.2rem 0.5rem; font-size: 0.8rem;">Approve</button>
+                                                    <button type="submit" class="btn btn-primary btn-xs">Approve</button>
                                                 </form>
                                             <% } %>
                                         <% } %>

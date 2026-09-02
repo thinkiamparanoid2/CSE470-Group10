@@ -46,7 +46,7 @@ This document details:
 * **Issue:** 
   1. Node.js and MySQL Server were not installed/configured in the system PATH.
   2. `node_modules/` was missing.
-  3. Database `smarstruction_db` with its 21 tables and seed data was not yet initialized.
+  3. Database `smartconstruct` with its 21 tables and seed data was not yet initialized.
 
 ### 1.7. Absence of Handover & Demonstration Documentation
 * **Issue:** There was no step-by-step click guide for project demonstration, nor an architectural progress tracker for team members and evaluators.
@@ -111,8 +111,8 @@ This document details:
   DB_HOST=localhost
   DB_USER=root
   DB_PASSWORD=
-  DB_NAME=smarstruction_db
-  SESSION_SECRET=smarstruction_secret_key_cse470
+  DB_NAME=smartconstruct
+  SESSION_SECRET=smartconstruct_secret_key_cse470
   ```
 * Installed all 132 NPM dependencies via `npm install`.
 * Executed `database/schema.sql` importing all 21 relational tables and initial seed data.

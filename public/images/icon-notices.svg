@@ -1,0 +1,6 @@
+<svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Notices icon">
+  <circle cx="20" cy="20" r="20" fill="#E7F0FA"/>
+  <path d="M20 11 C16.5 11 14.5 13.8 14.5 17.5 C14.5 22.5 12.5 24 12.5 24 L27.5 24 C27.5 24 25.5 22.5 25.5 17.5 C25.5 13.8 23.5 11 20 11 Z" fill="none" stroke="#14508C" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M17.5 27.5 C17.8 29 18.7 30 20 30 C21.3 30 22.2 29 22.5 27.5" fill="none" stroke="#14508C" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="26" cy="13" r="3" fill="#C2660D"/>
+</svg>

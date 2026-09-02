@@ -1,5 +1,5 @@
 const db = require('../config/db');
-const { isRequired, isValidDate, sanitize } = require('../middleware/validate');
+const { isRequired, isValidDate, sanitize, toDateInputValue } = require('../middleware/validate');
 
 // List Daily Site Reports
 async function listReports(req, res) {
@@ -45,7 +45,7 @@ async function listReports(req, res) {
 async function showGenerateForm(req, res) {
     try {
         const { project_id, report_date } = req.query;
-        const defaultDate = (report_date && isValidDate(report_date)) ? report_date : new Date().toISOString().split('T')[0];
+        const defaultDate = (report_date && isValidDate(report_date)) ? report_date : toDateInputValue();
         const [projects] = await db.query('SELECT * FROM projects WHERE status = "Ongoing" ORDER BY name ASC');
 
         let autoData = null;
@@ -123,7 +123,7 @@ async function viewReport(req, res) {
 
         if (reportRows.length === 0) return res.status(404).render('error', { message: 'Daily Site Report not found in database.' });
         const report = reportRows[0];
-        const dateStr = new Date(report.report_date).toISOString().split('T')[0];
+        const dateStr = toDateInputValue(report.report_date);
 
         const [laborLogs] = await db.query(`SELECT ll.*, u.name as recorder FROM labor_logs ll LEFT JOIN users u ON ll.created_by = u.id WHERE ll.project_id = ? AND ll.log_date = ?`, [report.project_id, dateStr]);
         const [wasteLogs] = await db.query(`SELECT w.*, m.name as material_name, m.unit FROM material_waste_logs w JOIN materials m ON w.material_id = m.id WHERE w.project_id = ? AND w.log_date = ?`, [report.project_id, dateStr]);

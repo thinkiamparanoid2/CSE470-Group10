@@ -10,11 +10,11 @@
 <body>
     <%- include('../partials/navbar') %>
 
-    <div class="container" style="max-width: 550px;">
+    <div class="container" style="max-width: 780px;">
         <div class="card" style="margin-top: 2rem;">
             <div class="page-header">
                 <h2>Edit Vendor Record</h2>
-                <a href="/vendors" class="btn btn-secondary" style="padding: 0.35rem 0.75rem;">Back</a>
+                <a href="/vendors" class="btn btn-secondary btn-sm">Back</a>
             </div>
 
             <% if (typeof error !== 'undefined' && error) { %>
@@ -28,21 +28,25 @@
                     <label for="company_name">Company Name</label>
                     <input type="text" id="company_name" name="company_name" required value="<%= vendor.company_name %>">
                 </div>
-                <div class="form-group">
-                    <label for="contact_person">Contact Representative</label>
-                    <input type="text" id="contact_person" name="contact_person" value="<%= vendor.contact_person %>">
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label for="contact_person">Contact Representative</label>
+                        <input type="text" id="contact_person" name="contact_person" value="<%= vendor.contact_person %>">
+                    </div>
+                    <div class="form-group">
+                        <label for="material_category">Material Category Provided</label>
+                        <input type="text" id="material_category" name="material_category" value="<%= vendor.material_category %>">
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="material_category">Material Category Provided</label>
-                    <input type="text" id="material_category" name="material_category" value="<%= vendor.material_category %>">
-                </div>
-                <div class="form-group">
-                    <label for="phone">Phone Number</label>
-                    <input type="text" id="phone" name="phone" required value="<%= vendor.phone %>">
-                </div>
-                <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" id="email" name="email" value="<%= vendor.email %>">
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="text" id="phone" name="phone" required value="<%= vendor.phone %>">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" value="<%= vendor.email %>">
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="address">Office / Yard Address</label>
@@ -52,7 +56,19 @@
                     <label for="rating">Rating (1.0 to 5.0)</label>
                     <input type="number" step="0.1" min="1.0" max="5.0" id="rating" name="rating" value="<%= vendor.rating %>">
                 </div>
-                <button type="submit" class="btn btn-primary" style="width: 100%;">Update Vendor Record</button>
+                <div class="form-group">
+                    <label for="user_id">Linked Vendor Login Account</label>
+                    <select id="user_id" name="user_id">
+                        <option value="">-- No Login Account (Manual Entry Only) --</option>
+                        <% (unlinkedUsers || []).forEach(u => { %>
+                            <option value="<%= u.id %>" <%= vendor.user_id === u.id ? 'selected' : '' %>><%= u.name %> (<%= u.email %>)</option>
+                        <% }) %>
+                    </select>
+                    <div class="input-hint">
+                        ℹ️ Linking a self-registered Vendor account lets that user log in and see their own POs, deliveries, payments, and contracts here.
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Update Vendor Record</button>
             </form>
         </div>
     </div>

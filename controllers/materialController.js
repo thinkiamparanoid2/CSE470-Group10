@@ -5,7 +5,7 @@ const { isRequired, isPositiveNumber, sanitize } = require('../middleware/valida
 async function listMaterials(req, res) {
     try {
         const [materials] = await db.query('SELECT * FROM materials ORDER BY name ASC');
-        res.render('materials/index', { materials, title: 'Material Stock Tracking | Member A' });
+        res.render('materials/index', { materials, title: 'Material Stock Tracking' });
     } catch (err) {
         console.error('List Materials Error:', err);
         res.render('materials/index', { materials: [], title: 'Material Stock Tracking', error: 'Failed to load materials.' });

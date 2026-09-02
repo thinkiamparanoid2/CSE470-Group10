@@ -1,10 +1,9 @@
 /* ==========================================================================
    SmartConstruction Enterprise Design System (v3.0)
    Corporate-grade Construction & ERP Management Platform
-   CSE470 Group 10
    ========================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&family=Space+Grotesk:wght@600;700&display=swap');
 
 :root {
     /* --- Brand Color System --- */
@@ -74,6 +73,16 @@
     --accent-emerald: #059669;
     --accent-green:   #059669;
     --accent-red:     #DC2626;
+
+    /* --- Construction Brand Accent: a genuine second brand color (distinct from
+       the semantic warning/amber tokens above), used deliberately for hero
+       moments and primary calls-to-action — safety-orange against deep navy is
+       the real-world palette construction-tech brands (e.g. Procore) actually
+       use, instead of the generic flat "SaaS blue everywhere" look. --- */
+    --brand-orange:       #F2600C;
+    --brand-orange-dark:  #C2410C;
+    --brand-orange-light: #FDBA74;
+    --brand-orange-glow:  rgba(242, 96, 12, 0.35);
 
     /* --- Typography Tokens --- */
     --text-primary: #0F172A;
@@ -191,7 +200,7 @@ code, kbd, samp, pre {
     gap: 1.25rem;
     padding: 0 2rem;
     height: 70px;
-    background: rgba(12, 33, 64, 0.96);
+    background: linear-gradient(120deg, rgba(10, 27, 55, 0.97) 0%, rgba(16, 46, 92, 0.96) 100%);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -203,14 +212,17 @@ code, kbd, samp, pre {
 }
 
 .brand {
-    font-family: 'Outfit', sans-serif;
-    font-size: 1.35rem;
-    font-weight: 800;
+    /* Space Grotesk gives the wordmark real logotype character — distinct from
+       the Outfit/Plus Jakarta Sans used for UI text everywhere else in the app —
+       so the brand name reads as a designed mark, not just bold body copy. */
+    font-family: 'Space Grotesk', 'Outfit', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
     display: flex;
     align-items: center;
     gap: 0.65rem;
     color: #FFFFFF;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.01em;
     flex-shrink: 0;
     text-decoration: none;
 }
@@ -226,19 +238,6 @@ code, kbd, samp, pre {
     border-radius: 9px;
     flex-shrink: 0;
     box-shadow: 0 2px 8px rgba(37, 99, 235, 0.4);
-}
-
-.brand-badge {
-    font-size: 0.68rem;
-    font-weight: 700;
-    background: rgba(37, 99, 235, 0.25);
-    color: #93C5FD;
-    border: 1px solid rgba(147, 197, 253, 0.35);
-    padding: 0.15rem 0.45rem;
-    border-radius: var(--radius-pill);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-left: 0.2rem;
 }
 
 .nav-links {
@@ -376,6 +375,17 @@ code, kbd, samp, pre {
     padding: 0.4rem 0.85rem;
     border-radius: var(--radius-pill);
     box-shadow: var(--shadow-xs);
+    max-width: 240px;
+}
+
+/* The user's name is the part allowed to truncate with an ellipsis — text-overflow
+   doesn't work on a flex container with multiple children, it just hard-clips
+   whichever child runs out of room, which was chopping the role pill in half. */
+.user-badge > span:first-child {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    min-width: 0;
 }
 
 .user-badge-role {
@@ -387,6 +397,8 @@ code, kbd, samp, pre {
     border-radius: var(--radius-pill);
     text-transform: uppercase;
     letter-spacing: 0.04em;
+    flex-shrink: 0;
+    white-space: nowrap;
 }
 
 .nav-toggle-btn {
@@ -425,8 +437,8 @@ code, kbd, samp, pre {
     align-items: center;
     flex-wrap: wrap;
     gap: 1.25rem;
-    margin-bottom: 2rem;
-    padding-bottom: 1.25rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
     border-bottom: 1px solid var(--border-color);
 }
 
@@ -453,22 +465,30 @@ code, kbd, samp, pre {
     flex-wrap: wrap;
 }
 
+.page-header-icon {
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(20, 80, 140, 0.15);
+}
+
 /* --- Responsive Grids --- */
 .grid-2 {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
     gap: 1.5rem;
 }
 
 .grid-3 {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+    gap: 1.25rem;
 }
 
 .grid-4 {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
     gap: 1.25rem;
 }
 
@@ -520,7 +540,7 @@ code, kbd, samp, pre {
     background: var(--card-bg);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-lg);
-    padding: 1.5rem;
+    padding: 1.1rem 1.25rem;
     box-shadow: var(--shadow-sm);
     position: relative;
     overflow: hidden;
@@ -560,10 +580,10 @@ code, kbd, samp, pre {
 
 .stat-value {
     font-family: 'Outfit', sans-serif;
-    font-size: 2.25rem;
+    font-size: 1.85rem;
     font-weight: 800;
     color: var(--slate-900);
-    margin-top: 0.35rem;
+    margin-top: 0.3rem;
     line-height: 1.1;
     letter-spacing: -0.02em;
 }
@@ -630,6 +650,31 @@ code, kbd, samp, pre {
     transform: scale(0.98);
 }
 
+.btn:focus-visible {
+    outline: 2px solid var(--primary-400);
+    outline-offset: 2px;
+}
+
+.btn:disabled,
+.btn.disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    pointer-events: none;
+    box-shadow: none;
+    transform: none;
+}
+
+.btn-xs {
+    /* The one size for every in-table row action (Edit, Approve, Statement, etc.) —
+       previously each list page hand-rolled its own padding/font-size combination
+       (anywhere from 0.2rem/0.8rem to 0.3rem/0.85rem), so identical buttons rendered
+       at slightly different pixel sizes depending which page you were on. */
+    padding: 0.3rem 0.65rem;
+    font-size: 0.8rem;
+    gap: 0.35rem;
+    border-radius: var(--radius-xs);
+}
+
 .btn-sm {
     padding: 0.4rem 0.75rem;
     font-size: 0.82rem;
@@ -642,18 +687,37 @@ code, kbd, samp, pre {
     border-radius: var(--radius-md);
 }
 
+.btn-block {
+    display: flex;
+    width: 100%;
+}
+
+/* Equal-width Submit/Cancel footer row — guarantees both buttons always match
+   width; several forms previously only gave `flex: 1` to the submit button,
+   leaving Cancel shrunk to its own text width beside a stretched primary button. */
+.form-actions-row {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+.form-actions-row > * {
+    flex: 1;
+    text-align: center;
+}
+
 .btn-primary {
-    background: var(--primary-600);
-    border-color: var(--primary-600);
+    background: linear-gradient(135deg, var(--primary-500) 0%, var(--primary-700) 100%);
+    border-color: var(--primary-700);
     color: #FFFFFF;
-    box-shadow: 0 1px 2px rgba(37, 99, 235, 0.2);
+    box-shadow: 0 1px 2px rgba(15, 40, 90, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 .btn-primary:hover {
-    background: var(--primary-700);
+    background: linear-gradient(135deg, var(--primary-400) 0%, var(--primary-600) 100%);
     border-color: var(--primary-700);
     color: #FFFFFF;
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    box-shadow: 0 6px 16px rgba(29, 78, 216, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
 }
 
 .btn-secondary {
@@ -661,6 +725,19 @@ code, kbd, samp, pre {
     color: var(--slate-700);
     border-color: var(--slate-300);
     box-shadow: var(--shadow-xs);
+}
+
+/* Secondary button variant for placement on dark backgrounds (hero sections,
+   closing CTAs) — was duplicated as identical inline styles in two places. */
+.btn-secondary.btn-on-dark {
+    color: #FFFFFF;
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.25);
+}
+.btn-secondary.btn-on-dark:hover {
+    color: #FFFFFF;
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
 }
 
 .btn-secondary:hover {
@@ -702,6 +779,24 @@ code, kbd, samp, pre {
     border-color: var(--warning-border);
 }
 
+/* Reserved for deliberate high-impact brand moments (marketing CTAs, hero
+   sections) — NOT a general-purpose button, so it stays rare and meaningful
+   instead of diluting the primary/secondary/danger action vocabulary. */
+.btn-brand {
+    background: linear-gradient(135deg, var(--brand-orange) 0%, var(--brand-orange-dark) 100%);
+    border-color: var(--brand-orange-dark);
+    color: #FFFFFF;
+    box-shadow: 0 4px 14px var(--brand-orange-glow), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.btn-brand:hover {
+    background: linear-gradient(135deg, #FF7A2E 0%, var(--brand-orange) 100%);
+    border-color: var(--brand-orange-dark);
+    color: #FFFFFF;
+    box-shadow: 0 8px 22px var(--brand-orange-glow), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    transform: translateY(-1px);
+}
+
 .btn-warning:hover {
     background: var(--accent-amber);
     border-color: var(--accent-amber);
@@ -717,10 +812,35 @@ code, kbd, samp, pre {
     border-radius: var(--radius-md);
     background: #FFFFFF;
     box-shadow: var(--shadow-xs);
+    /* Make the "there's more, scroll me" affordance obvious instead of relying on a
+       thin native scrollbar that's easy to miss — a wide table with no visible way
+       to reach its last column reads as broken, not as "just scroll right". */
+    scrollbar-width: auto;
+    scrollbar-color: var(--primary-300, #93C5FD) var(--slate-100, #F1F5F9);
+}
+.table-responsive::-webkit-scrollbar {
+    height: 10px;
+}
+.table-responsive::-webkit-scrollbar-track {
+    background: var(--slate-100, #F1F5F9);
+}
+.table-responsive::-webkit-scrollbar-thumb {
+    background: var(--primary-300, #93C5FD);
+    border-radius: var(--radius-pill);
+}
+.table-responsive::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-500, #3B82F6);
 }
 
 table {
     width: 100%;
+    /* Without a floor, a table with several columns just keeps shrinking each
+       column (wrapping their content, including button pairs, onto multiple
+       lines) instead of ever triggering .table-responsive's horizontal scroll —
+       so a data-dense table on a narrow screen looked "squished" rather than
+       scrollable. This guarantees every column keeps breathing room and lets
+       the scrollbar do its job once the table genuinely doesn't fit. */
+    min-width: 720px;
     border-collapse: collapse;
     margin: 0;
     text-align: left;
@@ -792,53 +912,43 @@ tbody tr:last-child td {
 }
 
 /* Success States */
-.status-good, .badge-active, .badge-completed, .badge-approved, .badge-operational, .badge-shipped, .badge-delivered {
+.status-good {
     background: var(--success-bg);
     color: var(--success-fg);
     border-color: var(--success-border);
 }
-.status-good::before, .badge-active::before, .badge-completed::before, .badge-approved::before, .badge-operational::before, .badge-shipped::before, .badge-delivered::before {
+.status-good::before {
     background: var(--success-dot);
 }
 
 /* Warning States */
-.status-warning, .badge-pending, .badge-in-progress, .badge-ongoing, .badge-scheduled, .badge-planning, .badge-under-maintenance {
+.status-warning, .status-moderate {
     background: var(--warning-bg);
     color: var(--warning-fg);
     border-color: var(--warning-border);
 }
-.status-warning::before, .badge-pending::before, .badge-in-progress::before, .badge-ongoing::before, .badge-scheduled::before, .badge-planning::before, .badge-under-maintenance::before {
+.status-warning::before, .status-moderate::before {
     background: var(--warning-dot);
 }
 
 /* Danger / Emergency States */
-.status-critical, .status-danger, .badge-emergency, .badge-cancelled, .badge-rejected, .badge-out-of-service, .badge-high-priority, .badge-overdue, .badge-on-hold {
+.status-critical, .status-danger, .status-lowstock {
     background: var(--danger-bg);
     color: var(--danger-fg);
     border-color: var(--danger-border);
 }
-.status-critical::before, .status-danger::before, .badge-emergency::before, .badge-cancelled::before, .badge-rejected::before, .badge-out-of-service::before, .badge-high-priority::before, .badge-overdue::before, .badge-on-hold::before {
+.status-critical::before, .status-danger::before, .status-lowstock::before {
     background: var(--danger-dot);
 }
 
 /* Info States */
-.status-info, .badge-available, .badge-normal, .badge-in-use {
+.status-info, .status-ongoing {
     background: var(--info-bg);
     color: var(--info-fg);
     border-color: var(--info-border);
 }
-.status-info::before, .badge-available::before, .badge-normal::before, .badge-in-use::before {
+.status-info::before, .status-ongoing::before {
     background: var(--info-dot);
-}
-
-/* Purple Category States */
-.badge-purple {
-    background: var(--purple-bg);
-    color: var(--purple-fg);
-    border-color: var(--purple-border);
-}
-.badge-purple::before {
-    background: var(--purple-dot);
 }
 
 /* ==========================================================================
@@ -983,40 +1093,6 @@ input:focus, select:focus, textarea:focus {
     justify-content: center;
 }
 
-.auth-role-switcher {
-    margin-top: 1.5rem;
-    padding: 1.1rem;
-    background: var(--slate-50);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
-}
-
-.role-pills-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.5rem;
-    margin-top: 0.75rem;
-}
-
-.role-pill-btn {
-    padding: 0.5rem 0.75rem;
-    font-size: 0.8rem;
-    font-weight: 600;
-    background: #FFFFFF;
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-sm);
-    color: var(--slate-700);
-    cursor: pointer;
-    transition: all var(--transition-fast);
-    text-align: left;
-}
-
-.role-pill-btn:hover {
-    border-color: var(--primary-500);
-    background: var(--primary-50);
-    color: var(--primary-600);
-}
-
 /* ==========================================================================
    Corporate Footer
    ========================================================================== */
@@ -1108,9 +1184,18 @@ footer {
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1340px) {
+    .navbar {
+        flex-wrap: wrap;
+        height: auto;
+        min-height: 70px;
+        row-gap: 0.5rem;
+    }
     .nav-toggle-btn {
         display: inline-block;
+    }
+    .nav-links {
+        top: auto;
     }
     .nav-links {
         display: none;
@@ -1142,3 +1227,43 @@ footer {
         grid-template-columns: 1fr;
     }
 }
+
+@media (max-width: 400px) {
+    .brand {
+        font-size: 1.1rem;
+    }
+}
+
+/* ==========================================================================
+   Restored component classes (icon badges, thumbnails, letterhead logo)
+   ========================================================================== */
+.icon-badge {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    vertical-align: middle;
+}
+
+.row-with-icon {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+}
+
+.project-thumb {
+    width: 88px;
+    height: 64px;
+    object-fit: cover;
+    border-radius: 8px;
+    flex-shrink: 0;
+    border: 1px solid var(--border-color);
+}
+
+.letterhead-logo {
+    width: 46px;
+    height: 46px;
+    border-radius: 10px;
+    flex-shrink: 0;
+}
+

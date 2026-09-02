@@ -30,11 +30,37 @@ function isValidEmail(email) {
     return emailRegex.test(email.trim());
 }
 
-// Check if value is a valid date string (YYYY-MM-DD)
+// Format a Date (or MySQL DATE value, or omitted for "today") as YYYY-MM-DD using
+// LOCAL calendar components. Do NOT use `date.toISOString().split('T')[0]` for this
+// anywhere in the app: toISOString() converts to UTC first, which silently shifts
+// the date backward by a day for any server running east of UTC (e.g. Asia/Dhaka,
+// UTC+6) whenever the local time is 00:00–06:00, or for ANY DATE column value
+// mysql2 hands back as a Date object at local midnight. That bug bit real code
+// here: a milestone's stored due date of 2026-03-30 was rendering as 2026-03-29 in
+// edit forms, and a site report's "today" cutoff was querying the wrong day's
+// labor/waste/request data whenever this ran in the early-morning window.
+function toDateInputValue(date) {
+    const d = date ? (date instanceof Date ? date : new Date(date)) : new Date();
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}
+
+// Check if value is a valid calendar date string (YYYY-MM-DD, as submitted by
+// every <input type="date"> in this app). JavaScript's Date constructor silently
+// rolls over impossible dates (e.g. "2026-02-30" becomes March 2nd) instead of
+// rejecting them, so a naive `new Date(str)` check would let nonsense dates
+// through. This parses the components and verifies they round-trip exactly.
 function isValidDate(dateStr) {
     if (!dateStr) return false;
-    const d = new Date(dateStr);
-    return d instanceof Date && !isNaN(d.getTime());
+    const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(dateStr).trim());
+    if (!match) return false;
+    const year = Number(match[1]);
+    const month = Number(match[2]);
+    const day = Number(match[3]);
+    const d = new Date(year, month - 1, day);
+    return d.getFullYear() === year && d.getMonth() === month - 1 && d.getDate() === day;
 }
 
 // Check if string length is within range
@@ -130,5 +156,6 @@ module.exports = {
     isLengthValid,
     isInRange,
     sanitize,
+    toDateInputValue,
     validateFields
 };

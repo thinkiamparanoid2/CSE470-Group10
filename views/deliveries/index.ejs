@@ -13,8 +13,8 @@
     <div class="container">
         <div class="page-header">
             <div>
-                <h2>🚚 Delivery Scheduling</h2>
-                <p style="color: var(--text-muted); font-size: 0.9rem;">Sprint 2 Feature • Member B</p>
+                <h1 class="page-header-title"><img src="/images/icon-deliveries.svg" alt="" class="page-header-icon">Delivery Scheduling</h1>
+                <p class="page-header-subtitle">Truck dispatches, transit status, and receipt confirmation.</p>
             </div>
         </div>
 
@@ -48,13 +48,13 @@
                                         <% if (d.status === 'Pending' && (user.role === 'Vendor' || user.role === 'SuperAdmin')) { %>
                                             <form action="/deliveries/status/<%= d.id %>" method="POST" style="display:inline;">
                                                 <input type="hidden" name="status" value="In Transit">
-                                                <button type="submit" class="btn btn-secondary" style="padding: 0.2rem 0.5rem; font-size: 0.8rem;">Mark In Transit</button>
+                                                <button type="submit" class="btn btn-secondary btn-xs">Mark In Transit</button>
                                             </form>
                                         <% } %>
                                         <% if (d.status === 'In Transit' && (user.role === 'Site Engineer' || user.role === 'Project Manager' || user.role === 'SuperAdmin')) { %>
                                             <form action="/deliveries/status/<%= d.id %>" method="POST" style="display:inline;">
                                                 <input type="hidden" name="status" value="Delivered">
-                                                <button type="submit" class="btn btn-primary" style="padding: 0.2rem 0.5rem; font-size: 0.8rem;">Receive Delivery</button>
+                                                <button type="submit" class="btn btn-primary btn-xs">Receive Delivery</button>
                                             </form>
                                         <% } %>
                                     </td>

@@ -17,7 +17,7 @@ async function listWasteLogs(req, res) {
         const [materials] = await db.query('SELECT id, name FROM materials ORDER BY name ASC');
 
         res.render('waste_logs/index', {
-            title: 'Material Waste Logs',
+            title: 'Material Waste Log',
             user: req.session.user,
             logs, projects, materials,
             error: null
@@ -50,15 +50,26 @@ async function createWasteLog(req, res) {
         return res.render('error', { message: 'Validation Error: A valid incident log date is required.' });
     }
 
+    const connection = await db.getConnection();
     try {
-        await db.query(
+        await connection.beginTransaction();
+        await connection.query(
             'INSERT INTO material_waste_logs (project_id, material_id, waste_quantity, reason, log_date, logged_by) VALUES (?, ?, ?, ?, ?, ?)',
             [project_id, material_id, parseFloat(waste_quantity), reason, log_date, req.session.user.id]
         );
+        // Wasted material is no longer usable stock — deduct it so inventory stays accurate.
+        await connection.query(
+            'UPDATE materials SET current_stock = current_stock - ? WHERE id = ?',
+            [parseFloat(waste_quantity), material_id]
+        );
+        await connection.commit();
         res.redirect('/waste-logs');
     } catch (err) {
+        await connection.rollback();
         console.error('Create Waste Log Error:', err);
         res.render('error', { message: 'Database Error: Could not save material waste log.' });
+    } finally {
+        connection.release();
     }
 }
 

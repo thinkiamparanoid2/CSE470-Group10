@@ -13,11 +13,13 @@
     <div class="container">
         <div class="page-header">
             <div>
-                <h2>💳 Vendor Payment Tracker</h2>
-                <p style="color: var(--text-muted); font-size: 0.9rem;">Sprint 4 Feature • Member B (Vendors & Financials)</p>
+                <h1 class="page-header-title"><img src="/images/icon-payments.svg" alt="" class="page-header-icon">Vendor Payment Tracker</h1>
+                <p class="page-header-subtitle">Disbursements, receipts, and outstanding balance ledgers.</p>
             </div>
-            <% if (user && user.role !== 'Vendor') { %>
-                <a href="/payments/create" class="btn btn-primary">+ Record Payment Disbursement</a>
+            <% if (user && (user.role === 'SuperAdmin' || user.role === 'Project Manager')) { %>
+                <div class="header-actions">
+                    <a href="/payments/create" class="btn btn-primary">+ Record Payment Disbursement</a>
+                </div>
             <% } %>
         </div>
 
@@ -45,7 +47,7 @@
                             %>
                                 <tr>
                                     <td><strong><%= v.company_name %></strong></td>
-                                    <td><%= v.contact_person || 'N/A' %> (<%= v.phone %>)</td>
+                                    <td><%= v.contact_person || 'N/A' %><br><small style="color: var(--text-muted);"><%= v.phone %></small></td>
                                     <td><%= v.material_category %></td>
                                     <td>৳<%= parseFloat(v.total_billed).toLocaleString(undefined, {minimumFractionDigits: 2}) %></td>
                                     <td style="color: var(--accent-green); font-weight: bold;">
@@ -56,11 +58,11 @@
                                     </td>
                                     <td>
                                         <span class="status-badge <%= bal <= 0 ? 'status-good' : 'status-lowstock' %>">
-                                            <%= bal <= 0 ? 'Settled / Advance' : 'Due Balance' %>
+                                            <%= bal <= 0 ? 'Settled' : 'Due Balance' %>
                                         </span>
                                     </td>
                                     <td>
-                                        <a href="/payments/vendor/<%= v.id %>" class="btn btn-secondary" style="padding: 0.3rem 0.6rem; font-size: 0.85rem;">Ledger Statement &rarr;</a>
+                                        <a href="/payments/vendor/<%= v.id %>" class="btn btn-secondary btn-xs">Statement &rarr;</a>
                                     </td>
                                 </tr>
                             <% }) %>

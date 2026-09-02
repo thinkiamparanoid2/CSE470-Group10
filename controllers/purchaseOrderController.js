@@ -108,7 +108,12 @@ async function createPurchaseOrder(req, res) {
 async function updateStatus(req, res) {
     const poId = parseInt(req.params.id, 10);
     const { status } = req.body;
-    const validStatuses = ['Pending', 'Approved', 'Shipped', 'Delivered'];
+    // "Shipped" and "Delivered" are intentionally NOT settable here — those transitions
+    // must only ever happen through the Deliveries workflow (deliveryController), which
+    // keeps the linked delivery record in sync and credits received stock. Allowing this
+    // endpoint to jump straight to Delivered would desync the PO from its delivery record
+    // and silently skip the stock-credit step.
+    const validStatuses = ['Pending', 'Approved'];
 
     if (isNaN(poId) || !validStatuses.includes(status)) {
         return res.render('error', { message: 'Validation Error: Invalid PO ID or status transition.' });

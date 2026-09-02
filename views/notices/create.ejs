@@ -10,10 +10,10 @@
 <body>
     <%- include('../partials/navbar') %>
 
-    <div class="container" style="max-width: 550px;">
+    <div class="container" style="max-width: 780px;">
         <div class="card" style="margin-top: 2rem;">
-            <h2>Publish New Notice</h2>
-            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">Member D • Notice Board CMS</p>
+            <h2 class="page-header-title" style="margin-bottom: 0.35rem;"><img src="/images/icon-notices.svg" alt="" class="page-header-icon" style="width: 30px; height: 30px;">Publish New Notice</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">Broadcast an announcement to the notice board.</p>
 
             <% if (typeof error !== 'undefined' && error) { %>
                 <div class="alert alert-error">
@@ -22,23 +22,25 @@
             <% } %>
 
             <form action="/notices/create" method="POST">
-                <div class="form-group">
-                    <label for="title">Notice Title</label>
-                    <input type="text" id="title" name="title" required placeholder="e.g. Site Safety Guidelines Update">
-                </div>
-                <div class="form-group">
-                    <label for="priority">Priority Level</label>
-                    <select id="priority" name="priority" required>
-                        <option value="Normal">Normal</option>
-                        <option value="High">High</option>
-                        <option value="Emergency">Emergency</option>
-                    </select>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label for="title">Notice Title</label>
+                        <input type="text" id="title" name="title" required placeholder="e.g. Site Safety Guidelines Update">
+                    </div>
+                    <div class="form-group">
+                        <label for="priority">Priority Level</label>
+                        <select id="priority" name="priority" required>
+                            <option value="Normal">Normal</option>
+                            <option value="High">High</option>
+                            <option value="Emergency">Emergency</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="content">Announcement Details</label>
                     <textarea id="content" name="content" rows="4" required placeholder="Details about the announcement..."></textarea>
                 </div>
-                <button type="submit" class="btn btn-primary" style="width: 100%;">Publish Notice</button>
+                <button type="submit" class="btn btn-primary btn-block">Publish Notice</button>
             </form>
         </div>
     </div>

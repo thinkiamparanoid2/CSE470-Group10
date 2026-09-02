@@ -1,7 +1,7 @@
 -- Database creation
-DROP DATABASE IF EXISTS `smarstruction_db`;
-CREATE DATABASE `smarstruction_db`;
-USE `smarstruction_db`;
+DROP DATABASE IF EXISTS `smartconstruct`;
+CREATE DATABASE `smartconstruct`;
+USE `smartconstruct`;
 
 -- Member D: Users & Role-Based Access Control (RBAC)
 CREATE TABLE IF NOT EXISTS `users` (
@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS `milestones` (
     `status` ENUM('Pending', 'In Progress', 'Completed') DEFAULT 'Pending',
     `due_date` DATE,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (`project_id`) REFERENCES `projects`(`id`) ON DELETE CASCADE
+    FOREIGN KEY (`project_id`) REFERENCES `projects`(`id`) ON DELETE RESTRICT
 );
 
 -- Sprint 2: Purchase Order System (Member A)
@@ -84,7 +84,7 @@ CREATE TABLE IF NOT EXISTS `purchase_orders` (
     `expected_date` DATE,
     `created_by` INT,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (`vendor_id`) REFERENCES `vendors`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`vendor_id`) REFERENCES `vendors`(`id`) ON DELETE RESTRICT,
     FOREIGN KEY (`created_by`) REFERENCES `users`(`id`) ON DELETE SET NULL
 );
 
@@ -95,7 +95,7 @@ CREATE TABLE IF NOT EXISTS `purchase_order_items` (
     `quantity` DECIMAL(10, 2) NOT NULL,
     `unit_price` DECIMAL(10, 2) NOT NULL,
     FOREIGN KEY (`po_id`) REFERENCES `purchase_orders`(`id`) ON DELETE CASCADE,
-    FOREIGN KEY (`material_id`) REFERENCES `materials`(`id`) ON DELETE CASCADE
+    FOREIGN KEY (`material_id`) REFERENCES `materials`(`id`) ON DELETE RESTRICT
 );
 
 -- Sprint 2: Delivery Scheduling (Member B)
@@ -106,7 +106,7 @@ CREATE TABLE IF NOT EXISTS `deliveries` (
     `delivery_date` DATE,
     `received_by` INT,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (`po_id`) REFERENCES `purchase_orders`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`po_id`) REFERENCES `purchase_orders`(`id`) ON DELETE RESTRICT,
     FOREIGN KEY (`received_by`) REFERENCES `users`(`id`) ON DELETE SET NULL
 );
 
@@ -120,7 +120,7 @@ CREATE TABLE IF NOT EXISTS `labor_logs` (
     `notes` TEXT,
     `created_by` INT,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (`project_id`) REFERENCES `projects`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`project_id`) REFERENCES `projects`(`id`) ON DELETE RESTRICT,
     FOREIGN KEY (`created_by`) REFERENCES `users`(`id`) ON DELETE SET NULL
 );
 
@@ -134,9 +134,9 @@ CREATE TABLE IF NOT EXISTS `inventory_transfers` (
     `status` ENUM('Requested', 'Approved', 'In Transit', 'Completed', 'Rejected') DEFAULT 'Requested',
     `created_by` INT,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (`material_id`) REFERENCES `materials`(`id`) ON DELETE CASCADE,
-    FOREIGN KEY (`from_project_id`) REFERENCES `projects`(`id`) ON DELETE CASCADE,
-    FOREIGN KEY (`to_project_id`) REFERENCES `projects`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`material_id`) REFERENCES `materials`(`id`) ON DELETE RESTRICT,
+    FOREIGN KEY (`from_project_id`) REFERENCES `projects`(`id`) ON DELETE RESTRICT,
+    FOREIGN KEY (`to_project_id`) REFERENCES `projects`(`id`) ON DELETE RESTRICT,
     FOREIGN KEY (`created_by`) REFERENCES `users`(`id`) ON DELETE SET NULL
 );
 
@@ -147,8 +147,8 @@ CREATE TABLE IF NOT EXISTS `vendor_quotations` (
     `material_id` INT NOT NULL,
     `price` DECIMAL(10, 2) NOT NULL,
     `last_updated` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (`vendor_id`) REFERENCES `vendors`(`id`) ON DELETE CASCADE,
-    FOREIGN KEY (`material_id`) REFERENCES `materials`(`id`) ON DELETE CASCADE
+    FOREIGN KEY (`vendor_id`) REFERENCES `vendors`(`id`) ON DELETE RESTRICT,
+    FOREIGN KEY (`material_id`) REFERENCES `materials`(`id`) ON DELETE RESTRICT
 );
 
 -- Sprint 3: Emergency Material Request (Member D)
@@ -161,8 +161,8 @@ CREATE TABLE IF NOT EXISTS `material_requests` (
     `status` ENUM('Pending', 'Approved', 'Fulfilled', 'Rejected') DEFAULT 'Pending',
     `requested_by` INT,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (`project_id`) REFERENCES `projects`(`id`) ON DELETE CASCADE,
-    FOREIGN KEY (`material_id`) REFERENCES `materials`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`project_id`) REFERENCES `projects`(`id`) ON DELETE RESTRICT,
+    FOREIGN KEY (`material_id`) REFERENCES `materials`(`id`) ON DELETE RESTRICT,
     FOREIGN KEY (`requested_by`) REFERENCES `users`(`id`) ON DELETE SET NULL
 );
 
@@ -176,8 +176,8 @@ CREATE TABLE IF NOT EXISTS `material_waste_logs` (
     `logged_by` INT,
     `log_date` DATE NOT NULL,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (`project_id`) REFERENCES `projects`(`id`) ON DELETE CASCADE,
-    FOREIGN KEY (`material_id`) REFERENCES `materials`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`project_id`) REFERENCES `projects`(`id`) ON DELETE RESTRICT,
+    FOREIGN KEY (`material_id`) REFERENCES `materials`(`id`) ON DELETE RESTRICT,
     FOREIGN KEY (`logged_by`) REFERENCES `users`(`id`) ON DELETE SET NULL
 );
 
@@ -189,7 +189,7 @@ CREATE TABLE IF NOT EXISTS `vendor_contracts` (
     `file_path` VARCHAR(255) NOT NULL,
     `uploaded_by` INT,
     `uploaded_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (`vendor_id`) REFERENCES `vendors`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`vendor_id`) REFERENCES `vendors`(`id`) ON DELETE RESTRICT,
     FOREIGN KEY (`uploaded_by`) REFERENCES `users`(`id`) ON DELETE SET NULL
 );
 
@@ -201,7 +201,7 @@ CREATE TABLE IF NOT EXISTS `boqs` (
     `notes` TEXT,
     `created_by` INT,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (`project_id`) REFERENCES `projects`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`project_id`) REFERENCES `projects`(`id`) ON DELETE RESTRICT,
     FOREIGN KEY (`created_by`) REFERENCES `users`(`id`) ON DELETE SET NULL
 );
 
@@ -229,7 +229,7 @@ CREATE TABLE IF NOT EXISTS `vendor_payments` (
     `notes` TEXT,
     `recorded_by` INT,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (`vendor_id`) REFERENCES `vendors`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`vendor_id`) REFERENCES `vendors`(`id`) ON DELETE RESTRICT,
     FOREIGN KEY (`po_id`) REFERENCES `purchase_orders`(`id`) ON DELETE SET NULL,
     FOREIGN KEY (`recorded_by`) REFERENCES `users`(`id`) ON DELETE SET NULL
 );
@@ -244,7 +244,7 @@ CREATE TABLE IF NOT EXISTS `daily_site_reports` (
     `safety_incidents` TEXT,
     `site_engineer_id` INT,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (`project_id`) REFERENCES `projects`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`project_id`) REFERENCES `projects`(`id`) ON DELETE RESTRICT,
     FOREIGN KEY (`site_engineer_id`) REFERENCES `users`(`id`) ON DELETE SET NULL
 );
 
@@ -274,7 +274,7 @@ CREATE TABLE IF NOT EXISTS `maintenance_schedules` (
     `notes` TEXT,
     `created_by` INT,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (`equipment_id`) REFERENCES `equipment`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`equipment_id`) REFERENCES `equipment`(`id`) ON DELETE RESTRICT,
     FOREIGN KEY (`created_by`) REFERENCES `users`(`id`) ON DELETE SET NULL
 );
 

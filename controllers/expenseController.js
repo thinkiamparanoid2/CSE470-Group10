@@ -28,16 +28,22 @@ async function calculateProjectFinancials(projectId, startDate = null, endDate =
         WHERE w.project_id = ? ${dateFilterWaste}
     `, wasteParams);
 
+    // Only Approved/Fulfilled requests represent real or committed spend — Pending and
+    // Rejected requests must never be counted, or the report overstates expenditure
+    // for money that was never actually spent.
     const [matRows] = await db.query(`
         SELECT COALESCE(SUM(mr.quantity * m.unit_price_est), 0) as material_req_cost
         FROM material_requests mr JOIN materials m ON mr.material_id = m.id
-        WHERE mr.project_id = ? ${dateFilterReq}
+        WHERE mr.project_id = ? AND mr.status IN ('Approved', 'Fulfilled') ${dateFilterReq}
     `, reqParams);
 
+    // Only count transfers that have actually completed delivery — a merely Requested,
+    // Approved-but-not-moved, In Transit, or Rejected transfer has not yet cost the
+    // receiving project anything.
     const [transferRows] = await db.query(`
         SELECT COALESCE(SUM(it.quantity * m.unit_price_est), 0) as transfer_cost
         FROM inventory_transfers it JOIN materials m ON it.material_id = m.id
-        WHERE it.to_project_id = ?
+        WHERE it.to_project_id = ? AND it.status = 'Completed'
     `, [projectId]);
 
     const laborCost = parseFloat(laborRows[0].labor_cost);
@@ -62,7 +68,7 @@ async function listExpenses(req, res) {
             p.totalExpenditure = financials.totalExpenditure;
             p.remainingBudget = parseFloat(p.budget) - financials.totalExpenditure;
         }
-        res.render('expenses/index', { title: 'Project Expense Report Export', projects, user: req.session.user });
+        res.render('expenses/index', { title: 'Project Expense Report & Financials Export', projects, user: req.session.user });
     } catch (err) {
         console.error('List Expenses Error:', err);
         res.render('expenses/index', { title: 'Project Expense Reports', projects: [], user: req.session.user, error: 'Could not load expense overview.' });
@@ -120,9 +126,18 @@ async function generateReport(req, res) {
             WHERE mr.project_id = ? ${dateFilterReq} ORDER BY mr.created_at DESC
         `, reqParams);
 
+        const [transfersIn] = await db.query(`
+            SELECT it.*, m.name as material_name, m.unit, m.unit_price_est, (it.quantity * m.unit_price_est) as est_cost,
+                   p.name as from_project_name
+            FROM inventory_transfers it
+            JOIN materials m ON it.material_id = m.id
+            JOIN projects p ON it.from_project_id = p.id
+            WHERE it.to_project_id = ? ORDER BY it.created_at DESC
+        `, [projectId]);
+
         res.render('expenses/report', {
             title: `Expense Report: ${project.name}`,
-            project, financials, laborLogs, wasteLogs, matRequests,
+            project, financials, laborLogs, wasteLogs, matRequests, transfersIn,
             startDate: start_date || '', endDate: end_date || '',
             user: req.session.user
         });

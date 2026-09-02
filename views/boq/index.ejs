@@ -13,11 +13,13 @@
     <div class="container">
         <div class="page-header">
             <div>
-                <h2>📈 Bill of Quantities (BOQ) Generator</h2>
-                <p style="color: var(--text-muted); font-size: 0.9rem;">Sprint 4 Feature • Member A (Materials & Inventory)</p>
+                <h1 class="page-header-title"><img src="/images/icon-boq.svg" alt="" class="page-header-icon">Bill of Quantities (BOQ) Generator</h1>
+                <p class="page-header-subtitle">Itemized cost worksheets per project with one-click Excel export.</p>
             </div>
             <% if (user && (user.role === 'SuperAdmin' || user.role === 'Project Manager' || user.role === 'Site Engineer')) { %>
-                <a href="/boq/create" class="btn btn-primary">+ Create New BOQ</a>
+                <div class="header-actions">
+                    <a href="/boq/create" class="btn btn-primary">+ Create New BOQ</a>
+                </div>
             <% } %>
         </div>
 
@@ -49,8 +51,10 @@
                                     <td><%= boq.created_by_name || 'System' %></td>
                                     <td><%= new Date(boq.created_at).toLocaleDateString() %></td>
                                     <td>
-                                        <a href="/boq/<%= boq.id %>" class="btn btn-secondary" style="padding: 0.3rem 0.6rem; font-size: 0.85rem;">Worksheet</a>
-                                        <a href="/boq/<%= boq.id %>/export-csv" class="btn btn-primary" style="padding: 0.3rem 0.6rem; font-size: 0.85rem; margin-left: 0.3rem;">📊 Excel CSV</a>
+                                        <div style="display: flex; gap: 0.4rem;">
+                                            <a href="/boq/<%= boq.id %>" class="btn btn-secondary btn-xs">Worksheet</a>
+                                            <a href="/boq/<%= boq.id %>/export-csv" class="btn btn-primary btn-xs">📊 Excel CSV</a>
+                                        </div>
                                     </td>
                                 </tr>
                             <% }) %>
