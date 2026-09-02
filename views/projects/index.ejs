@@ -49,7 +49,17 @@
                                     <td><%= p.location || 'N/A' %></td>
                                     <td>৳<%= Number(p.budget).toLocaleString() %></td>
                                     <td>
-                                        <span class="status-badge <%= p.status === 'Ongoing' ? 'status-ongoing' : p.status === 'Completed' ? 'status-good' : 'status-lowstock' %>">
+                                        <%
+                                            // 'Planning' — a project that simply hasn't broken ground yet — was
+                                            // sharing the same red/danger badge as 'On Hold', which genuinely does
+                                            // signal a stalled project needing attention. A not-yet-started
+                                            // project shouldn't read as a problem.
+                                            let pBadgeClass = 'status-ongoing';
+                                            if (p.status === 'Completed') pBadgeClass = 'status-good';
+                                            else if (p.status === 'On Hold') pBadgeClass = 'status-critical';
+                                            else if (p.status === 'Planning') pBadgeClass = 'status-info';
+                                        %>
+                                        <span class="status-badge <%= pBadgeClass %>">
                                             <%= p.status %>
                                         </span>
                                     </td>

@@ -1,5 +1,5 @@
 const db = require('../config/db');
-const { isValidDate } = require('../middleware/validate');
+const { isValidDate, sanitizeCsvCell } = require('../middleware/validate');
 
 // Helper function to aggregate financials for a project
 async function calculateProjectFinancials(projectId, startDate = null, endDate = null) {
@@ -170,8 +170,8 @@ async function exportCsv(req, res) {
 
         let csv = '\uFEFF';
         csv += `Consolidated Project Expense & Financial Report\n`;
-        csv += `Project Name,${project.name.replace(/,/g, ' ')}\n`;
-        csv += `Location,${(project.location || '').replace(/,/g, ' ')}\n`;
+        csv += `Project Name,${sanitizeCsvCell(project.name.replace(/,/g, ' '))}\n`;
+        csv += `Location,${sanitizeCsvCell((project.location || '').replace(/,/g, ' '))}\n`;
         csv += `Report Date,${new Date().toLocaleDateString()}\n`;
         if (start_date && end_date) csv += `Filter Period,${start_date} to ${end_date}\n`;
         csv += `\n--- Financial Executive Summary ---\n`;
@@ -185,13 +185,13 @@ async function exportCsv(req, res) {
         csv += `--- Labor Attendance & Wage Log Details ---\n`;
         csv += `Log Date,Headcount,Total Cost (BDT),Notes\n`;
         laborLogs.forEach(ll => {
-            csv += `${new Date(ll.log_date).toLocaleDateString()},${ll.headcount},${ll.total_cost},"${(ll.notes || '').replace(/"/g, '""')}"\n`;
+            csv += `${new Date(ll.log_date).toLocaleDateString()},${ll.headcount},${ll.total_cost},"${sanitizeCsvCell((ll.notes || '').replace(/"/g, '""'))}"\n`;
         });
 
         csv += `\n--- Material Waste & Damage Log Details ---\n`;
         csv += `Log Date,Material Name,Waste Quantity,Estimated Loss Valuation (BDT),Reason\n`;
         wasteLogs.forEach(wl => {
-            csv += `${new Date(wl.log_date).toLocaleDateString()},"${wl.material_name}",${wl.waste_quantity} ${wl.unit},${parseFloat(wl.est_loss || 0).toFixed(2)},"${(wl.reason || '').replace(/"/g, '""')}"\n`;
+            csv += `${new Date(wl.log_date).toLocaleDateString()},"${sanitizeCsvCell(wl.material_name)}",${wl.waste_quantity} ${wl.unit},${parseFloat(wl.est_loss || 0).toFixed(2)},"${sanitizeCsvCell((wl.reason || '').replace(/"/g, '""'))}"\n`;
         });
 
         res.setHeader('Content-Type', 'text/csv; charset=utf-8');

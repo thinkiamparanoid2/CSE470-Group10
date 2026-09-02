@@ -77,9 +77,29 @@ function isInRange(value, min, max) {
 }
 
 // Sanitize string input (trim whitespace, remove script tags)
+// The tag-matcher requires an actual tag name (a letter, optionally after a `/`)
+// right after `<` — matching bare `<[^>]*>` instead silently mangled ordinary text
+// like "diameter < 16mm and length > 12ft" by treating the whole span between an
+// unrelated `<` and a later `>` as one "tag" and deleting it, which is exactly the
+// kind of free-text comparison/measurement note this app's forms invite (BOQ
+// items, notices, waste-log reasons, site report notes).
 function sanitize(value) {
     if (!value || typeof value !== 'string') return value;
-    return value.trim().replace(/<script[^>]*>.*?<\/script>/gi, '').replace(/<[^>]*>/g, '');
+    return value.trim().replace(/<script[^>]*>.*?<\/script>/gi, '').replace(/<\/?[a-zA-Z][^>]*>/g, '');
+}
+
+// Neutralize CSV/formula injection (a well-documented OWASP vulnerability class):
+// if a cell's text starts with =, +, -, @, tab, or CR, Excel/LibreOffice/Sheets
+// treat it as a formula the moment the exported file is opened — not as data.
+// That turns any free-text field a user can type (a material name, a waste-log
+// reason, a labor note) into a code-execution/data-exfiltration vector for
+// whoever later opens the CSV this app generates. Prefixing a leading apostrophe
+// forces spreadsheet apps to read the cell as plain text; it has no visible
+// effect on values that were already safe. Apply this to every user-controlled
+// string written into a CSV cell — never to numbers, dates, or fixed labels.
+function sanitizeCsvCell(value) {
+    const str = String(value === null || value === undefined ? '' : value);
+    return /^[=+\-@\t\r]/.test(str) ? `'${str}` : str;
 }
 
 /**
@@ -156,6 +176,7 @@ module.exports = {
     isLengthValid,
     isInRange,
     sanitize,
+    sanitizeCsvCell,
     toDateInputValue,
     validateFields
 };

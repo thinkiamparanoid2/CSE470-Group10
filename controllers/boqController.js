@@ -1,5 +1,5 @@
 const db = require('../config/db');
-const { isRequired, isPositiveNumber, sanitize } = require('../middleware/validate');
+const { isRequired, isPositiveNumber, sanitize, sanitizeCsvCell } = require('../middleware/validate');
 
 // List all BOQs
 async function listBoqs(req, res) {
@@ -174,8 +174,8 @@ async function exportCsv(req, res) {
 
         let csv = '\uFEFF'; // UTF-8 BOM for Excel support
         csv += `Bill of Quantities (BOQ) Report\n`;
-        csv += `Title,${boq.title.replace(/,/g, ' ')}\n`;
-        csv += `Project,${boq.project_name.replace(/,/g, ' ')}\n`;
+        csv += `Title,${sanitizeCsvCell(boq.title.replace(/,/g, ' '))}\n`;
+        csv += `Project,${sanitizeCsvCell(boq.project_name.replace(/,/g, ' '))}\n`;
         csv += `Date Created,${new Date(boq.created_at).toLocaleDateString()}\n\n`;
         csv += `Item #,Category,Material / Item Name,Unit,Estimated Quantity,Unit Price (EST BDT),Total Estimated Cost (BDT)\n`;
 
@@ -183,7 +183,7 @@ async function exportCsv(req, res) {
         items.forEach((item, index) => {
             const rowTotal = parseFloat(item.quantity_estimated) * parseFloat(item.unit_price_estimated);
             grandTotal += rowTotal;
-            csv += `${index + 1},"${item.item_category}","${item.material_name}",${item.unit},${item.quantity_estimated},${item.unit_price_estimated},${rowTotal.toFixed(2)}\n`;
+            csv += `${index + 1},"${sanitizeCsvCell(item.item_category)}","${sanitizeCsvCell(item.material_name)}","${sanitizeCsvCell(item.unit)}",${item.quantity_estimated},${item.unit_price_estimated},${rowTotal.toFixed(2)}\n`;
         });
 
         csv += `\n,,,,,Grand Total Estimated Cost:,${grandTotal.toFixed(2)}\n`;

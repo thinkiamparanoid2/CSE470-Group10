@@ -181,7 +181,15 @@ async function scheduleMaintenance(req, res) {
         return res.render('error', { message: 'Validation Error: Please select an equipment asset to schedule.' });
     }
     if (!scheduled_date || !isValidDate(scheduled_date)) {
-        return res.render('error', { message: 'Validation Error: A valid future maintenance schedule date is required.' });
+        return res.render('error', { message: 'Validation Error: A valid maintenance schedule date is required.' });
+    }
+    // The error above already promised a "future" date but the check never actually
+    // enforced it — a past date passed isValidDate() and got scheduled anyway.
+    // YYYY-MM-DD strings compare correctly lexicographically, so this is a plain
+    // string comparison against today's LOCAL date (never toISOString() — see the
+    // note on toDateInputValue for why that shifts the date on this server).
+    if (scheduled_date < toDateInputValue()) {
+        return res.render('error', { message: 'Validation Error: Maintenance schedule date cannot be in the past.' });
     }
     if (!isRequired(description) || description.length < 3) {
         return res.render('error', { message: 'Validation Error: Please provide a description of the planned maintenance service.' });

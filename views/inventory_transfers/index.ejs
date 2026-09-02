@@ -47,7 +47,17 @@
                                     <td><%= t.from_project_name %></td>
                                     <td><%= t.to_project_name %></td>
                                     <td>
-                                        <span class="status-badge <%= t.status === 'Completed' ? 'status-good' : (t.status === 'Requested' || t.status === 'Rejected' ? 'status-lowstock' : 'status-moderate') %>">
+                                        <%
+                                            // 'Requested' — a brand-new, perfectly normal pending transfer — was
+                                            // sharing the same red/danger badge as 'Rejected'. A fresh request
+                                            // shouldn't look like something already went wrong; only a genuine
+                                            // rejection should read as alarming.
+                                            let tBadgeClass = 'status-moderate'; // Approved / In Transit (default)
+                                            if (t.status === 'Completed') tBadgeClass = 'status-good';
+                                            else if (t.status === 'Rejected') tBadgeClass = 'status-critical';
+                                            else if (t.status === 'Requested') tBadgeClass = 'status-warning';
+                                        %>
+                                        <span class="status-badge <%= tBadgeClass %>">
                                             <%= t.status %>
                                         </span>
                                     </td>

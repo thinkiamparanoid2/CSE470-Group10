@@ -518,12 +518,18 @@
                         else if (pname.includes('uttara') || pname.includes('villa')) coverImg = '/images/project-uttara.jpg';
                         else if (pname.includes('highway') || pname.includes('road') || pname.includes('expressway') || ploc.includes('highway') || ploc.includes('expressway')) coverImg = '/images/project-highway.jpg';
                     %>
+                    <%
+                        let pBadgeClass = 'status-ongoing';
+                        if (p.status === 'Completed') pBadgeClass = 'status-good';
+                        else if (p.status === 'On Hold') pBadgeClass = 'status-critical';
+                        else if (p.status === 'Planning') pBadgeClass = 'status-info';
+                    %>
                     <div class="project-corporate-card">
                         <img src="<%= coverImg %>" alt="<%= p.name %> construction site" class="project-image-banner">
                         <div class="project-content">
                             <div class="project-title-row">
                                 <h3><%= p.name %></h3>
-                                <span class="status-badge status-good"><%= p.status %></span>
+                                <span class="status-badge <%= pBadgeClass %>"><%= p.status %></span>
                             </div>
                             <p class="project-location">📍 <%= p.location || 'Dhaka, Bangladesh' %></p>
                             <div class="project-footer-row">

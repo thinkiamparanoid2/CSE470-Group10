@@ -74,13 +74,21 @@ async function updateStatus(req, res) {
         await connection.beginTransaction();
 
         if (status === 'Delivered') {
+            // Re-read the status under a row lock, inside the transaction, right before
+            // deciding whether to credit stock. The earlier `deliveryInfo.current_status`
+            // was read before the transaction even opened — relying on that stale value
+            // here would let two near-simultaneous requests (e.g. a double-clicked
+            // "Receive Delivery" button) both see "not yet Delivered" and both credit
+            // stock, double-counting the same shipment.
+            const [[locked]] = await connection.query(
+                'SELECT status FROM deliveries WHERE id = ? FOR UPDATE', [deliveryId]
+            );
+            const alreadyDelivered = locked.status === 'Delivered';
+
             await connection.query('UPDATE deliveries SET status = ?, received_by = ? WHERE id = ?', [status, userId, deliveryId]);
             await connection.query('UPDATE purchase_orders SET status = ? WHERE id = ?', ['Delivered', deliveryInfo.po_id]);
 
-            // Only credit stock the moment the delivery transitions INTO Delivered —
-            // guards against double-crediting if this endpoint is ever called again
-            // on an already-delivered record.
-            if (deliveryInfo.current_status !== 'Delivered') {
+            if (!alreadyDelivered) {
                 const [items] = await connection.query(
                     'SELECT material_id, quantity FROM purchase_order_items WHERE po_id = ?', [deliveryInfo.po_id]
                 );

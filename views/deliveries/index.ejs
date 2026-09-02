@@ -40,7 +40,12 @@
                                     <td><%= d.company_name %></td>
                                     <td><%= d.expected_date ? new Date(d.expected_date).toLocaleDateString() : 'N/A' %></td>
                                     <td>
-                                        <span class="status-badge <%= d.status === 'Delivered' ? 'status-good' : (d.status === 'In Transit' ? 'status-moderate' : 'status-lowstock') %>">
+                                        <%
+                                            // A delivery that simply hasn't shipped yet is normal, not alarming —
+                                            // it was rendering in the same red/danger badge as a real problem
+                                            // state, even though this status has no "rejected"/"failed" counterpart.
+                                        %>
+                                        <span class="status-badge <%= d.status === 'Delivered' ? 'status-good' : (d.status === 'In Transit' ? 'status-moderate' : 'status-warning') %>">
                                             <%= d.status %>
                                         </span>
                                     </td>

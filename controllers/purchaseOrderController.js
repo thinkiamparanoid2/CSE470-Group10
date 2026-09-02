@@ -122,6 +122,11 @@ async function updateStatus(req, res) {
     const connection = await db.getConnection();
     try {
         await connection.beginTransaction();
+        // Lock the PO row first so two near-simultaneous "Approve" clicks on the same
+        // order serialize instead of racing — without this, both could pass the
+        // "no delivery yet" check below before either inserts one, creating two
+        // delivery records for a single purchase order.
+        await connection.query('SELECT id FROM purchase_orders WHERE id = ? FOR UPDATE', [poId]);
         await connection.query('UPDATE purchase_orders SET status = ? WHERE id = ?', [status, poId]);
 
         if (status === 'Approved') {

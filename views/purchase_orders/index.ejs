@@ -45,7 +45,12 @@
                                     <td><%= po.vendor_name %></td>
                                     <td>৳<%= parseFloat(po.total_amount).toLocaleString() %></td>
                                     <td>
-                                        <span class="status-badge <%= (po.status === 'Approved' || po.status === 'Delivered') ? 'status-good' : (po.status === 'Pending' ? 'status-lowstock' : 'status-ongoing') %>">
+                                        <%
+                                            // A freshly-submitted PO awaiting approval is normal, not alarming —
+                                            // it was rendering in the same red/danger badge as if something had
+                                            // gone wrong, even though this status has no "rejected" counterpart.
+                                        %>
+                                        <span class="status-badge <%= (po.status === 'Approved' || po.status === 'Delivered') ? 'status-good' : (po.status === 'Pending' ? 'status-warning' : 'status-ongoing') %>">
                                             <%= po.status %>
                                         </span>
                                     </td>

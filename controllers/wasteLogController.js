@@ -53,6 +53,22 @@ async function createWasteLog(req, res) {
     const connection = await db.getConnection();
     try {
         await connection.beginTransaction();
+
+        // Lock the material row and confirm there's actually enough stock to write off
+        // before deducting — without this, logging waste greater than what's on hand
+        // would silently drive current_stock negative instead of being rejected.
+        const [[material]] = await connection.query(
+            'SELECT current_stock FROM materials WHERE id = ? FOR UPDATE', [material_id]
+        );
+        if (!material) {
+            await connection.rollback();
+            return res.render('error', { message: 'Validation Error: Selected material could not be found.' });
+        }
+        if (parseFloat(material.current_stock) < parseFloat(waste_quantity)) {
+            await connection.rollback();
+            return res.render('error', { message: `Validation Error: Cannot log ${parseFloat(waste_quantity)} units of waste — only ${parseFloat(material.current_stock)} currently in stock.` });
+        }
+
         await connection.query(
             'INSERT INTO material_waste_logs (project_id, material_id, waste_quantity, reason, log_date, logged_by) VALUES (?, ?, ?, ?, ?, ?)',
             [project_id, material_id, parseFloat(waste_quantity), reason, log_date, req.session.user.id]

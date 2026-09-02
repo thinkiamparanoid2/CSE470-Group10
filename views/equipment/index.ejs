@@ -59,7 +59,17 @@
                                     <td><%= ms.assigned_to || 'Internal Mechanics' %></td>
                                     <td>৳<%= parseFloat(ms.cost_estimate || 0).toLocaleString() %></td>
                                     <td>
-                                        <span class="status-badge <%= ms.status === 'Completed' ? 'status-good' : (ms.status === 'In Progress' ? 'status-lowstock' : (ms.status === 'Overdue' ? 'status-lowstock' : 'status-ongoing')) %>">
+                                        <%
+                                            // 'In Progress' and 'Overdue' were sharing the same red/danger badge —
+                                            // making a mechanic actively on the job look exactly as alarming as a
+                                            // task that's genuinely late. In Progress is a normal, fine state and
+                                            // belongs with Scheduled's calm blue; only Overdue should read as red.
+                                            let msBadgeClass = 'status-ongoing'; // Scheduled (default)
+                                            if (ms.status === 'Completed') msBadgeClass = 'status-good';
+                                            else if (ms.status === 'Overdue') msBadgeClass = 'status-critical';
+                                            else if (ms.status === 'In Progress') msBadgeClass = 'status-info';
+                                        %>
+                                        <span class="status-badge <%= msBadgeClass %>">
                                             <%= ms.status %>
                                         </span>
                                     </td>

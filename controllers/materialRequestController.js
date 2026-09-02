@@ -88,17 +88,27 @@ async function updateStatus(req, res) {
             return res.status(404).render('error', { message: 'Validation Error: Material request not found.' });
         }
 
-        await connection.query('UPDATE material_requests SET status = ? WHERE id = ?', [status, requestId]);
-
         // Only deduct stock the moment the request transitions INTO Fulfilled — guards
         // against double-deducting if this endpoint is ever called again on an
         // already-fulfilled request.
         if (status === 'Fulfilled' && existing.status !== 'Fulfilled') {
+            // Lock the material row and confirm enough stock is actually on hand before
+            // deducting — without this, fulfilling a request for more than what's in
+            // stock would silently drive current_stock negative instead of being blocked.
+            const [[material]] = await connection.query(
+                'SELECT current_stock FROM materials WHERE id = ? FOR UPDATE', [existing.material_id]
+            );
+            if (!material || parseFloat(material.current_stock) < parseFloat(existing.quantity)) {
+                await connection.rollback();
+                return res.render('error', { message: `Validation Error: Cannot mark this request Fulfilled — only ${material ? parseFloat(material.current_stock) : 0} units of this material are currently in stock (requested ${parseFloat(existing.quantity)}).` });
+            }
             await connection.query(
                 'UPDATE materials SET current_stock = current_stock - ? WHERE id = ?',
                 [existing.quantity, existing.material_id]
             );
         }
+
+        await connection.query('UPDATE material_requests SET status = ? WHERE id = ?', [status, requestId]);
 
         await connection.commit();
         res.redirect('/material-requests');
